@@ -227,6 +227,7 @@ export default function TestPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
+    handleNextAction,
     currentTest,
     typingTimeLeft,
     sentenceAnswers,
@@ -247,66 +248,33 @@ export default function TestPage() {
     setShowInstructions(true); // Show typing instructions first
   };
 
-  // Reset the test completely
-  const resetTest = () => {
-    setTestStarted(false);
-    setTestCompleted(false);
-    setCurrentTest('typing');
-    setTypingInput('');
-    setTypingTimeLeft(60);
-    setTypingResults({ wpm: 0, accuracy: 0 });
-    setCurrentSentenceIndex(0);
-    setSentenceAnswers(Array(10).fill(''));
-    setSentenceTimeLeft(30);
-    setCurrentFillIndex(0);
-    setFillAnswers(Array(10).fill(''));
-    setFillTimeLeft(30);
-    setCurrentJumbledIndex(0);
-    setJumbledAnswers(Array(15).fill(''));
-    setJumbledTimeLeft(30);
-    setCurrentPassageIndex(0);
-    setPassageInputs(Array(3).fill(''));
-    setPassageInput('');
-    setPassageTimeLeft(30);
-    setWritingTimeLeft(90);
-    setIsReadingPhase(true);
-    setEmailInput('');
-    setEmailTimeLeft(300);
-    setShowInstructions(true);
-  };
-
   // Typing test functions
   const evaluateTypingTest = () => {
-    const typingQuestion = questions[0]; // First question is typing
-    // Handle empty or whitespace-only input
+    const typingQuestion = questions[0];
     if (!typingInput.trim()) {
       console.log('Typing evaluation: Empty input, WPM: 0, Accuracy: 0');
       setTypingResults({ wpm: 0, accuracy: 0 });
       startSentenceCompletion();
       return;
     }
-
-    // WPM calculation
-    const words = typingInput.trim().split(/\s+/).filter((w) => w.length > 0);
-    const timeInSeconds = Math.max(60 - typingTimeLeft, 1); // At least 1 second
+    const inputWords = typingInput.trim().split(/\s+/).filter((w) => w.length > 0);
+    const referenceWords = typingQuestion.paragraph.trim().split(/\s+/).filter((w) => w.length > 0);
+    let correctWords = 0;
+    const minWordCount = Math.min(inputWords.length, referenceWords.length);
+    for (let i = 0; i < minWordCount; i++) {
+      if (inputWords[i] === referenceWords[i]) correctWords++;
+    }
+    const timeInSeconds = Math.max(60 - typingTimeLeft, 1);
     const timeInMinutes = timeInSeconds / 60;
-    const wpm = Math.round(words.length / timeInMinutes);
-    console.log(`Typing evaluation: Words: ${words.length}, Time (s): ${timeInSeconds}, WPM: ${wpm}`);
-
-    // Accuracy calculation
-    const reference = typingQuestion.paragraph;
+    const wpm = Math.round(correctWords / timeInMinutes) || 0;
+    console.log(`Typing evaluation: Input words: ${inputWords.length}, Correct words: ${correctWords}, Time (s): ${timeInSeconds}, WPM: ${wpm}`);
+    const reference = typingQuestion.paragraph.slice(0, typingInput.length);
     let correctChars = 0;
-    const minLength = Math.min(typingInput.length, reference.length);
-    // Count matching characters
-    for (let i = 0; i < minLength; i++) {
+    for (let i = 0; i < typingInput.length; i++) {
       if (typingInput[i] === reference[i]) correctChars++;
     }
-    // Penalize extra or missing characters
-    const totalChars = reference.length;
-    const errors = Math.abs(typingInput.length - reference.length); // Extra or missing chars
-    const accuracy = Math.round(((correctChars / (totalChars + errors)) * 100) || 0);
-    console.log(`Typing evaluation: Correct chars: ${correctChars}, Total chars: ${totalChars}, Errors: ${errors}, Accuracy: ${accuracy}%`);
-
+    const accuracy = Math.round((correctChars / typingInput.length) * 100) || 0;
+    console.log(`Typing evaluation: Correct chars: ${correctChars}, Input chars: ${typingInput.length}, Accuracy: ${accuracy}%`);
     setTypingResults({ wpm, accuracy });
     startSentenceCompletion();
   };
@@ -519,7 +487,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, typingTimeLeft, showInstructions]);
+  }, [currentTest, typingTimeLeft, showInstructions, evaluateTypingTest]);
 
   useEffect(() => {
     if (currentTest === 'sentence' && sentenceTimeLeft > 0 && !showInstructions) {
@@ -535,7 +503,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, sentenceTimeLeft, showInstructions]);
+  }, [currentTest, sentenceTimeLeft, showInstructions, handleNextSentence]);
 
   useEffect(() => {
     if (currentTest === 'fill' && fillTimeLeft > 0 && !showInstructions) {
@@ -551,10 +519,10 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, fillTimeLeft, showInstructions]);
+  }, [currentTest, fillTimeLeft, showInstructions, handleNextFill]);
 
   useEffect(() => {
-    if (currentTest == 'jumbled' && jumbledTimeLeft > 0 && !showInstructions) {
+    if (currentTest === 'jumbled' && jumbledTimeLeft > 0 && !showInstructions) {
       const timer = setInterval(() => {
         setJumbledTimeLeft((prev) => {
           if (prev <= 1) {
@@ -567,7 +535,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, jumbledTimeLeft, showInstructions]);
+  }, [currentTest, jumbledTimeLeft, showInstructions, handleNextJumbled]);
 
   useEffect(() => {
     if (currentTest === 'passage' && isReadingPhase && passageTimeLeft > 0 && !showInstructions) {
@@ -583,7 +551,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, passageTimeLeft, isReadingPhase, showInstructions]);
+  }, [currentTest, passageTimeLeft, isReadingPhase, showInstructions, handleNextPassage]);
 
   useEffect(() => {
     if (currentTest === 'passage' && !isReadingPhase && writingTimeLeft > 0 && !showInstructions) {
@@ -599,7 +567,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, writingTimeLeft, isReadingPhase, showInstructions]);
+  }, [currentTest, writingTimeLeft, isReadingPhase, showInstructions, handleNextPassage]);
 
   useEffect(() => {
     if (currentTest === 'email' && emailTimeLeft > 0 && !showInstructions) {
@@ -615,7 +583,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, emailTimeLeft, showInstructions]);
+  }, [currentTest, emailTimeLeft, showInstructions, evaluateEmailWriting]);
 
   // Format time display
   const formatTime = (seconds) => {

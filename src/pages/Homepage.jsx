@@ -63,14 +63,7 @@ export default function VersantHomepage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
                   className="bg-green-600 hover:bg-green-700 text-white py-4 sm:py-5 text-base sm:text-lg"
-                  onClick={() => {
-                    if (currentUser) {
-                      navigate('/login')
-                    } else {
-                      navigate('/login')
-                    }
-                  }}
-                  
+                  onClick={handleTakeTest}
                 >
                   Take the Test
                 </Button>
