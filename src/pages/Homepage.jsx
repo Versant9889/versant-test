@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, googleProvider, db } from '../firebaseConfig';
 import Button from '../components/ui/button';
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/card';
 
@@ -11,7 +13,6 @@ export default function VersantHomepage() {
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const auth = getAuth();
 
   const handleTakeTest = () => {
     if (currentUser) {
@@ -29,6 +30,29 @@ export default function VersantHomepage() {
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to sign in. Please check your credentials.');
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Check if Firestore user doc exists
+      const userRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userRef);
+      if (!docSnap.exists()) {
+        await setDoc(userRef, {
+          email: user.email,
+          name: user.displayName,
+          hasPaid: false,
+        });
+      }
+
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Google Sign-In Error:', error.message);
+      setError('Google Sign-In Failed: ' + error.message);
     }
   };
 
@@ -114,6 +138,29 @@ export default function VersantHomepage() {
                     >
                       Sign In
                     </Button>
+
+                    <div className="relative my-4">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={handleGoogleLogin}
+                      className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 py-2"
+                    >
+                      <img
+                        src="https://developers.google.com/identity/images/g-logo.png"
+                        alt="Google logo"
+                        className="h-5 w-5 mr-2"
+                      />
+                      Sign in with Google
+                    </Button>
+
                     <div className="text-center text-xs text-gray-600">
                       Don't have an account? <Link to="/signup" className="text-green-600 hover:underline">Sign up</Link>
                     </div>
