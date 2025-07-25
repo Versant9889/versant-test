@@ -134,7 +134,7 @@ export default function VersantHomepage() {
                     </div>
                     <Button 
                       type="submit"
-                      className="w-full bg-green-600 hover:bg-green-700 py-2"
+                      className="w-full bg-green-600 hover:bg-green-700 py-2 text-white"
                     >
                       Sign In
                     </Button>
@@ -148,15 +148,16 @@ export default function VersantHomepage() {
                       </div>
                     </div>
 
+                    {/* ✅ Updated Google Button */}
                     <Button
                       type="button"
                       onClick={handleGoogleLogin}
-                      className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 py-2"
+                      className="w-full flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-2"
                     >
                       <img
                         src="https://developers.google.com/identity/images/g-logo.png"
                         alt="Google logo"
-                        className="h-5 w-5 mr-2"
+                        className="h-5 w-5 mr-2 bg-white rounded-full"
                       />
                       Sign in with Google
                     </Button>
