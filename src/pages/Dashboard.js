@@ -114,6 +114,10 @@ const Dashboard = () => {
     alert('Payment successful! You now have access to all premium tests.');
   };
 
+  const handleGoogleLogin = () => {
+    // Implement Google Login here
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-green-50">
       <Header />
@@ -187,6 +191,23 @@ const Dashboard = () => {
                 </button>
               </div>
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={handleGoogleLogin}
+              className="flex items-center space-x-2 text-sm font-medium bg-white text-green-700 px-4 py-2 rounded-full hover:bg-green-100 transition-all duration-200 border border-green-700 shadow-md"
+              style={{ 
+                opacity: 1,  // Ensures button is always visible
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: '8px'
+              }}
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M21.35 11.1h-9.18v2.98h5.24c-.23 1.22-1.39 3.59-5.24 3.59-3.15 0-5.72-2.61-5.72-5.83s2.57-5.83 5.72-5.83c1.8 0 3.01.77 3.7 1.43l2.53-2.47C16.13 3.94 14.29 3 12.17 3 6.97 3 2.83 7.13 2.83 12.33s4.14 9.33 9.34 9.33c5.39 0 8.96-3.77 8.96-9.09 0-.61-.07-1.21-.18-1.77z"/>
+              </svg>
+              <span className="text-black">Sign in with Google</span>
+            </button>
           </div>
         </div>
       </main>
