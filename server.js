@@ -10,11 +10,12 @@ app.use(express.json());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? process.env.PRODUCTION_CLIENT_URL
-    : 'http://localhost:3001'
+    : 'http://localhost:3000'
 }));
 
 // Routes
-app.use('/api', stripeRoutes);
+// Temporarily disable the Stripe API to make all tests free
+// app.use('/api', stripeRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
