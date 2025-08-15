@@ -15,11 +15,7 @@ export default function VersantHomepage() {
   const navigate = useNavigate();
 
   const handleTakeTest = () => {
-    if (currentUser) {
-      navigate('/dashboard');
-    } else {
-      navigate('/login');
-    }
+    navigate('/login');
   };
 
   const handleSignIn = async (e) => {

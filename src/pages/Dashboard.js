@@ -90,7 +90,7 @@ const Dashboard = () => {
   const userTestStatus = Array.from({ length: 20 }, (_, index) => ({
     id: index + 1,
     name: `Test ${index + 1}`,
-    paid: index < 3 ? true : userTestAccess, // First 3 tests are free
+    paid: true,
     attempted: false,
     description: `Test ${index + 1} challenges your English skills with exercises in typing, grammar, and comprehension, designed to enhance fluency and confidence at your level.`,
     level: index + 1 <= 3 ? 'Easy' : index + 1 <= 8 ? 'Moderate' : index + 1 <= 12 ? 'Hard' : 'Moderate',
@@ -131,18 +131,7 @@ const Dashboard = () => {
               Start with 3 free tests to assess your skills. Unlock 17 more premium tests to master English proficiency.
             </p>
           </div>
-          {!userTestAccess && (
-            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-              <h2 className="text-xl font-semibold text-green-800 mb-2">Unlock Premium Tests</h2>
-              <p className="text-gray-600 mb-4">Get access to 17 additional tests with advanced features and comprehensive assessments.</p>
-              <button
-                onClick={() => setShowPaymentModal(true)}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Upgrade Now - $49.99
-              </button>
-            </div>
-          )}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
             {userTestStatus.map((test, index) => (
               <div
@@ -192,25 +181,7 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={handleGoogleLogin}
-              className="flex items-center space-x-2 text-sm font-medium bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition-all duration-200 shadow-md"
-              style={{ 
-                opacity: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 'auto',
-                minWidth: '200px'
-              }}
-            >
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
-                <path fill="#179933ff" d="M21.35 11.1h-9.18v2.98h5.24c-.23 1.22-1.39 3.59-5.24 3.59-3.15 0-5.72-2.61-5.72-5.83s2.57-5.83 5.72-5.83c1.8 0 3.01.77 3.7 1.43l2.53-2.47C16.13 3.94 14.29 3 12.17 3 6.97 3 2.83 7.13 2.83 12.33s4.14 9.33 9.34 9.33c5.39 0 8.96-3.77 8.96-9.09 0-.61-.07-1.21-.18-1.77z"/>
-              </svg>
-              <span className="text-white font-semibold">Sign in with Google</span>
-            </button>
-          </div>
+          
         </div>
       </main>
       <PaymentModal
