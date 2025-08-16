@@ -128,7 +128,7 @@ const Dashboard = () => {
               Welcome to Your Learning Journey
             </h1>
             <p className="text-base sm:text-lg max-w-2xl mx-auto">
-              Start with 3 free tests to assess your skills. Unlock 17 more premium tests to master English proficiency.
+              Enjoy 20 free tests designed to boost your English skills — no limits, no cost!
             </p>
           </div>
           

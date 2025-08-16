@@ -670,6 +670,13 @@ export default function TestPage() {
   // Typing test
   if (currentTest === 'typing') {
     const typingQuestion = questions[0];
+    if (!typingQuestion) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-lg text-gray-600">Loading test...</p>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
         <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">

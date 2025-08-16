@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ResultPage() {
   const { state } = useLocation();
@@ -13,6 +13,8 @@ export default function ResultPage() {
     emailInput,
     questions,
   } = state || {};
+
+  const navigate = useNavigate();
 
   // Handle case where state is missing (e.g., direct navigation to /results)
   if (!state || !questions || !typingResults) {
@@ -103,7 +105,7 @@ export default function ResultPage() {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <button
-              onClick={() => window.location.reload()} // Simple way to restart; adjust as needed
+              onClick={() => navigate('/dashboard')}
               className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
             >
               Retake Test {testId}

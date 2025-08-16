@@ -284,207 +284,1207 @@
     { "id": 200, "question": "I went to the ___ for a movement.", "acceptableAnswers": ["citadel", "stronghold"], "answer": "citadel" }
   ],
   "fillBlanks": [
-    { "id": 1, "question": "She ___ the dinner tonight.", "options": ["cooked", "cooks", "cooking"], "answer": "cooked" },
-  { "id": 2, "question": "They ___ the team’s chai break.", "options": ["planned", "plans", "planning"], "answer": "planned" },
-  { "id": 3, "question": "He ___ the grocery list yesterday.", "options": ["sorted", "sorts", "sorting"], "answer": "sorted" },
-  { "id": 4, "question": "We ___ the Diwali decorations.", "options": ["arranged", "arranges", "arranging"], "answer": "arranged" },
-  { "id": 5, "question": "I ___ the meeting notes today.", "options": ["jotted", "jots", "jotting"], "answer": "jotted" },
-  { "id": 6, "question": "She ___ the kids’ clothes.", "options": ["folded", "folds", "folding"], "answer": "folded" },
-  { "id": 7, "question": "They ___ the office party.", "options": ["hosted", "hosts", "hosting"], "answer": "hosted" },
-  { "id": 8, "question": "He ___ the TV remote.", "options": ["fixed", "fixes", "fixing"], "answer": "fixed" },
-  { "id": 9, "question": "We ___ the family picnic.", "options": ["planned", "plans", "planning"], "answer": "planned" },
-  { "id": 10, "question": "I ___ the team’s roster.", "options": ["updated", "updates", "updating"], "answer": "updated" },
-  { "id": 11, "question": "She ___ the breakfast menu.", "options": ["decided", "decides", "deciding"], "answer": "decided" },
-  { "id": 12, "question": "They ___ the project timeline.", "options": ["set", "sets", "setting"], "answer": "set" },
-  { "id": 13, "question": "He ___ the kids’ homework.", "options": ["checked", "checks", "checking"], "answer": "checked" },
-  { "id": 14, "question": "We ___ the office snacks.", "options": ["ordered", "orders", "ordering"], "answer": "ordered" },
-  { "id": 15, "question": "I ___ the festival gifts.", "options": ["wrapped", "wraps", "wrapping"], "answer": "wrapped" },
-  { "id": 16, "question": "She ___ the team’s lunch.", "options": ["arranged", "arranges", "arranging"], "answer": "arranged" },
-  { "id": 17, "question": "They ___ the house chores.", "options": ["divided", "divides", "dividing"], "answer": "divided" },
-  { "id": 18, "question": "He ___ the meeting room.", "options": ["booked", "books", "booking"], "answer": "booked" },
-  { "id": 19, "question": "We ___ the Holi colors.", "options": ["bought", "buys", "buying"], "answer": "bought" },
-  { "id": 20, "question": "I ___ the kids’ schedule.", "options": ["fixed", "fixes", "fixing"], "answer": "fixed" },
-  { "id": 21, "question": "She ___ the family budget.", "options": ["planned", "plans", "planning"], "answer": "planned" },
-  { "id": 22, "question": "They ___ the team huddle.", "options": ["led", "leads", "leading"], "answer": "led" },
-  { "id": 23, "question": "He ___ the dinner table.", "options": ["set", "sets", "setting"], "answer": "set" },
-  { "id": 24, "question": "We ___ the office event.", "options": ["organized", "organizes", "organizing"], "answer": "organized" },
-  { "id": 25, "question": "I ___ the grocery order.", "options": ["placed", "places", "placing"], "answer": "placed" },
-  { "id": 26, "question": "She ___ the kids’ toys.", "options": ["sorted", "sorts", "sorting"], "answer": "sorted" },
-  { "id": 27, "question": "They ___ the project tasks.", "options": ["assigned", "assigns", "assigning"], "answer": "assigned" },
-  { "id": 28, "question": "He ___ the festival sweets.", "options": ["ordered", "orders", "ordering"], "answer": "ordered" },
-  { "id": 29, "question": "We ___ the team’s goals.", "options": ["discussed", "discusses", "discussing"], "answer": "discussed" },
-  { "id": 30, "question": "I ___ the house plants.", "options": ["watered", "waters", "watering"], "answer": "watered" },
-  { "id": 31, "question": "She ___ the meeting agenda.", "options": ["prepared", "prepares", "preparing"], "answer": "prepared" },
-  { "id": 32, "question": "They ___ the family vacation.", "options": ["booked", "books", "booking"], "answer": "booked" },
-  { "id": 33, "question": "He ___ the project budget.", "options": ["reviewed", "reviews", "reviewing"], "answer": "reviewed" },
-  { "id": 34, "question": "We ___ the Diwali party.", "options": ["hosted", "hosts", "hosting"], "answer": "hosted" },
-  { "id": 35, "question": "I ___ the team’s report.", "options": ["compiled", "compiles", "compiling"], "answer": "compiled" },
-  { "id": 36, "question": "She ___ the grocery budget.", "options": ["managed", "manages", "managing"], "answer": "managed" },
-  { "id": 37, "question": "They ___ the office supplies.", "options": ["restocked", "restocks", "restocking"], "answer": "restocked" },
-  { "id": 38, "question": "He ___ the kids’ outing.", "options": ["planned", "plans", "planning"], "answer": "planned" },
-  { "id": 39, "question": "We ___ the team’s feedback.", "options": ["gathered", "gathers", "gathering"], "answer": "gathered" },
-  { "id": 40, "question": "I ___ the festival invites.", "options": ["sent", "sends", "sending"], "answer": "sent" },
-  { "id": 41, "question": "She ___ the house repairs.", "options": ["arranged", "arranges", "arranging"], "answer": "arranged" },
-  { "id": 42, "question": "They ___ the project updates.", "options": ["shared", "shares", "sharing"], "answer": "shared" },
-  { "id": 43, "question": "He ___ the family savings.", "options": ["tracked", "tracks", "tracking"], "answer": "tracked" },
-  { "id": 44, "question": "We ___ the office decor.", "options": ["updated", "updates", "updating"], "answer": "updated" },
-  { "id": 45, "question": "I ___ the kids’ lunch.", "options": ["packed", "packs", "packing"], "answer": "packed" },
-  { "id": 46, "question": "She ___ the team’s roster.", "options": ["revised", "revises", "revising"], "answer": "revised" },
-  { "id": 47, "question": "They ___ the Holi plans.", "options": ["finalized", "finalizes", "finalizing"], "answer": "finalized" },
-  { "id": 48, "question": "He ___ the meeting notes.", "options": ["summarized", "summarizes", "summarizing"], "answer": "summarized" },
-  { "id": 49, "question": "We ___ the family expenses.", "options": ["monitored", "monitors", "monitoring"], "answer": "monitored" },
-  { "id": 50, "question": "I ___ the office schedule.", "options": ["coordinated", "coordinates", "coordinating"], "answer": "coordinated" },
-  { "id": 51, "question": "She ___ the festival menu.", "options": ["planned", "plans", "planning"], "answer": "planned" },
-  { "id": 52, "question": "They ___ the team’s targets.", "options": ["set", "sets", "setting"], "answer": "set" },
-  { "id": 53, "question": "He ___ the kids’ studies.", "options": ["guided", "guides", "guiding"], "answer": "guided" },
-  { "id": 54, "question": "We ___ the office budget.", "options": ["allocated", "allocates", "allocating"], "answer": "allocated" },
-  { "id": 55, "question": "I ___ the grocery delivery.", "options": ["scheduled", "schedules", "scheduling"], "answer": "scheduled" },
-  { "id": 56, "question": "She ___ the team’s tasks.", "options": ["delegated", "delegates", "delegating"], "answer": "delegated" },
-  { "id": 57, "question": "They ___ the family reunion.", "options": ["organized", "organizes", "organizing"], "answer": "organized" },
-  { "id": 58, "question": "He ___ the project risks.", "options": ["assessed", "assesses", "assessing"], "answer": "assessed" },
-  { "id": 59, "question": "We ___ the Diwali gifts.", "options": ["distributed", "distributes", "distributing"], "answer": "distributed" },
-  { "id": 60, "question": "I ___ the kids’ projects.", "options": ["supervised", "supervises", "supervising"], "answer": "supervised" },
-  { "id": 61, "question": "She ___ the office workflow.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 62, "question": "They ___ the family disputes.", "options": ["resolved", "resolves", "resolving"], "answer": "resolved" },
-  { "id": 63, "question": "He ___ the client pitch.", "options": ["nailed", "nails", "nailing"], "answer": "nailed" },
-  { "id": 64, "question": "We ___ the festival budget.", "options": ["balanced", "balances", "balancing"], "answer": "balanced" },
-  { "id": 65, "question": "I ___ the team’s appraisal.", "options": ["conducted", "conducts", "conducting"], "answer": "conducted" },
-  { "id": 66, "question": "She ___ the household tasks.", "options": ["prioritized", "prioritizes", "prioritizing"], "answer": "prioritized" },
-  { "id": 67, "question": "They ___ the project deadlines.", "options": ["met", "meets", "meeting"], "answer": "met" },
-  { "id": 68, "question": "He ___ the family investments.", "options": ["evaluated", "evaluates", "evaluating"], "answer": "evaluated" },
-  { "id": 69, "question": "We ___ the office policies.", "options": ["revised", "revises", "revising"], "answer": "revised" },
-  { "id": 70, "question": "I ___ the kids’ activities.", "options": ["coordinated", "coordinates", "coordinating"], "answer": "coordinated" },
-  { "id": 71, "question": "She ___ the team’s synergy.", "options": ["enhanced", "enhances", "enhancing"], "answer": "enhanced" },
-  { "id": 72, "question": "They ___ the family traditions.", "options": ["upheld", "upholds", "upholding"], "answer": "upheld" },
-  { "id": 73, "question": "He ___ the project scope.", "options": ["clarified", "clarifies", "clarifying"], "answer": "clarified" },
-  { "id": 74, "question": "We ___ the Holi celebrations.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 75, "question": "I ___ the team’s morale.", "options": ["boosted", "boosts", "boosting"], "answer": "boosted" },
-  { "id": 76, "question": "She ___ the grocery expenses.", "options": ["tracked", "tracks", "tracking"], "answer": "tracked" },
-  { "id": 77, "question": "They ___ the office logistics.", "options": ["managed", "manages", "managing"], "answer": "managed" },
-  { "id": 78, "question": "He ___ the kids’ exams.", "options": ["monitored", "monitors", "monitoring"], "answer": "monitored" },
-  { "id": 79, "question": "We ___ the Diwali events.", "options": ["coordinated", "coordinates", "coordinating"], "answer": "coordinated" },
-  { "id": 80, "question": "I ___ the project updates.", "options": ["communicated", "communicates", "communicating"], "answer": "communicated" },
-  { "id": 81, "question": "She ___ the family finances.", "options": ["reconciled", "reconciles", "reconciling"], "answer": "reconciled" },
-  { "id": 82, "question": "They ___ the team’s strategy.", "options": ["aligned", "aligns", "aligning"], "answer": "aligned" },
-  { "id": 83, "question": "He ___ the client concerns.", "options": ["addressed", "addresses", "addressing"], "answer": "addressed" },
-  { "id": 84, "question": "We ___ the festival plans.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 85, "question": "I ___ the team’s progress.", "options": ["evaluated", "evaluates", "evaluating"], "answer": "evaluated" },
-  { "id": 86, "question": "She ___ the household budget.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 87, "question": "They ___ the project risks.", "options": ["mitigated", "mitigates", "mitigating"], "answer": "mitigated" },
-  { "id": 88, "question": "He ___ the kids’ hobbies.", "options": ["nurtured", "nurtures", "nurturing"], "answer": "nurtured" },
-  { "id": 89, "question": "We ___ the office workflows.", "options": ["refined", "refines", "refining"], "answer": "refined" },
-  { "id": 90, "question": "I ___ the family events.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 91, "question": "She ___ the team’s dynamics.", "options": ["strengthened", "strengthens", "strengthening"], "answer": "strengthened" },
-  { "id": 92, "question": "They ___ the Holi budget.", "options": ["allocated", "allocates", "allocating"], "answer": "allocated" },
-  { "id": 93, "question": "He ___ the project deliverables.", "options": ["validated", "validates", "validating"], "answer": "validated" },
-  { "id": 94, "question": "We ___ the kids’ schedules.", "options": ["synchronized", "synchronizes", "synchronizing"], "answer": "synchronized" },
-  { "id": 95, "question": "I ___ the office priorities.", "options": ["prioritized", "prioritizes", "prioritizing"], "answer": "prioritized" },
-  { "id": 96, "question": "She ___ the family traditions.", "options": ["preserved", "preserves", "preserving"], "answer": "preserved" },
-  { "id": 97, "question": "They ___ the team’s efforts.", "options": ["coordinated", "coordinates", "coordinating"], "answer": "coordinated" },
-  { "id": 98, "question": "He ___ the festival logistics.", "options": ["managed", "manages", "managing"], "answer": "managed" },
-  { "id": 99, "question": "We ___ the project outcomes.", "options": ["assessed", "assesses", "assessing"], "answer": "assessed" },
-  { "id": 100, "question": "I ___ the kids’ progress.", "options": ["monitored", "monitors", "monitoring"], "answer": "monitored" },
-  { "id": 101, "question": "She ___ the office conflicts.", "options": ["resolved", "resolves", "resolving"], "answer": "resolved" },
-  { "id": 102, "question": "They ___ the family priorities.", "options": ["realigned", "realigns", "realigning"], "answer": "realigned" },
-  { "id": 103, "question": "He ___ the client feedback.", "options": ["incorporated", "incorporates", "incorporating"], "answer": "incorporated" },
-  { "id": 104, "question": "We ___ the Diwali logistics.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 105, "question": "I ___ the team’s objectives.", "options": ["clarified", "clarifies", "clarifying"], "answer": "clarified" },
-  { "id": 106, "question": "She ___ the household expenses.", "options": ["minimized", "minimizes", "minimizing"], "answer": "minimized" },
-  { "id": 107, "question": "They ___ the project milestones.", "options": ["tracked", "tracks", "tracking"], "answer": "tracked" },
-  { "id": 108, "question": "He ___ the kids’ talents.", "options": ["fostered", "fosters", "fostering"], "answer": "fostered" },
-  { "id": 109, "question": "We ___ the office standards.", "options": ["upheld", "upholds", "upholding"], "answer": "upheld" },
-  { "id": 110, "question": "I ___ the festival preparations.", "options": ["oversaw", "oversees", "overseeing"], "answer": "oversaw" },
-  { "id": 111, "question": "She ___ the team’s performance.", "options": ["evaluated", "evaluates", "evaluating"], "answer": "evaluated" },
-  { "id": 112, "question": "They ___ the family goals.", "options": ["prioritized", "prioritizes", "prioritizing"], "answer": "prioritized" },
-  { "id": 113, "question": "He ___ the project constraints.", "options": ["addressed", "addresses", "addressing"], "answer": "addressed" },
-  { "id": 114, "question": "We ___ the Holi events.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 115, "question": "I ___ the team’s synergy.", "options": ["enhanced", "enhances", "enhancing"], "answer": "enhanced" },
-  { "id": 116, "question": "She ___ the family savings.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 117, "question": "They ___ the project timelines.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 118, "question": "He ___ the kids’ routines.", "options": ["structured", "structures", "structuring"], "answer": "structured" },
-  { "id": 119, "question": "We ___ the office processes.", "options": ["refined", "refines", "refining"], "answer": "refined" },
-  { "id": 120, "question": "I ___ the festival budget.", "options": ["balanced", "balances", "balancing"], "answer": "balanced" },
-  { "id": 121, "question": "She ___ the team’s challenges.", "options": ["tackled", "tackles", "tackling"], "answer": "tackled" },
-  { "id": 122, "question": "They ___ the family dynamics.", "options": ["strengthened", "strengthens", "strengthening"], "answer": "strengthened" },
-  { "id": 123, "question": "He ___ the client expectations.", "options": ["exceeded", "exceeds", "exceeding"], "answer": "exceeded" },
-  { "id": 124, "question": "We ___ the Diwali preparations.", "options": ["coordinated", "coordinates", "coordinating"], "answer": "coordinated" },
-  { "id": 125, "question": "I ___ the team’s priorities.", "options": ["reprioritized", "reprioritizes", "reprioritizing"], "answer": "reprioritized" },
-  { "id": 126, "question": "She ___ the household logistics.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 127, "question": "They ___ the project outcomes.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 128, "question": "He ___ the kids’ aspirations.", "options": ["nurtured", "nurtures", "nurturing"], "answer": "nurtured" },
-  { "id": 129, "question": "We ___ the office efficiency.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 130, "question": "I ___ the festival events.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 131, "question": "She ___ the team’s conflicts.", "options": ["mediated", "mediates", "mediating"], "answer": "mediated" },
-  { "id": 132, "question": "They ___ the family plans.", "options": ["recalibrated", "recalibrates", "recalibrating"], "answer": "recalibrated" },
-  { "id": 133, "question": "He ___ the client negotiations.", "options": ["steered", "steers", "steering"], "answer": "steered" },
-  { "id": 134, "question": "We ___ the Holi logistics.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 135, "question": "I ___ the team’s objectives.", "options": ["redefined", "redefines", "redefining"], "answer": "redefined" },
-  { "id": 136, "question": "She ___ the family expenses.", "options": ["restructured", "restructures", "restructuring"], "answer": "restructured" },
-  { "id": 137, "question": "They ___ the project synergies.", "options": ["leveraged", "leverages", "leveraging"], "answer": "leveraged" },
-  { "id": 138, "question": "He ___ the kids’ goals.", "options": ["fostered", "fosters", "fostering"], "answer": "fostered" },
-  { "id": 139, "question": "We ___ the office standards.", "options": ["elevated", "elevates", "elevating"], "answer": "elevated" },
-  { "id": 140, "question": "I ___ the festival priorities.", "options": ["reprioritized", "reprioritizes", "reprioritizing"], "answer": "reprioritized" },
-  { "id": 141, "question": "She ___ the team’s vision.", "options": ["articulated", "articulates", "articulating"], "answer": "articulated" },
-  { "id": 142, "question": "They ___ the family harmony.", "options": ["restored", "restores", "restoring"], "answer": "restored" },
-  { "id": 143, "question": "He ___ the client rapport.", "options": ["cultivated", "cultivates", "cultivating"], "answer": "cultivated" },
-  { "id": 144, "question": "We ___ the Diwali events.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 145, "question": "I ___ the team’s momentum.", "options": ["sustained", "sustains", "sustaining"], "answer": "sustained" },
-  { "id": 146, "question": "She ___ the household finances.", "options": ["reconciled", "reconciles", "reconciling"], "answer": "reconciled" },
-  { "id": 147, "question": "They ___ the project efficiency.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 148, "question": "He ___ the kids’ confidence.", "options": ["bolstered", "bolsters", "bolstering"], "answer": "bolstered" },
-  { "id": 149, "question": "We ___ the office workflows.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 150, "question": "I ___ the festival logistics.", "options": ["navigated", "navigates", "navigating"], "answer": "navigated" },
-  { "id": 151, "question": "She ___ the budget constraints.", "options": ["navigated", "navigates", "navigating"], "answer": "navigated" },
-  { "id": 152, "question": "They ___ the team’s synergy.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 153, "question": "He ___ the client trust.", "options": ["fortified", "fortifies", "fortifying"], "answer": "fortified" },
-  { "id": 154, "question": "We ___ the family priorities.", "options": ["recalibrated", "recalibrates", "recalibrating"], "answer": "recalibrated" },
-  { "id": 155, "question": "I ___ the project challenges.", "options": ["overcame", "overcomes", "overcoming"], "answer": "overcame" },
-  { "id": 156, "question": "She ___ the household dynamics.", "options": ["harmonized", "harmonizes", "harmonizing"], "answer": "harmonized" },
-  { "id": 157, "question": "They ___ the office culture.", "options": ["enriched", "enriches", "enriching"], "answer": "enriched" },
-  { "id": 158, "question": "He ___ the kids’ ambitions.", "options": ["championed", "champions", "championing"], "answer": "championed" },
-  { "id": 159, "question": "We ___ the Diwali logistics.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 160, "question": "I ___ the team’s direction.", "options": ["reoriented", "reorients", "reorienting"], "answer": "reoriented" },
-  { "id": 161, "question": "She ___ the family conflicts.", "options": ["mediated", "mediates", "mediating"], "answer": "mediated" },
-  { "id": 162, "question": "They ___ the project outcomes.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 163, "question": "He ___ the client relationships.", "options": ["nurtured", "nurtures", "nurturing"], "answer": "nurtured" },
-  { "id": 164, "question": "We ___ the Holi preparations.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 165, "question": "I ___ the team’s vision.", "options": ["rearticulated", "rearticulates", "rearticulating"], "answer": "rearticulated" },
-  { "id": 166, "question": "She ___ the household priorities.", "options": ["reprioritized", "reprioritizes", "reprioritizing"], "answer": "reprioritized" },
-  { "id": 167, "question": "They ___ the office efficiency.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 168, "question": "He ___ the kids’ dreams.", "options": ["fostered", "fosters", "fostering"], "answer": "fostered" },
-  { "id": 169, "question": "We ___ the project synergies.", "options": ["leveraged", "leverages", "leveraging"], "answer": "leveraged" },
-  { "id": 170, "question": "I ___ the festival challenges.", "options": ["navigated", "navigates", "navigating"], "answer": "navigated" },
-  { "id": 171, "question": "She ___ the team’s conflicts.", "options": ["arbitrated", "arbitrates", "arbitrating"], "answer": "arbitrated" },
-  { "id": 172, "question": "They ___ the family harmony.", "options": ["restored", "restores", "restoring"], "answer": "restored" },
-  { "id": 173, "question": "He ___ the client confidence.", "options": ["bolstered", "bolsters", "bolstering"], "answer": "bolstered" },
-  { "id": 174, "question": "We ___ the Diwali events.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 175, "question": "I ___ the team’s strategy.", "options": ["recalibrated", "recalibrates", "recalibrating"], "answer": "recalibrated" },
-  { "id": 176, "question": "She ___ the household finances.", "options": ["restructured", "restructures", "restructuring"], "answer": "restructured" },
-  { "id": 177, "question": "They ___ the project efficiency.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 178, "question": "He ___ the kids’ potential.", "options": ["unlocked", "unlocks", "unlocking"], "answer": "unlocked" },
-  { "id": 179, "question": "We ___ the office culture.", "options": ["transformed", "transforms", "transforming"], "answer": "transformed" },
-  { "id": 180, "question": "I ___ the festival logistics.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 181, "question": "She ___ the team’s challenges.", "options": ["navigated", "navigates", "navigating"], "answer": "navigated" },
-  { "id": 182, "question": "They ___ the family priorities.", "options": ["reprioritized", "reprioritizes", "reprioritizing"], "answer": "reprioritized" },
-  { "id": 183, "question": "He ___ the client partnerships.", "options": ["strengthened", "strengthens", "strengthening"], "answer": "strengthened" },
-  { "id": 184, "question": "We ___ the Holi logistics.", "options": ["streamlined", "streamlines", "streamlining"], "answer": "streamlined" },
-  { "id": 185, "question": "I ___ the team’s direction.", "options": ["reoriented", "reorients", "reorienting"], "answer": "reoriented" },
-  { "id": 186, "question": "She ___ the household dynamics.", "options": ["harmonized", "harmonizes", "harmonizing"], "answer": "harmonized" },
-  { "id": 187, "question": "They ___ the project outcomes.", "options": ["optimized", "optimizes", "optimizing"], "answer": "optimized" },
-  { "id": 188, "question": "He ___ the kids’ aspirations.", "options": ["championed", "champions", "championing"], "answer": "championed" },
-  { "id": 189, "question": "We ___ the office synergy.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 190, "question": "I ___ the festival challenges.", "options": ["overcame", "overcomes", "overcoming"], "answer": "overcame" },
-  { "id": 191, "question": "She ___ the team’s conflicts.", "options": ["arbitrated", "arbitrates", "arbitrating"], "answer": "arbitrated" },
-  { "id": 192, "question": "They ___ the family harmony.", "options": ["restored", "restores", "restoring"], "answer": "restored" },
-  { "id": 193, "question": "He ___ the client trust.", "options": ["fortified", "fortifies", "fortifying"], "answer": "fortified" },
-  { "id": 194, "question": "We ___ the Diwali logistics.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" },
-  { "id": 195, "question": "I ___ the team’s strategy.", "options": ["recalibrated", "recalibrates", "recalibrating"], "answer": "recalibrated" },
-  { "id": 196, "question": "She ___ the household finances.", "options": ["restructured", "restructures", "restructuring"], "answer": "restructured" },
-  { "id": 197, "question": "They ___ the project efficiency.", "options": ["maximized", "maximizes", "maximizing"], "answer": "maximized" },
-  { "id": 198, "question": "He ___ the kids’ potential.", "options": ["unlocked", "unlocks", "unlocking"], "answer": "unlocked" },
-  { "id": 199, "question": "We ___ the office culture.", "options": ["transformed", "transforms", "transforming"], "answer": "transformed" },
-  { "id": 200, "question": "I ___ the festival logistics.", "options": ["orchestrated", "orchestrates", "orchestrating"], "answer": "orchestrated" }
-  ],
+  {
+    "id": 1,
+    "question": "Which response is best? 'How can I assist you today?'",
+    "options": ["I'd like to inquire about your services.", "Don't bother.", "What do you want?"],
+    "answer": "I'd like to inquire about your services."
+  },
+  {
+    "id": 2,
+    "question": "Fill in the blank: 'The conference is scheduled ___ next week.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 3,
+    "question": "Choose the correct phrase: 'She is responsible ___ managing the team.'",
+    "options": ["for", "on", "at"],
+    "answer": "for"
+  },
+  {
+    "id": 4,
+    "question": "Conversation: A: 'May I speak to the manager?' B: ?",
+    "options": ["Certainly, one moment please.", "No way.", "Why?"],
+    "answer": "Certainly, one moment please."
+  },
+  {
+    "id": 5,
+    "question": "Which sentence is correct?",
+    "options": ["He don’t like coffee.", "He doesn’t like coffee.", "He not like coffee."],
+    "answer": "He doesn’t like coffee."
+  },
+  {
+    "id": 6,
+    "question": "At the hotel: 'Do you have any ___ available?'",
+    "options": ["rooms", "cars", "books"],
+    "answer": "rooms"
+  },
+  {
+    "id": 7,
+    "question": "Fill in the blank: 'I apologize ___ the delay.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 8,
+    "question": "Which is the polite reply to: 'Thank you for your help.'",
+    "options": ["You're welcome.", "No thanks.", "Forget it."],
+    "answer": "You're welcome."
+  },
+  {
+    "id": 9,
+    "question": "Identify the error: 'They was happy with the results.'",
+    "options": ["They", "was", "results"],
+    "answer": "was"
+  },
+  {
+    "id": 10,
+    "question": "You are starting a professional email. Which greeting is correct?",
+    "options": ["Hey,", "Dear Mr. Smith,", "Yo,"],
+    "answer": "Dear Mr. Smith,"
+  },
+  {
+    "id": 11,
+    "question": "Fill in the blank: 'We are committed ___ excellence.'",
+    "options": ["to", "on", "at"],
+    "answer": "to"
+  },
+  {
+    "id": 12,
+    "question": "Which reply is natural? 'Would you like to join us?'",
+    "options": ["Yes, I'd love to.", "No, thanks.", "Maybe."],
+    "answer": "Yes, I'd love to."
+  },
+  {
+    "id": 13,
+    "question": "Choose the correct sentence.",
+    "options": ["I has finished the report.", "I have finished the report.", "I having finished the report."],
+    "answer": "I have finished the report."
+  },
+  {
+    "id": 14,
+    "question": "In a meeting: 'Let's move on to the next ___.'",
+    "options": ["item", "food", "game"],
+    "answer": "item"
+  },
+  {
+    "id": 15,
+    "question": "Which expression is polite in a business call?",
+    "options": ["May I put you on hold?", "Hang on.", "Wait there."],
+    "answer": "May I put you on hold?"
+  },
+  {
+    "id": 16,
+    "question": "Fill in the blank: 'He is experienced ___ project management.'",
+    "options": ["in", "at", "on"],
+    "answer": "in"
+  },
+  {
+    "id": 17,
+    "question": "Spot the error: 'She go to work every day.'",
+    "options": ["She", "go", "every"],
+    "answer": "go"
+  },
+  {
+    "id": 18,
+    "question": "Which is correct?",
+    "options": ["We hope to hear from you soon.", "We hoping to hear from you soon.", "We hope hear from you soon."],
+    "answer": "We hope to hear from you soon."
+  },
+  {
+    "id": 19,
+    "question": "Choose the correct reply: 'How are you today?'",
+    "options": ["I'm fine, thank you.", "Bad.", "Nothing."],
+    "answer": "I'm fine, thank you."
+  },
+  {
+    "id": 20,
+    "question": "Fill in the blank: 'Please feel free to contact me if you have any ___.'",
+    "options": ["questions", "answers", "problems"],
+    "answer": "questions"
+  },
+  {
+    "id": 21,
+    "question": "Conversation: A: 'Is this the right department?' B should reply:",
+    "options": ["Yes, it is.", "No idea.", "Go away."],
+    "answer": "Yes, it is."
+  },
+  {
+    "id": 22,
+    "question": "Which is correct in an email?",
+    "options": ["Attached is the file.", "Attached the file.", "Attach is the file."],
+    "answer": "Attached is the file."
+  },
+  {
+    "id": 23,
+    "question": "Fill in the blank: 'The project was delayed ___ bad weather.'",
+    "options": ["because of", "so", "but"],
+    "answer": "because of"
+  },
+  {
+    "id": 24,
+    "question": "Choose the best opening in a cover letter.",
+    "options": ["I am writing to apply for the position.", "Hey there,", "What's up,"],
+    "answer": "I am writing to apply for the position."
+  },
+  {
+    "id": 25,
+    "question": "Which is polite?",
+    "options": ["Could you please send the report?", "Send the report now!", "Why haven't you sent it?"],
+    "answer": "Could you please send the report?"
+  },
+  {
+    "id": 26,
+    "question": "Spot the mistake: 'You doesn’t need to worry.'",
+    "options": ["You", "doesn’t", "worry"],
+    "answer": "doesn’t"
+  },
+  {
+    "id": 27,
+    "question": "Conversation: 'Welcome to our office.' The visitor replies:",
+    "options": ["Thank you.", "No thanks.", "Bye."],
+    "answer": "Thank you."
+  },
+  {
+    "id": 28,
+    "question": "Which is correct?",
+    "options": ["Let’s meet to discuss.", "Let’s meet for discuss.", "Let’s meet discuss."],
+    "answer": "Let’s meet to discuss."
+  },
+  {
+    "id": 29,
+    "question": "Fill in the blank: 'The office closes ___ 5 p.m.'",
+    "options": ["at", "on", "in"],
+    "answer": "at"
+  },
+  {
+    "id": 30,
+    "question": "Choose the natural reply: 'Sorry for the inconvenience.'",
+    "options": ["No problem.", "You should be.", "Why?"],
+    "answer": "No problem."
+  },
+  {
+    "id": 31,
+    "question": "Which response is best? 'Do you have any questions?'",
+    "options": ["Not at the moment, thank you.", "Yes, many.", "No questions."],
+    "answer": "Not at the moment, thank you."
+  },
+  {
+    "id": 32,
+    "question": "Fill in the blank: 'We arrived ___ the airport early.'",
+    "options": ["at", "in", "on"],
+    "answer": "at"
+  },
+  {
+    "id": 33,
+    "question": "Choose the correct phrase: 'He specializes ___ marketing.'",
+    "options": ["in", "on", "at"],
+    "answer": "in"
+  },
+  {
+    "id": 34,
+    "question": "Conversation: A: 'Can I get your name?' B: ?",
+    "options": ["Yes, it's John Doe.", "No.", "Why ask?"],
+    "answer": "Yes, it's John Doe."
+  },
+  {
+    "id": 35,
+    "question": "Which sentence is correct?",
+    "options": ["They isn’t coming.", "They aren’t coming.", "They not coming."],
+    "answer": "They aren’t coming."
+  },
+  {
+    "id": 36,
+    "question": "At the bank: 'I'd like to open a new ___.'",
+    "options": ["account", "book", "door"],
+    "answer": "account"
+  },
+  {
+    "id": 37,
+    "question": "Fill in the blank: 'Thank you ___ your patience.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 38,
+    "question": "Which is the polite reply to: 'Have a nice day.'",
+    "options": ["You too.", "No.", "Bye."],
+    "answer": "You too."
+  },
+  {
+    "id": 39,
+    "question": "Identify the error: 'I were there yesterday.'",
+    "options": ["I", "were", "yesterday"],
+    "answer": "were"
+  },
+  {
+    "id": 40,
+    "question": "You are replying to a job offer. Which is correct?",
+    "options": ["I accept the position.", "I no accept.", "Accept position."],
+    "answer": "I accept the position."
+  },
+  {
+    "id": 41,
+    "question": "Fill in the blank: 'She is dedicated ___ her work.'",
+    "options": ["to", "on", "at"],
+    "answer": "to"
+  },
+  {
+    "id": 42,
+    "question": "Which reply is natural? 'Can I borrow your pen?'",
+    "options": ["Sure, here you go.", "No, mine.", "Why?"],
+    "answer": "Sure, here you go."
+  },
+  {
+    "id": 43,
+    "question": "Choose the correct sentence.",
+    "options": ["We has a meeting.", "We have a meeting.", "We having a meeting."],
+    "answer": "We have a meeting."
+  },
+  {
+    "id": 44,
+    "question": "In an interview: 'Tell me about your ___.'",
+    "options": ["experience", "hobbies", "pets"],
+    "answer": "experience"
+  },
+  {
+    "id": 45,
+    "question": "Which expression is polite in email?",
+    "options": ["Please find attached.", "Attached here.", "See attachment."],
+    "answer": "Please find attached."
+  },
+  {
+    "id": 46,
+    "question": "Fill in the blank: 'I am proficient ___ Excel.'",
+    "options": ["in", "at", "on"],
+    "answer": "in"
+  },
+  {
+    "id": 47,
+    "question": "Spot the error: 'He like traveling.'",
+    "options": ["He", "like", "traveling"],
+    "answer": "like"
+  },
+  {
+    "id": 48,
+    "question": "Which is correct?",
+    "options": ["I look forward to meeting you.", "I look forward meeting you.", "I looking forward to meeting you."],
+    "answer": "I look forward to meeting you."
+  },
+  {
+    "id": 49,
+    "question": "Choose the correct reply: 'What's your opinion?'",
+    "options": ["I think it's a good idea.", "No opinion.", "Nothing."],
+    "answer": "I think it's a good idea."
+  },
+  {
+    "id": 50,
+    "question": "Fill in the blank: 'Please let me know if that's ___.'",
+    "options": ["convenient", "inconvenient", "boring"],
+    "answer": "convenient"
+  },
+  {
+    "id": 51,
+    "question": "Conversation: A: 'Do you need assistance?' B should reply:",
+    "options": ["Yes, please.", "No need.", "Leave."],
+    "answer": "Yes, please."
+  },
+  {
+    "id": 52,
+    "question": "Which is correct in a report?",
+    "options": ["The data shows.", "The data show.", "Data shows."],
+    "answer": "The data shows."
+  },
+  {
+    "id": 53,
+    "question": "Fill in the blank: 'He left ___ he was tired.'",
+    "options": ["because", "so", "but"],
+    "answer": "because"
+  },
+  {
+    "id": 54,
+    "question": "Choose the best closing for a formal letter.",
+    "options": ["Sincerely,", "Cheers,", "Later,"],
+    "answer": "Sincerely,"
+  },
+  {
+    "id": 55,
+    "question": "Which is polite?",
+    "options": ["Would you mind helping me?", "Help me now!", "Do it."],
+    "answer": "Would you mind helping me?"
+  },
+  {
+    "id": 56,
+    "question": "Spot the mistake: 'She don’t agree.'",
+    "options": ["She", "don’t", "agree"],
+    "answer": "don’t"
+  },
+  {
+    "id": 57,
+    "question": "Conversation: 'Good afternoon, how may I help?' The customer replies:",
+    "options": ["I'd like to make a reservation.", "No help.", "Stop."],
+    "answer": "I'd like to make a reservation."
+  },
+  {
+    "id": 58,
+    "question": "Which is correct?",
+    "options": ["We need to focus on.", "We need to focus about.", "We need focus on."],
+    "answer": "We need to focus on."
+  },
+  {
+    "id": 59,
+    "question": "Fill in the blank: 'The event starts ___ Friday.'",
+    "options": ["on", "at", "in"],
+    "answer": "on"
+  },
+  {
+    "id": 60,
+    "question": "Choose the natural reply: 'I'm running late.'",
+    "options": ["That's fine, take your time.", "Hurry up!", "Why late?"],
+    "answer": "That's fine, take your time."
+  },
+  {
+    "id": 61,
+    "question": "Which response is best? 'Can we reschedule?'",
+    "options": ["Yes, that works for me.", "No.", "Maybe."],
+    "answer": "Yes, that works for me."
+  },
+  {
+    "id": 62,
+    "question": "Fill in the blank: 'Please arrive ___ time.'",
+    "options": ["on", "in", "at"],
+    "answer": "on"
+  },
+  {
+    "id": 63,
+    "question": "Choose the correct phrase: 'I am excited ___ the opportunity.'",
+    "options": ["about", "on", "at"],
+    "answer": "about"
+  },
+  {
+    "id": 64,
+    "question": "Conversation: A: 'What's the status?' B: ?",
+    "options": ["It's in progress.", "Don't know.", "Ask someone else."],
+    "answer": "It's in progress."
+  },
+  {
+    "id": 65,
+    "question": "Which sentence is correct?",
+    "options": ["You is correct.", "You are correct.", "You be correct."],
+    "answer": "You are correct."
+  },
+  {
+    "id": 66,
+    "question": "At the store: 'Do you accept credit ___?'",
+    "options": ["cards", "books", "food"],
+    "answer": "cards"
+  },
+  {
+    "id": 67,
+    "question": "Fill in the blank: 'We are grateful ___ your support.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 68,
+    "question": "Which is the polite reply to: 'Congratulations!'",
+    "options": ["Thank you.", "No.", "Whatever."],
+    "answer": "Thank you."
+  },
+  {
+    "id": 69,
+    "question": "Identify the error: 'Us went to the office.'",
+    "options": ["Us", "went", "office"],
+    "answer": "Us"
+  },
+  {
+    "id": 70,
+    "question": "You are confirming an appointment. Which is correct?",
+    "options": ["I confirm our meeting.", "Confirm meeting.", "I no confirm."],
+    "answer": "I confirm our meeting."
+  },
+  {
+    "id": 71,
+    "question": "Fill in the blank: 'He is passionate ___ innovation.'",
+    "options": ["about", "on", "at"],
+    "answer": "about"
+  },
+  {
+    "id": 72,
+    "question": "Which reply is natural? 'Shall we begin?'",
+    "options": ["Yes, let's.", "No.", "Wait."],
+    "answer": "Yes, let's."
+  },
+  {
+    "id": 73,
+    "question": "Choose the correct sentence.",
+    "options": ["She have an idea.", "She has an idea.", "She having an idea."],
+    "answer": "She has an idea."
+  },
+  {
+    "id": 74,
+    "question": "In a presentation: 'Next, I'll discuss the ___.'",
+    "options": ["results", "weather", "movies"],
+    "answer": "results"
+  },
+  {
+    "id": 75,
+    "question": "Which expression is polite in negotiation?",
+    "options": ["I appreciate your offer.", "Bad offer.", "No way."],
+    "answer": "I appreciate your offer."
+  },
+  {
+    "id": 76,
+    "question": "Fill in the blank: 'They are aware ___ the issue.'",
+    "options": ["of", "at", "on"],
+    "answer": "of"
+  },
+  {
+    "id": 77,
+    "question": "Spot the error: 'I enjoys reading.'",
+    "options": ["I", "enjoys", "reading"],
+    "answer": "enjoys"
+  },
+  {
+    "id": 78,
+    "question": "Which is correct?",
+    "options": ["Please let me know your thoughts.", "Please let know your thoughts.", "Let me know thoughts."],
+    "answer": "Please let me know your thoughts."
+  },
+  {
+    "id": 79,
+    "question": "Choose the correct reply: 'Did you receive my email?'",
+    "options": ["Yes, I did.", "No email.", "What email?"],
+    "answer": "Yes, I did."
+  },
+  {
+    "id": 80,
+    "question": "Fill in the blank: 'Make yourself at ___.'",
+    "options": ["home", "work", "school"],
+    "answer": "home"
+  },
+  {
+    "id": 81,
+    "question": "Conversation: A: 'Is the manager available?' B should reply:",
+    "options": ["Yes, I'll connect you.", "No available.", "Don't ask."],
+    "answer": "Yes, I'll connect you."
+  },
+  {
+    "id": 82,
+    "question": "Which is correct in a proposal?",
+    "options": ["We propose the following.", "We proposing the following.", "Propose following."],
+    "answer": "We propose the following."
+  },
+  {
+    "id": 83,
+    "question": "Fill in the blank: 'The flight was canceled ___ fog.'",
+    "options": ["due to", "so", "but"],
+    "answer": "due to"
+  },
+  {
+    "id": 84,
+    "question": "Choose the best subject line for an email.",
+    "options": ["Follow-up on Meeting", "Hey", "Stuff"],
+    "answer": "Follow-up on Meeting"
+  },
+  {
+    "id": 85,
+    "question": "Which is polite?",
+    "options": ["May I have your attention?", "Listen up!", "Shut up."],
+    "answer": "May I have your attention?"
+  },
+  {
+    "id": 86,
+    "question": "Spot the mistake: 'He aren’t ready.'",
+    "options": ["He", "aren’t", "ready"],
+    "answer": "aren’t"
+  },
+  {
+    "id": 87,
+    "question": "Conversation: 'Thank you for calling.' The caller replies:",
+    "options": ["You're welcome.", "No problem.", "Bye."],
+    "answer": "You're welcome."
+  },
+  {
+    "id": 88,
+    "question": "Which is correct?",
+    "options": ["I would like to inform you.", "I would like inform you.", "Like to inform."],
+    "answer": "I would like to inform you."
+  },
+  {
+    "id": 89,
+    "question": "Fill in the blank: 'We will meet ___ noon.'",
+    "options": ["at", "on", "in"],
+    "answer": "at"
+  },
+  {
+    "id": 90,
+    "question": "Choose the natural reply: 'Excuse me for interrupting.'",
+    "options": ["No worries.", "Don't interrupt.", "Why?"],
+    "answer": "No worries."
+  },
+  {
+    "id": 91,
+    "question": "Which response is best? 'What time is the meeting?'",
+    "options": ["It's at 2 p.m.", "Don't know.", "Ask later."],
+    "answer": "It's at 2 p.m."
+  },
+  {
+    "id": 92,
+    "question": "Fill in the blank: 'The train arrives ___ platform 3.'",
+    "options": ["at", "in", "on"],
+    "answer": "at"
+  },
+  {
+    "id": 93,
+    "question": "Choose the correct phrase: 'We depend ___ your cooperation.'",
+    "options": ["on", "in", "at"],
+    "answer": "on"
+  },
+  {
+    "id": 94,
+    "question": "Conversation: A: 'Can you confirm?' B: ?",
+    "options": ["Yes, confirmed.", "No confirm.", "Why?"],
+    "answer": "Yes, confirmed."
+  },
+  {
+    "id": 95,
+    "question": "Which sentence is correct?",
+    "options": ["It don’t matter.", "It doesn’t matter.", "It not matter."],
+    "answer": "It doesn’t matter."
+  },
+  {
+    "id": 96,
+    "question": "At the airport: 'Please proceed to gate ___.'",
+    "options": ["number", "house", "car"],
+    "answer": "number"
+  },
+  {
+    "id": 97,
+    "question": "Fill in the blank: 'Sorry ___ the misunderstanding.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 98,
+    "question": "Which is the polite reply to: 'Best wishes.'",
+    "options": ["Same to you.", "No.", "Okay."],
+    "answer": "Same to you."
+  },
+  {
+    "id": 99,
+    "question": "Identify the error: 'Them are correct.'",
+    "options": ["Them", "are", "correct"],
+    "answer": "Them"
+  },
+  {
+    "id": 100,
+    "question": "You are declining an invitation. Which is correct?",
+    "options": ["I regret I cannot attend.", "No attend.", "Cannot."],
+    "answer": "I regret I cannot attend."
+  },
+  {
+    "id": 101,
+    "question": "Fill in the blank: 'She is focused ___ her goals.'",
+    "options": ["on", "in", "at"],
+    "answer": "on"
+  },
+  {
+    "id": 102,
+    "question": "Which reply is natural? 'Do you agree?'",
+    "options": ["Absolutely.", "No.", "Maybe."],
+    "answer": "Absolutely."
+  },
+  {
+    "id": 103,
+    "question": "Choose the correct sentence.",
+    "options": ["They is here.", "They are here.", "They be here."],
+    "answer": "They are here."
+  },
+  {
+    "id": 104,
+    "question": "In a email: 'I am writing to ___.'",
+    "options": ["inquire", "eat", "sleep"],
+    "answer": "inquire"
+  },
+  {
+    "id": 105,
+    "question": "Which expression is polite in feedback?",
+    "options": ["I suggest improving this.", "This is bad.", "Fix it."],
+    "answer": "I suggest improving this."
+  },
+  {
+    "id": 106,
+    "question": "Fill in the blank: 'He is satisfied ___ the outcome.'",
+    "options": ["with", "at", "on"],
+    "answer": "with"
+  },
+  {
+    "id": 107,
+    "question": "Spot the error: 'We plays tennis.'",
+    "options": ["We", "plays", "tennis"],
+    "answer": "plays"
+  },
+  {
+    "id": 108,
+    "question": "Which is correct?",
+    "options": ["Thank you for your time.", "Thank for time.", "Your time thank."],
+    "answer": "Thank you for your time."
+  },
+  {
+    "id": 109,
+    "question": "Choose the correct reply: 'How can I reach you?'",
+    "options": ["By email or phone.", "No reach.", "Don't."],
+    "answer": "By email or phone."
+  },
+  {
+    "id": 110,
+    "question": "Fill in the blank: 'Please take a ___.'",
+    "options": ["seat", "walk", "run"],
+    "answer": "seat"
+  },
+  {
+    "id": 111,
+    "question": "Conversation: A: 'Is this available?' B should reply:",
+    "options": ["Yes, it is.", "No available.", "Ask later."],
+    "answer": "Yes, it is."
+  },
+  {
+    "id": 112,
+    "question": "Which is correct in instructions?",
+    "options": ["Follow these steps.", "Follow steps these.", "Steps follow."],
+    "answer": "Follow these steps."
+  },
+  {
+    "id": 113,
+    "question": "Fill in the blank: 'She succeeded ___ hard work.'",
+    "options": ["through", "so", "but"],
+    "answer": "through"
+  },
+  {
+    "id": 114,
+    "question": "Choose the best greeting for a business call.",
+    "options": ["Hello, this is John speaking.", "Hey", "Yo"],
+    "answer": "Hello, this is John speaking."
+  },
+  {
+    "id": 115,
+    "question": "Which is polite?",
+    "options": ["Could you clarify?", "What do you mean?", "Explain again!"],
+    "answer": "Could you clarify?"
+  },
+  {
+    "id": 116,
+    "question": "Spot the mistake: 'I isn’t sure.'",
+    "options": ["I", "isn’t", "sure"],
+    "answer": "isn’t"
+  },
+  {
+    "id": 117,
+    "question": "Conversation: 'We appreciate your business.' The response:",
+    "options": ["Thank you.", "No appreciate.", "Bye."],
+    "answer": "Thank you."
+  },
+  {
+    "id": 118,
+    "question": "Which is correct?",
+    "options": ["Please respond at your earliest convenience.", "Respond now.", "Earliest respond."],
+    "answer": "Please respond at your earliest convenience."
+  },
+  {
+    "id": 119,
+    "question": "Fill in the blank: 'The store opens ___ 9 a.m.'",
+    "options": ["at", "on", "in"],
+    "answer": "at"
+  },
+  {
+    "id": 120,
+    "question": "Choose the natural reply: 'I appreciate your help.'",
+    "options": ["My pleasure.", "No help.", "Why?"],
+    "answer": "My pleasure."
+  },
+  {
+    "id": 121,
+    "question": "Which response is best? 'What's the agenda?'",
+    "options": ["Here it is.", "No agenda.", "Later."],
+    "answer": "Here it is."
+  },
+  {
+    "id": 122,
+    "question": "Fill in the blank: 'We live ___ the city.'",
+    "options": ["in", "at", "on"],
+    "answer": "in"
+  },
+  {
+    "id": 123,
+    "question": "Choose the correct phrase: 'He insists ___ punctuality.'",
+    "options": ["on", "in", "at"],
+    "answer": "on"
+  },
+  {
+    "id": 124,
+    "question": "Conversation: A: 'May I leave early?' B: ?",
+    "options": ["Yes, you may.", "No leave.", "Why?"],
+    "answer": "Yes, you may."
+  },
+  {
+    "id": 125,
+    "question": "Which sentence is correct?",
+    "options": ["We doesn’t know.", "We don’t know.", "We not know."],
+    "answer": "We don’t know."
+  },
+  {
+    "id": 126,
+    "question": "At the office: 'Please sign the ___.'",
+    "options": ["document", "song", "dance"],
+    "answer": "document"
+  },
+  {
+    "id": 127,
+    "question": "Fill in the blank: 'Thanks ___ understanding.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 128,
+    "question": "Which is the polite reply to: 'Good luck.'",
+    "options": ["Thank you.", "No luck.", "Okay."],
+    "answer": "Thank you."
+  },
+  {
+    "id": 129,
+    "question": "Identify the error: 'Her is absent.'",
+    "options": ["Her", "is", "absent"],
+    "answer": "Her"
+  },
+  {
+    "id": 130,
+    "question": "You are introducing yourself. Which is correct?",
+    "options": ["I am John Doe.", "Am John.", "John am."],
+    "answer": "I am John Doe."
+  },
+  {
+    "id": 131,
+    "question": "Fill in the blank: 'They are proud ___ their achievements.'",
+    "options": ["of", "on", "at"],
+    "answer": "of"
+  },
+  {
+    "id": 132,
+    "question": "Which reply is natural? 'Would you like coffee?'",
+    "options": ["Yes, please.", "No coffee.", "Maybe."],
+    "answer": "Yes, please."
+  },
+  {
+    "id": 133,
+    "question": "Choose the correct sentence.",
+    "options": ["He do his best.", "He does his best.", "He doing his best."],
+    "answer": "He does his best."
+  },
+  {
+    "id": 134,
+    "question": "In a contract: 'The parties agree to ___.'",
+    "options": ["terms", "games", "foods"],
+    "answer": "terms"
+  },
+  {
+    "id": 135,
+    "question": "Which expression is polite in refusal?",
+    "options": ["I'm afraid I can't.", "No way.", "Forget it."],
+    "answer": "I'm afraid I can't."
+  },
+  {
+    "id": 136,
+    "question": "Fill in the blank: 'I am impressed ___ your work.'",
+    "options": ["with", "at", "on"],
+    "answer": "with"
+  },
+  {
+    "id": 137,
+    "question": "Spot the error: 'You likes it.'",
+    "options": ["You", "likes", "it"],
+    "answer": "likes"
+  },
+  {
+    "id": 138,
+    "question": "Which is correct?",
+    "options": ["We value your feedback.", "Value feedback your.", "Feedback value."],
+    "answer": "We value your feedback."
+  },
+  {
+    "id": 139,
+    "question": "Choose the correct reply: 'When is the deadline?'",
+    "options": ["It's next Friday.", "No deadline.", "Ask."],
+    "answer": "It's next Friday."
+  },
+  {
+    "id": 140,
+    "question": "Fill in the blank: 'Please be ___ time.'",
+    "options": ["on", "in", "at"],
+    "answer": "on"
+  },
+  {
+    "id": 141,
+    "question": "Conversation: A: 'Do you have the report?' B should reply:",
+    "options": ["Yes, here it is.", "No report.", "Later."],
+    "answer": "Yes, here it is."
+  },
+  {
+    "id": 142,
+    "question": "Which is correct in a memo?",
+    "options": ["To all staff.", "All staff to.", "Staff all."],
+    "answer": "To all staff."
+  },
+  {
+    "id": 143,
+    "question": "Fill in the blank: 'The event was postponed ___ rain.'",
+    "options": ["due to", "so", "but"],
+    "answer": "due to"
+  },
+  {
+    "id": 144,
+    "question": "Choose the best response to a complaint.",
+    "options": ["We apologize for the inconvenience.", "Your fault.", "Too bad."],
+    "answer": "We apologize for the inconvenience."
+  },
+  {
+    "id": 145,
+    "question": "Which is polite?",
+    "options": ["I would appreciate your input.", "Give input now!", "Input!"],
+    "answer": "I would appreciate your input."
+  },
+  {
+    "id": 146,
+    "question": "Spot the mistake: 'They wasn’t there.'",
+    "options": ["They", "wasn’t", "there"],
+    "answer": "wasn’t"
+  },
+  {
+    "id": 147,
+    "question": "Conversation: 'Have a great day.' The reply:",
+    "options": ["You too.", "No day.", "Bye."],
+    "answer": "You too."
+  },
+  {
+    "id": 148,
+    "question": "Which is correct?",
+    "options": ["Enclosed please find.", "Find enclosed please.", "Please enclosed find."],
+    "answer": "Enclosed please find."
+  },
+  {
+    "id": 149,
+    "question": "Fill in the blank: 'Let's schedule ___ next week.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 150,
+    "question": "Choose the natural reply: 'Thank you for the invitation.'",
+    "options": ["You're welcome.", "No invitation.", "Why?"],
+    "answer": "You're welcome."
+  },
+  {
+    "id": 151,
+    "question": "Which response is best? 'How was the trip?'",
+    "options": ["It was productive.", "Bad.", "Nothing."],
+    "answer": "It was productive."
+  },
+  {
+    "id": 152,
+    "question": "Fill in the blank: 'The bus stops ___ the corner.'",
+    "options": ["at", "in", "on"],
+    "answer": "at"
+  },
+  {
+    "id": 153,
+    "question": "Choose the correct phrase: 'She believes ___ teamwork.'",
+    "options": ["in", "on", "at"],
+    "answer": "in"
+  },
+  {
+    "id": 154,
+    "question": "Conversation: A: 'What's your extension?' B: ?",
+    "options": ["It's 1234.", "No extension.", "Why?"],
+    "answer": "It's 1234."
+  },
+  {
+    "id": 155,
+    "question": "Which sentence is correct?",
+    "options": ["I weren’t aware.", "I wasn’t aware.", "I not aware."],
+    "answer": "I wasn’t aware."
+  },
+  {
+    "id": 156,
+    "question": "At the reception: 'Please fill out this ___.'",
+    "options": ["form", "song", "dance"],
+    "answer": "form"
+  },
+  {
+    "id": 157,
+    "question": "Fill in the blank: 'We look forward ___ hearing from you.'",
+    "options": ["to", "at", "on"],
+    "answer": "to"
+  },
+  {
+    "id": 158,
+    "question": "Which is the polite reply to: 'Sorry to bother you.'",
+    "options": ["No bother at all.", "You bother.", "Go away."],
+    "answer": "No bother at all."
+  },
+  {
+    "id": 159,
+    "question": "Identify the error: 'Him is the manager.'",
+    "options": ["Him", "is", "manager"],
+    "answer": "Him"
+  },
+  {
+    "id": 160,
+    "question": "You are requesting information. Which is correct?",
+    "options": ["Could you provide details?", "Provide now.", "Details."],
+    "answer": "Could you provide details?"
+  },
+  {
+    "id": 161,
+    "question": "Fill in the blank: 'He is concerned ___ the budget.'",
+    "options": ["about", "on", "at"],
+    "answer": "about"
+  },
+  {
+    "id": 162,
+    "question": "Which reply is natural? 'Can we postpone?'",
+    "options": ["Sure, no problem.", "No.", "Maybe."],
+    "answer": "Sure, no problem."
+  },
+  {
+    "id": 163,
+    "question": "Choose the correct sentence.",
+    "options": ["You has the key.", "You have the key.", "You having the key."],
+    "answer": "You have the key."
+  },
+  {
+    "id": 164,
+    "question": "In a survey: 'Please rate your ___.'",
+    "options": ["satisfaction", "hunger", "sleep"],
+    "answer": "satisfaction"
+  },
+  {
+    "id": 165,
+    "question": "Which expression is polite in agreement?",
+    "options": ["I concur.", "Wrong.", "No."],
+    "answer": "I concur."
+  },
+  {
+    "id": 166,
+    "question": "Fill in the blank: 'She is familiar ___ the process.'",
+    "options": ["with", "at", "on"],
+    "answer": "with"
+  },
+  {
+    "id": 167,
+    "question": "Spot the error: 'She work hard.'",
+    "options": ["She", "work", "hard"],
+    "answer": "work"
+  },
+  {
+    "id": 168,
+    "question": "Which is correct?",
+    "options": ["Best regards.", "Regards best.", "Best regard."],
+    "answer": "Best regards."
+  },
+  {
+    "id": 169,
+    "question": "Choose the correct reply: 'Is this correct?'",
+    "options": ["Yes, it is.", "No correct.", "Ask."],
+    "answer": "Yes, it is."
+  },
+  {
+    "id": 170,
+    "question": "Fill in the blank: 'Please confirm your ___.'",
+    "options": ["attendance", "absence", "ignorance"],
+    "answer": "attendance"
+  },
+  {
+    "id": 171,
+    "question": "Conversation: A: 'What's the policy?' B should reply:",
+    "options": ["Here it is.", "No policy.", "Later."],
+    "answer": "Here it is."
+  },
+  {
+    "id": 172,
+    "question": "Which is correct in a notice?",
+    "options": ["Meeting canceled.", "Canceled meeting.", "Meeting cancel."],
+    "answer": "Meeting canceled."
+  },
+  {
+    "id": 173,
+    "question": "Fill in the blank: 'He resigned ___ personal reasons.'",
+    "options": ["for", "so", "but"],
+    "answer": "for"
+  },
+  {
+    "id": 174,
+    "question": "Choose the best way to end a call.",
+    "options": ["Thank you, goodbye.", "Bye now.", "Hang up."],
+    "answer": "Thank you, goodbye."
+  },
+  {
+    "id": 175,
+    "question": "Which is polite?",
+    "options": ["Excuse me, may I ask?", "Ask now!", "What?"],
+    "answer": "Excuse me, may I ask?"
+  },
+  {
+    "id": 176,
+    "question": "Spot the mistake: 'We wasn’t prepared.'",
+    "options": ["We", "wasn’t", "prepared"],
+    "answer": "wasn’t"
+  },
+  {
+    "id": 177,
+    "question": "Conversation: 'Pleased to meet you.' The reply:",
+    "options": ["Likewise.", "No pleased.", "Bye."],
+    "answer": "Likewise."
+  },
+  {
+    "id": 178,
+    "question": "Which is correct?",
+    "options": ["I am attaching the file.", "Attaching file I am.", "File attaching."],
+    "answer": "I am attaching the file."
+  },
+  {
+    "id": 179,
+    "question": "Fill in the blank: 'The holiday is ___ December.'",
+    "options": ["in", "at", "on"],
+    "answer": "in"
+  },
+  {
+    "id": 180,
+    "question": "Choose the natural reply: 'Sorry about that.'",
+    "options": ["It's okay.", "Be sorry.", "Why?"],
+    "answer": "It's okay."
+  },
+  {
+    "id": 181,
+    "question": "Which response is best? 'Do you need more time?'",
+    "options": ["No, thank you.", "Yes need.", "Time more."],
+    "answer": "No, thank you."
+  },
+  {
+    "id": 182,
+    "question": "Fill in the blank: 'Please park ___ the lot.'",
+    "options": ["in", "at", "on"],
+    "answer": "in"
+  },
+  {
+    "id": 183,
+    "question": "Choose the correct phrase: 'We apologize ___ any inconvenience.'",
+    "options": ["for", "on", "at"],
+    "answer": "for"
+  },
+  {
+    "id": 184,
+    "question": "Conversation: A: 'Can I transfer you?' B: ?",
+    "options": ["Yes, please.", "No transfer.", "Why?"],
+    "answer": "Yes, please."
+  },
+  {
+    "id": 185,
+    "question": "Which sentence is correct?",
+    "options": ["She weren’t happy.", "She wasn’t happy.", "She not happy."],
+    "answer": "She wasn’t happy."
+  },
+  {
+    "id": 186,
+    "question": "At the meeting: 'Let's review the ___.'",
+    "options": ["agenda", "menu", "playlist"],
+    "answer": "agenda"
+  },
+  {
+    "id": 187,
+    "question": "Fill in the blank: 'I am responsible ___ this task.'",
+    "options": ["for", "at", "on"],
+    "answer": "for"
+  },
+  {
+    "id": 188,
+    "question": "Which is the polite reply to: 'Welcome aboard.'",
+    "options": ["Thank you.", "No welcome.", "Okay."],
+    "answer": "Thank you."
+  },
+  {
+    "id": 189,
+    "question": "Identify the error: 'Me am tired.'",
+    "options": ["Me", "am", "tired"],
+    "answer": "Me"
+  },
+  {
+    "id": 190,
+    "question": "You are offering help. Which is correct?",
+    "options": ["How can I assist?", "Assist how?", "Help."],
+    "answer": "How can I assist?"
+  },
+  {
+    "id": 191,
+    "question": "Fill in the blank: 'The team is excited ___ the project.'",
+    "options": ["about", "on", "at"],
+    "answer": "about"
+  },
+  {
+    "id": 192,
+    "question": "Which reply is natural? 'Is everything okay?'",
+    "options": ["Yes, fine.", "No okay.", "Maybe."],
+    "answer": "Yes, fine."
+  },
+  {
+    "id": 193,
+    "question": "Choose the correct sentence.",
+    "options": ["It seem good.", "It seems good.", "It seeming good."],
+    "answer": "It seems good."
+  },
+  {
+    "id": 194,
+    "question": "In a report: 'The findings indicate ___.'",
+    "options": ["success", "failure", "nothing"],
+    "answer": "success"
+  },
+  {
+    "id": 195,
+    "question": "Which expression is polite in request?",
+    "options": ["Would you be able to?", "Do it.", "Now."],
+    "answer": "Would you be able to?"
+  },
+  {
+    "id": 196,
+    "question": "Fill in the blank: 'He is compliant ___ the rules.'",
+    "options": ["with", "at", "on"],
+    "answer": "with"
+  },
+  {
+    "id": 197,
+    "question": "Spot the error: 'They eats lunch.'",
+    "options": ["They", "eats", "lunch"],
+    "answer": "eats"
+  },
+  {
+    "id": 198,
+    "question": "Which is correct?",
+    "options": ["Kind regards.", "Regards kind.", "Kind regard."],
+    "answer": "Kind regards."
+  },
+  {
+    "id": 199,
+    "question": "Choose the correct reply: 'What's the update?'",
+    "options": ["Everything is on track.", "No update.", "Later."],
+    "answer": "Everything is on track."
+  },
+  {
+    "id": 200,
+    "question": "Fill in the blank: 'Please submit your ___.'",
+    "options": ["application", "complaint", "excuse"],
+    "answer": "application"
+  }
+],
   "jumbledWords": [
     { "id": 1, "jumbled": "she/the/cooked/dinner", "answer": "She cooked the dinner." },
   { "id": 2, "jumbled": "they/the/planned/chai/break", "answer": "They planned the chai break." },
@@ -872,3 +1872,4 @@
   { "id": 60, "sentences": "I had navigated the festival logistics for Holi with great expertise. Colors, music, and snacks were perfectly organized. The family’s celebration was vibrant and unforgettable. The planning made the event truly special." }
    ]
   }
+
