@@ -1,0 +1,106 @@
+body.test-page-active {
+    /* Using a dark green gradient that matches your site's theme */
+    background: linear-gradient(135deg, #2F855A 0%, #1A202C 100%);
+}
+
+.test-container-glass {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 700px;
+    color: white;
+}
+
+.test-title {
+    color: white;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.test-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.test-question-area {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.test-input, .test-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.test-input::placeholder, .test-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.test-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    min-width: 120px;
+    margin-top: 1rem;
+}
+
+.test-btn-primary {
+    background: #38A169; /* Green 600 */
+    color: white;
+}
+
+.test-btn-primary:hover {
+    background: #2F855A; /* Green 700 */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(47, 133, 90, 0.3);
+}
+
+.test-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.test-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.timer-display-circular {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 3px solid rgba(56, 161, 105, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+}
+
+.timer-text-circular {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+}

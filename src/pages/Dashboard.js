@@ -5,6 +5,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import PaymentModal from '../components/PaymentModal';
+import Footer from '../components/Footer';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -47,20 +48,7 @@ const Header = () => {
   );
 };
 
-const Footer = () => {
-  return (
-    <footer className="bg-green-900 text-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center">
-        <p className="text-sm">© 2025 English Mastery App. All rights reserved.</p>
-        <div className="flex space-x-6 mt-4 sm:mt-0">
-          <a href="/privacy" className="text-sm hover:text-green-500 transition-colors duration-200">Privacy Policy</a>
-          <a href="/terms" className="text-sm hover:text-green-500 transition-colors duration-200">Terms of Service</a>
-          <a href="/contact" className="text-sm hover:text-green-500 transition-colors duration-200">Contact Us</a>
-        </div>
-      </div>
-    </footer>
-  );
-};
+
 
 const Dashboard = () => {
   const navigate = useNavigate();

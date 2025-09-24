@@ -1,8 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import masterData from '../data/masterTest.json';
+import Footer from '../components/Footer';
+import './TestPage.css';
 
 export default function TestPage() {
+  // Add a class to the body when the component mounts, and remove it when it unmounts
+  useEffect(() => {
+    document.body.classList.add('test-page-active');
+    return () => {
+      document.body.classList.remove('test-page-active');
+    };
+  }, []);
+
   // Navigation hook
   const navigate = useNavigate();
 
@@ -595,75 +605,76 @@ export default function TestPage() {
   // Test introduction with enhanced validation
   if (!testId || testId < 1 || testId > 20) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Invalid Test Selected</h2>
-          </div>
-          <div className="p-6">
-            <p className="text-green-700">Please select a test from the dashboard (Test 1 to Test 20).</p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Invalid Test Selected</h2>
+            <p className="test-subtitle">Please select a test from the dashboard (Test 1 to Test 20).</p>
             <button
               onClick={() => navigate('/dashboard')}
-              className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               Go to Dashboard
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   if (!testStarted) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Versant Writing Test {testId}</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-green-700">This test has six sections:</p>
-            <ol className="list-decimal pl-5 space-y-2 text-green-700">
-              <li>Typing Test (1 minute)</li>
-              <li>Sentence Completion (10 questions, 5 minutes)</li>
-              <li>Fill in the Blanks (10 questions, 5 minutes)</li>
-              <li>Jumbled Words (15 questions, 7.5 minutes)</li>
-              <li>Passage Reconstruction (3 tasks, 6 minutes)</li>
-              <li>Email Writing (5 minutes)</li>
-            </ol>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Versant Writing Test {testId}</h2>
+            <div className="text-left test-subtitle space-y-2">
+              <p>This test has six sections:</p>
+              <ol className="list-decimal pl-5 space-y-1">
+                <li>Typing Test (1 minute)</li>
+                <li>Sentence Completion (10 questions, 5 minutes)</li>
+                <li>Fill in the Blanks (10 questions, 5 minutes)</li>
+                <li>Jumbled Words (15 questions, 7.5 minutes)</li>
+                <li>Passage Reconstruction (3 tasks, 6 minutes)</li>
+                <li>Email Writing (5 minutes)</li>
+              </ol>
+            </div>
             <button
               onClick={startTest}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               Start Test
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Typing test instructions
   if (currentTest === 'typing' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Typing Test</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Improve your typing speed and accuracy through audio dictation. Listen to the audio carefully and type the dictated text into the input field. Click ‘Start Section’ to begin.
-            </p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Typing Test</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Improve your typing speed and accuracy through audio dictation. Listen to the audio carefully and type the dictated text into the input field. Click ‘Start Section’ to begin.
+              </p>
+            </div>
             <button
               onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               Start Section
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -672,67 +683,62 @@ export default function TestPage() {
     const typingQuestion = questions[0];
     if (!typingQuestion) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <p className="text-lg text-gray-600">Loading test...</p>
-        </div>
+        <>
+          <div className="min-h-screen flex items-center justify-center">
+            <p className="text-lg text-gray-600">Loading test...</p>
+          </div>
+          <Footer />
+        </>
       );
     }
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Typing Test</h2>
-            <p className="text-green-700">Time left: {formatTime(typingTimeLeft)}</p>
-          </div>
-          <div className="p-6 space-y-4">
-            <div className="bg-green-100 p-4 rounded border border-green-200">
-              <p className="text-green-800">{typingQuestion.paragraph}</p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Typing Test</h2>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">{formatTime(typingTimeLeft)}</div>
+            </div>
+            <div className="test-question-area">
+              <p>{typingQuestion.paragraph}</p>
             </div>
             <textarea
               value={typingInput}
               onChange={(e) => setTypingInput(e.target.value)}
-              className="w-full h-32 p-2 border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="test-textarea"
               placeholder="Type the text above..."
               disabled={typingTimeLeft <= 0}
             />
             <button
               onClick={evaluateTypingTest}
               disabled={typingTimeLeft > 0 && typingInput.length === 0}
-              className={`w-full py-2 px-4 rounded-md ${
-                typingTimeLeft > 0
-                  ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                  : 'bg-green-600 hover:bg-green-700 text-white'
-              }`}
-            >
+              className={`test-btn ${typingTimeLeft > 0 ? 'test-btn-secondary' : 'test-btn-primary'}`}>
               {typingTimeLeft > 0 ? 'Press Enter to Skip' : 'Continue'}
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Sentence completion instructions
   if (currentTest === 'sentence' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Sentence Completion</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 30 seconds. Click ‘Start Section’ to begin.
-            </p>
-            <button
-              onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-            >
-              Start Section
-            </button>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Sentence Completion</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 30 seconds. Click ‘Start Section’ to begin.
+              </p>
+            </div>
+            <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -740,58 +746,56 @@ export default function TestPage() {
   if (currentTest === 'sentence') {
     const currentQuestion = questions[1 + currentSentenceIndex]; // Questions 1-10 are sentence completion
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Sentence Completion</h2>
-            <p className="text-green-700">
-              Question {currentSentenceIndex + 1} of 10 • Time: {sentenceTimeLeft}s
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-lg text-green-800">{currentQuestion.question}</p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Sentence Completion</h2>
+            <p className="test-subtitle">Question {currentSentenceIndex + 1} of 10</p>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">{sentenceTimeLeft}s</div>
+            </div>
+            <div className="test-question-area">
+              <p>{currentQuestion.question}</p>
+            </div>
             <input
               ref={sentenceInputRef}
               type="text"
               value={sentenceAnswers[currentSentenceIndex]}
               onChange={handleSentenceAnswer}
               placeholder="Complete the sentence..."
-              className="w-full p-2 border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="test-input"
             />
             <button
               onClick={handleNextSentence}
               disabled={!sentenceAnswers[currentSentenceIndex]}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               {currentSentenceIndex < 9 ? 'Next (or press Enter)' : 'Continue'}
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Fill in blanks instructions
   if (currentTest === 'fill' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Fill in the Blanks</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Strengthen your language skills by filling in missing words. Select the correct word from the multiple-choice options within 30 seconds. Click ‘Start Section’ to begin.
-            </p>
-            <button
-              onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-            >
-              Start Section
-            </button>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Fill in the Blanks</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Strengthen your language skills by filling in missing words. Select the correct word from the multiple-choice options within 30 seconds. Click ‘Start Section’ to begin.
+              </p>
+            </div>
+            <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -799,65 +803,63 @@ export default function TestPage() {
   if (currentTest === 'fill') {
     const currentQuestion = questions[11 + currentFillIndex]; // Questions 11-20 are fill in the blanks
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Fill in the Blanks</h2>
-            <p className="text-green-700">
-              Question {currentFillIndex + 1} of 10 • Time: {fillTimeLeft}s
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-lg text-green-800">{currentQuestion.question}</p>
-            <div className="space-y-2">
-              {currentQuestion.options.map((option, i) => (
-                <label key={i} className="flex items-center space-x-2 text-green-800">
-                  <input
-                    ref={i === 0 ? fillInputRef : null} // Focus the first radio button
-                    type="radio"
-                    value={option}
-                    checked={fillAnswers[currentFillIndex] === option}
-                    onChange={() => handleFillAnswer(option)}
-                    className="text-green-600 border-green-300 focus:ring-green-500"
-                  />
-                  <span>{option}</span>
-                </label>
-              ))}
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Fill in the Blanks</h2>
+            <p className="test-subtitle">Question {currentFillIndex + 1} of 10</p>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">{fillTimeLeft}s</div>
+            </div>
+            <div className="test-question-area">
+              <p>{currentQuestion.question}</p>
+              <div className="space-y-2 mt-4 text-left">
+                {currentQuestion.options.map((option, i) => (
+                  <label key={i} className="flex items-center space-x-3 p-2 rounded-md hover:bg-white/20">
+                    <input
+                      ref={i === 0 ? fillInputRef : null}
+                      type="radio"
+                      value={option}
+                      checked={fillAnswers[currentFillIndex] === option}
+                      onChange={() => handleFillAnswer(option)}
+                      className="h-4 w-4 text-green-300 bg-transparent border-white/50 focus:ring-green-300"
+                    />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
             </div>
             <button
               onClick={handleNextFill}
               disabled={!fillAnswers[currentFillIndex]}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               {currentFillIndex < 9 ? 'Next (or press Enter)' : 'Continue'}
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Jumbled words instructions
   if (currentTest === 'jumbled' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Jumbled Words</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Boost logical thinking by unscrambling jumbled sentences. Type the correct sentence by rearranging the words within 30 seconds. Click ‘Start Section’ to begin.
-            </p>
-            <button
-              onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-            >
-              Start Section
-            </button>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Jumbled Words</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Boost logical thinking by unscrambling jumbled sentences. Type the correct sentence by rearranging the words within 30 seconds. Click ‘Start Section’ to begin.
+              </p>
+            </div>
+            <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -865,63 +867,57 @@ export default function TestPage() {
   if (currentTest === 'jumbled') {
     const currentQuestion = questions[21 + currentJumbledIndex]; // Questions 21-35 are jumbled words
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Jumbled Words</h2>
-            <p className="text-green-700">
-              Question {currentJumbledIndex + 1} of 15 • Time: {jumbledTimeLeft}s
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-lg text-green-800">
-              Unscramble these words to make a correct sentence:
-            </p>
-            <p className="text-xl font-bold text-green-700">
-              {currentQuestion.jumbled.replace(/\//g, ' ')}
-            </p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Jumbled Words</h2>
+            <p className="test-subtitle">Question {currentJumbledIndex + 1} of 15</p>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">{jumbledTimeLeft}s</div>
+            </div>
+            <div className="test-question-area">
+              <p>Unscramble these words to make a correct sentence:</p>
+              <p className="text-xl font-bold mt-2">{currentQuestion.jumbled.replace(/\//g, ' ')}</p>
+            </div>
             <input
               ref={jumbledInputRef}
               type="text"
               value={jumbledAnswers[currentJumbledIndex]}
               onChange={handleJumbledAnswer}
               placeholder="Type the correct sentence..."
-              className="w-full p-2 border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="test-input"
             />
             <button
               onClick={handleNextJumbled}
               disabled={!jumbledAnswers[currentJumbledIndex]}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               {currentJumbledIndex < 14 ? 'Next (or press Enter)' : 'Continue'}
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Passage reconstruction instructions
   if (currentTest === 'passage' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Passage Reconstruction</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Enhance memory and paraphrasing by reconstructing passages. Read the passage for 30 seconds, then rewrite it in your own words within 90 seconds. Click ‘Start Section’ to begin.
-            </p>
-            <button
-              onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-            >
-              Start Section
-            </button>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Passage Reconstruction</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Enhance memory and paraphrasing by reconstructing passages. Read the passage for 30 seconds, then rewrite it in your own words within 90 seconds. Click ‘Start Section’ to begin.
+              </p>
+            </div>
+            <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -929,79 +925,67 @@ export default function TestPage() {
   if (currentTest === 'passage') {
     const currentPassage = questions[36 + currentPassageIndex]; // Questions 36-38 are passage reconstruction
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Passage Reconstruction</h2>
-            <p className="text-green-700">
-              Passage {currentPassageIndex + 1} of 3 •{' '}
-              {isReadingPhase
-                ? `Reading Time: ${formatTime(passageTimeLeft)}`
-                : `Writing Time: ${formatTime(writingTimeLeft)}`}
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Passage Reconstruction</h2>
+            <p className="test-subtitle">Passage {currentPassageIndex + 1} of 3</p>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">
+                {isReadingPhase ? formatTime(passageTimeLeft) : formatTime(writingTimeLeft)}
+              </div>
+            </div>
             {isReadingPhase ? (
               <>
-                <p className="text-lg text-green-800">
-                  Read this passage carefully. It will disappear in {passageTimeLeft} seconds.
-                </p>
-                <div className="bg-green-100 p-4 rounded border border-green-200">
-                  <p className="text-green-800">{currentPassage.sentences}</p>
+                <div className="test-question-area">
+                  <p>Read this passage carefully. It will disappear in {passageTimeLeft} seconds.</p>
+                  <p className="mt-4">{currentPassage.sentences}</p>
                 </div>
-                <button
-                  onClick={() => setIsReadingPhase(false)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                >
+                <button onClick={() => setIsReadingPhase(false)} className="test-btn test-btn-primary">
                   I'm Ready to Write (or press Enter)
                 </button>
               </>
             ) : (
               <>
-                <p className="text-lg text-green-800">Reconstruct the passage in your own words:</p>
+                <div className="test-question-area">
+                  <p>Reconstruct the passage in your own words:</p>
+                </div>
                 <textarea
                   ref={passageInputRef}
                   value={passageInput}
                   onChange={(e) => setPassageInput(e.target.value)}
                   placeholder="Write the passage here..."
-                  className="w-full min-h-[200px] p-2 border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  className="test-textarea min-h-[200px]"
                 />
-                <button
-                  onClick={handleNextPassage}
-                  disabled={!passageInput}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-                >
+                <button onClick={handleNextPassage} disabled={!passageInput} className="test-btn test-btn-primary">
                   {currentPassageIndex < 2 ? 'Next Passage (or press Enter)' : 'Continue'}
                 </button>
               </>
             )}
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // Email writing instructions
   if (currentTest === 'email' && showInstructions) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-md bg-green-100 rounded-2xl shadow-md animate-fade-in">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl font-bold text-green-800">Email Writing</h2>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-sm text-green-800">
-              Practice professional communication by writing clear emails. Read the prompt and write a formal email within 5 minutes. Click ‘Start Section’ to begin.
-            </p>
-            <button
-              onClick={handleStartSection}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
-            >
-              Start Section
-            </button>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass max-w-md">
+            <h2 className="test-title">Email Writing</h2>
+            <div className="test-question-area">
+              <p className="test-subtitle">
+                Practice professional communication by writing clear emails. Read the prompt and write a formal email within 5 minutes. Click ‘Start Section’ to begin.
+              </p>
+            </div>
+            <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
@@ -1009,34 +993,37 @@ export default function TestPage() {
   if (currentTest === 'email') {
     const emailQuestion = questions[39]; // Question 39 is email writing
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-green-50">
-        <div className="w-full max-w-2xl border border-green-200 rounded-lg shadow-sm bg-white">
-          <div className="p-6 border-b border-green-200">
-            <h2 className="text-2xl text-green-800 font-semibold">Email Writing</h2>
-            <p className="text-green-700">Time left: {formatTime(emailTimeLeft)}</p>
-          </div>
-          <div className="p-6 space-y-4">
-            <p className="text-lg text-green-800">{emailQuestion.prompt}</p>
+      <>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="test-container-glass">
+            <h2 className="test-title">Email Writing</h2>
+            <div className="timer-display-circular">
+              <div className="timer-text-circular">{formatTime(emailTimeLeft)}</div>
+            </div>
+            <div className="test-question-area">
+              <p>{emailQuestion.prompt}</p>
+            </div>
             <textarea
               ref={emailInputRef}
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
               placeholder="Write your email here..."
-              className="w-full min-h-[200px] p-2 border border-green-300 rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="test-textarea min-h-[200px]"
             />
             <button
               onClick={evaluateEmailWriting}
               disabled={!emailInput}
-              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md"
+              className="test-btn test-btn-primary"
             >
               {emailTimeLeft > 0 ? 'Submit (or press Enter)' : 'Finish Test'}
             </button>
           </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   // If test is completed, redirect happened, so nothing to render here
-  return null;
+  return <Footer />;
 }

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, googleProvider, db } from '../firebaseConfig';
 import Button from '../components/ui/button';
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/card';
+
+import Header from '../components/Header';
 
 export default function VersantHomepage() {
   const [email, setEmail] = useState('');
@@ -54,20 +57,11 @@ export default function VersantHomepage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navigation Bar */}
-      <nav className="bg-green-700 text-white px-4 py-3 shadow-md md:px-6 md:py-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 md:w-8 md:h-8 bg-green-500 rounded-full"></div>
-            <span className="text-lg md:text-xl font-bold">Versant Test</span>
-          </div>
-          <div className="hidden md:flex space-x-6 lg:space-x-8">
-            <Link to="/" className="hover:text-green-200 font-medium">Home</Link>
-            <a href="#about" className="hover:text-green-200 font-medium">About</a>
-            <a href="#contact" className="hover:text-green-200 font-medium">Contact</a>
-          </div>
-        </div>
-      </nav>
+      <Helmet>
+        <title>Versant Practice Test | Ace Your Versant Exam</title>
+        <meta name="description" content="Prepare for your Versant test with our interactive practice tests. Get instant feedback and improve your score. Start your free Versant practice test today!" />
+      </Helmet>
+      <Header />
 
       {/* Hero Section */}
       <main className="flex-grow bg-gradient-to-b from-green-50 to-white px-4 sm:px-6">
@@ -75,7 +69,7 @@ export default function VersantHomepage() {
           <div className="flex flex-col lg:flex-row items-center">
             <div className="w-full lg:w-1/2 mb-8 lg:mb-0 lg:pr-8">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 md:mb-6">
-                Assess Your English Skills with <span className="text-green-600">Versant</span>
+                Take a Free Versant Practice Test and Assess Your English Skills
               </h1>
               <p className="text-base sm:text-lg text-gray-600 mb-6 md:mb-8">
                 The Versant English Test is a fast, accurate, and convenient way to test your English speaking, listening, reading, and writing skills.
@@ -172,7 +166,11 @@ export default function VersantHomepage() {
       {/* Footer */}
       <footer className="bg-green-800 text-white py-6 px-4">
         <div className="container mx-auto text-center text-sm">
-          © {new Date().getFullYear()} Versant Test. All rights reserved.
+          <p>© {new Date().getFullYear()} Versant Test. All rights reserved.</p>
+          <div className="mt-2">
+            <Link to="/terms" className="hover:text-green-200 mx-2">Terms and Conditions</Link>
+            <Link to="/privacy" className="hover:text-green-200 mx-2">Privacy Policy</Link>
+          </div>
         </div>
       </footer>
     </div>
