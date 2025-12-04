@@ -4,6 +4,7 @@ body.test-page-active {
 }
 
 .test-container-glass {
+    position: relative;
     text-align: center;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.05);
@@ -85,6 +86,25 @@ body.test-page-active {
 .test-btn-secondary:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
+}
+
+.test-btn-exit-corner {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.test-btn-exit-corner:hover {
+    opacity: 1;
 }
 
 .timer-display-circular {

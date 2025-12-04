@@ -1,0 +1,13 @@
+body { 
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+}
+.blog-card {
+    transition: all 0.3s ease;
+}
+.blog-card:hover {
+    transform: translateY(-2px);
+}
+.featured-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}

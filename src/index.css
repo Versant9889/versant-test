@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.blog-card {
+  transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%); /* Using Tailwind's green-500 and green-700 equivalents */
+}
+
+.tag:hover {
+  transform: scale(1.05);
+}

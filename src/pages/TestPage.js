@@ -33,7 +33,7 @@ export default function TestPage() {
   // Sentence completion state
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [sentenceAnswers, setSentenceAnswers] = useState([]);
-  const [sentenceTimeLeft, setSentenceTimeLeft] = useState(30); // 30 seconds per question
+  const [sentenceTimeLeft, setSentenceTimeLeft] = useState(15); // 15 seconds per question
   const sentenceInputRef = useRef(null);
 
   // Fill in blanks state
@@ -292,7 +292,7 @@ export default function TestPage() {
   // Sentence completion functions
   const startSentenceCompletion = () => {
     setCurrentSentenceIndex(0);
-    setSentenceTimeLeft(30);
+    setSentenceTimeLeft(15);
     setCurrentTest('sentence');
     setShowInstructions(true); // Show instructions before starting
   };
@@ -307,7 +307,7 @@ export default function TestPage() {
     if (currentSentenceIndex < 9) {
       // 10 questions (0-9)
       setCurrentSentenceIndex((prev) => prev + 1);
-      setSentenceTimeLeft(30);
+      setSentenceTimeLeft(15);
     } else {
       startFillInBlanks();
     }
@@ -458,7 +458,7 @@ export default function TestPage() {
           text = "Improve your typing speed and accuracy through audio dictation. Listen to the audio carefully and type the dictated text into the input field. Click 'Start Section' to begin.";
           break;
         case 'sentence':
-          text = "Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 30 seconds. Click 'Start Section' to begin.";
+          text = "Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 15 seconds. Click 'Start Section' to begin.";
           break;
         case 'fill':
           text = "Strengthen your language skills by filling in missing words. Select the correct word from the multiple-choice options within 30 seconds. Click 'Start Section' to begin.";
@@ -506,7 +506,7 @@ export default function TestPage() {
           if (prev <= 1) {
             clearInterval(timer);
             handleNextSentence();
-            return 30;
+            return 15;
           }
           return prev - 1;
         });
@@ -602,6 +602,12 @@ export default function TestPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const handleExitTest = () => {
+    if (window.confirm('Are you sure you want to exit the test? Your progress will be lost and you cannot resume it.')) {
+      navigate('/dashboard');
+    }
+  };
+
   // Test introduction with enhanced validation
   if (!testId || testId < 1 || testId > 20) {
     return (
@@ -633,7 +639,7 @@ export default function TestPage() {
               <p>This test has six sections:</p>
               <ol className="list-decimal pl-5 space-y-1">
                 <li>Typing Test (1 minute)</li>
-                <li>Sentence Completion (10 questions, 5 minutes)</li>
+                <li>Sentence Completion (10 questions, 2.5 minutes)</li>
                 <li>Fill in the Blanks (10 questions, 5 minutes)</li>
                 <li>Jumbled Words (15 questions, 7.5 minutes)</li>
                 <li>Passage Reconstruction (3 tasks, 6 minutes)</li>
@@ -659,6 +665,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+             <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Typing Test</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -695,6 +704,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Typing Test</h2>
             <div className="timer-display-circular">
               <div className="timer-text-circular">{formatTime(typingTimeLeft)}</div>
@@ -728,6 +740,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Sentence Completion</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -749,6 +764,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Sentence Completion</h2>
             <p className="test-subtitle">Question {currentSentenceIndex + 1} of 10</p>
             <div className="timer-display-circular">
@@ -785,6 +803,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Fill in the Blanks</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -806,6 +827,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Fill in the Blanks</h2>
             <p className="test-subtitle">Question {currentFillIndex + 1} of 10</p>
             <div className="timer-display-circular">
@@ -849,6 +873,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Jumbled Words</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -870,6 +897,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Jumbled Words</h2>
             <p className="test-subtitle">Question {currentJumbledIndex + 1} of 15</p>
             <div className="timer-display-circular">
@@ -907,6 +937,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Passage Reconstruction</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -928,6 +961,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Passage Reconstruction</h2>
             <p className="test-subtitle">Passage {currentPassageIndex + 1} of 3</p>
             <div className="timer-display-circular">
@@ -975,6 +1011,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Email Writing</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
@@ -996,6 +1035,9 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
+              &times;
+            </button>
             <h2 className="test-title">Email Writing</h2>
             <div className="timer-display-circular">
               <div className="timer-text-circular">{formatTime(emailTimeLeft)}</div>
