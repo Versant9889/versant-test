@@ -33,6 +33,9 @@ const Header = () => {
           <button onClick={() => navigate('/dashboard')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
             Dashboard
           </button>
+          <button onClick={() => navigate('/practice')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
+            Practice Hub
+          </button>
           <button onClick={() => navigate('/')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
             Home
           </button>

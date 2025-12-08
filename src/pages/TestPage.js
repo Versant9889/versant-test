@@ -13,10 +13,7 @@ export default function TestPage() {
     };
   }, []);
 
-  // Navigation hook
   const navigate = useNavigate();
-
-  // Test state
   const location = useLocation();
   const { testId } = location.state || {};
   const [currentTest, setCurrentTest] = useState('typing');
@@ -26,8 +23,10 @@ export default function TestPage() {
   const [showInstructions, setShowInstructions] = useState(true); // Toggle instructions
 
   // Typing test state
-  const [typingInput, setTypingInput] = useState('');
   const [typingTimeLeft, setTypingTimeLeft] = useState(60); // 1 minute
+
+  // Typing test state
+  const [typingInput, setTypingInput] = useState('');
   const [typingResults, setTypingResults] = useState({ wpm: 0, accuracy: 0 });
 
   // Sentence completion state
@@ -84,9 +83,7 @@ export default function TestPage() {
 
       const handlePopState = (e) => {
         e.preventDefault();
-        const confirmLeave = window.confirm(
-          'Your test progress will be lost if you go back. Are you sure you want to leave?'
-        );
+        const confirmLeave = window.confirm('Your test progress will be lost if you go back. Are you sure you want to leave?');
         if (confirmLeave) {
           navigate('/dashboard'); // Navigate to dashboard if user confirms
         } else {
@@ -173,13 +170,28 @@ export default function TestPage() {
 
   // Text-to-speech function for instructions
   const speakInstruction = (text) => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel(); // Cancel any ongoing speech
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 1.0; // Normal speed
-      utterance.pitch = 1.0; // Normal pitch
-      window.speechSynthesis.speak(utterance);
+    if ('speechSynthesis' in window) {
+      const speak = () => {
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel();
+        }
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'en-US';
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          window.speechSynthesis.speak(utterance);
+        }, 100);
+      };
+
+      if (window.speechSynthesis.getVoices().length) {
+        speak();
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          speak();
+          window.speechSynthesis.onvoiceschanged = null;
+        };
+      }
     }
   };
 
@@ -455,7 +467,7 @@ export default function TestPage() {
       let text = '';
       switch (currentTest) {
         case 'typing':
-          text = "Improve your typing speed and accuracy through audio dictation. Listen to the audio carefully and type the dictated text into the input field. Click 'Start Section' to begin.";
+          text = "Improve your typing speed and accuracy. You will have 1 minute to type the paragraph shown. Click 'Start Section' to begin.";
           break;
         case 'sentence':
           text = "Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 15 seconds. Click 'Start Section' to begin.";
@@ -513,7 +525,7 @@ export default function TestPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentTest, sentenceTimeLeft, showInstructions, handleNextSentence]);
+  }, [currentTest, fillTimeLeft, showInstructions, handleNextFill]);
 
   useEffect(() => {
     if (currentTest === 'fill' && fillTimeLeft > 0 && !showInstructions) {

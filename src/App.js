@@ -13,6 +13,9 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import FullBlogPost from './pages/FullBlogPost';
 import BlogIndex from './pages/BlogIndex';
+import PracticeHub from './pages/PracticeHub';
+
+import PracticeTestPage from './pages/PracticeTestPage';
 
 // IMPORTANT: Replace with your own Google Analytics Measurement ID
 const TRACKING_ID = "G-91JD206S3Z"; 
@@ -45,6 +48,8 @@ function App() {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/blog" element={<BlogIndex />} />
+        <Route path="/practice" element={<PracticeHub />} />
+        <Route path="/practice/:section" element={<PracticeTestPage />} />
         <Route path="/blog/:slug" element={<FullBlogPost />} />
       </Routes>
     </Router>

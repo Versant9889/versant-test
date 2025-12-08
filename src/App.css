@@ -36,3 +36,106 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+    box-sizing: border-box;
+}
+
+/* Card 1 - Gradient Glass */
+.card-glass {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(168, 85, 247, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glass:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+}
+
+/* Card 2 - Minimal Border */
+.card-minimal {
+    background: white;
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.card-minimal:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+    transform: translateY(-4px);
+}
+
+/* Card 3 - Dark Elegant */
+.card-dark {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid #374151;
+    transition: all 0.3s ease;
+}
+
+.card-dark:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 15px 35px rgba(96, 165, 250, 0.3);
+    transform: translateY(-6px);
+}
+
+/* Card 4 - Colorful Badge */
+.card-badge {
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #f59e0b 0%, #ef4444 100%);
+}
+
+.card-badge:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+}
+
+/* Card 5 - Split Design */
+.card-split {
+    background: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card-split:hover {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+}
+
+.split-accent {
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+/* Card 6 - Neon Glow */
+.card-neon {
+    background: #0f172a;
+    border: 2px solid #06b6d4;
+    transition: all 0.3s ease;
+}
+
+.card-neon:hover {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.6), 0 0 60px rgba(6, 182, 212, 0.3);
+    transform: translateY(-5px);
+}
+
+.button-style {
+    transition: all 0.3s ease;
+}
+
+.button-style:hover {
+    transform: scale(1.05);
+}

@@ -1,4 +1,4 @@
-import React, from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import blogPostsData from '../data/blogPosts.json'; // Renamed to avoid conflict
@@ -40,7 +40,7 @@ export default function BlogIndex() {
     const email = event.target.querySelector('input[type="email"]').value;
     alert(`Thank you for subscribing with ${email}!`);
     // In a real application, you would send this email to your backend
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -69,7 +69,7 @@ export default function BlogIndex() {
             <article className="bg-white rounded-2xl shadow-xl overflow-hidden blog-card">
               <div className="md:flex">
                 <div className="md:w-1/2">
-                  <img src={featuredPost.imageUrl} alt={featuredPost.title} className="h-64 md:h-full w-full object-cover" />
+                  <img src={`${process.env.PUBLIC_URL}${featuredPost.imageUrl}`} alt={featuredPost.title} className="h-64 md:h-full w-full object-cover" />
                 </div>
                 <div className="md:w-1/2 p-8 flex flex-col justify-center">
                   <div className="flex items-center mb-4">
@@ -115,7 +115,7 @@ export default function BlogIndex() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blogGrid">
             {postsToDisplay.map(post => (
               <article key={post.id} className="blog-card bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
-                <img src={post.imageUrl} alt={post.title} className="h-56 w-full object-cover" />
+                <img src={`${process.env.PUBLIC_URL}${post.imageUrl}`} alt={post.title} className="h-56 w-full object-cover" />
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center mb-3">
                     <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{post.category}</span>
