@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import masterData from '../data/masterTest.json';
 import Footer from '../components/Footer';
 import './TestPage.css';
+import { gradeEmail, gradePassage } from '../utils/scoringUtils';
 
 export default function TestPage() {
   // Add a class to the body when the component mounts, and remove it when it unmounts
@@ -21,6 +22,7 @@ export default function TestPage() {
   const [testCompleted, setTestCompleted] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [showInstructions, setShowInstructions] = useState(true); // Toggle instructions
+
 
   // Typing test state
   const [typingTimeLeft, setTypingTimeLeft] = useState(60); // 1 minute
@@ -112,6 +114,7 @@ export default function TestPage() {
     }
   }, [testId]);
 
+
   const loadTestQuestions = (testId) => {
     // Validate testId (must be between 1 and 20)
     const testIndex = testId - 1; // Convert to zero-based index
@@ -129,41 +132,43 @@ export default function TestPage() {
     const email = masterData.emailWriting;
 
     // Calculate indices based on testId
-    const typingIndex = testIndex; // 1 typing question per test
-    const sentenceStart = testIndex * 10; // 10 sentence completion questions per test
-    const fillStart = testIndex * 10; // 10 fill in the blanks questions per test
-    const jumbledStart = testIndex * 15; // 15 jumbled words questions per test
-    const passageStart = testIndex * 3; // 3 passage reconstruction questions per test
-    const emailIndex = testIndex; // 1 email writing question per test
+    // Use modulo to cycle through available questions if testId > available data
+    const typingIndex = testIndex % typing.length;
+    const emailIndex = testIndex % email.length;
 
-    // Ensure the indices are within bounds
-    if (
-      typingIndex >= typing.length ||
-      sentenceStart + 10 > sentence.length ||
-      fillStart + 10 > fill.length ||
-      jumbledStart + 15 > jumbled.length ||
-      passageStart + 3 > passage.length ||
-      emailIndex >= email.length
-    ) {
-      console.error(`Data for testId ${testId} is incomplete in masterTest.json`);
-      return [];
-    }
+    // Cycle the START index for array chunks
+    const sentenceStart = (testIndex * 10) % Math.max(1, sentence.length);
+    const fillStart = (testIndex * 10) % Math.max(1, fill.length);
+    const jumbledStart = (testIndex * 15) % Math.max(1, jumbled.length);
+    const passageStart = (testIndex * 3) % Math.max(1, passage.length);
 
-    // Load questions for the current test with all fields
-    questions.push({ ...typing[typingIndex] }); // 1 typing question
-    for (let i = sentenceStart; i < sentenceStart + 10; i++) {
-      questions.push({ ...sentence[i] }); // 10 sentence completion, preserve all fields
-    }
-    for (let i = fillStart; i < fillStart + 10; i++) {
-      questions.push({ ...fill[i] }); // 10 fill in the blanks, preserve all fields
-    }
-    for (let i = jumbledStart; i < jumbledStart + 15; i++) {
-      questions.push({ ...jumbled[i] }); // 15 jumbled words, preserve all fields
-    }
-    for (let i = passageStart; i < passageStart + 3; i++) {
-      questions.push({ ...passage[i] }); // 3 passage reconstruction
-    }
-    questions.push({ ...email[emailIndex] }); // 1 email writing
+    // Helper to extract a chunk of questions with wrapping
+    const getChunk = (sourceArr, start, count) => {
+      if (!sourceArr || sourceArr.length === 0) return [];
+      const result = [];
+      for (let i = 0; i < count; i++) {
+        result.push(sourceArr[(start + i) % sourceArr.length]);
+      }
+      return result;
+    };
+
+    // 1. Typing (1 question) - Index 0
+    questions.push(typing[typingIndex]);
+
+    // 2. Sentence Completion (10 questions) - Indices 1-10
+    questions.push(...getChunk(sentence, sentenceStart, 10));
+
+    // 3. Fill in Blanks (10 questions) - Indices 11-20
+    questions.push(...getChunk(fill, fillStart, 10));
+
+    // 4. Jumbled Words (15 questions) - Indices 21-35
+    questions.push(...getChunk(jumbled, jumbledStart, 15));
+
+    // 5. Passage Reconstruction (3 questions) - Indices 36-38
+    questions.push(...getChunk(passage, passageStart, 3));
+
+    // 6. Email Writing (1 question) - Index 39
+    questions.push(email[emailIndex]);
 
     return questions;
   };
@@ -175,13 +180,29 @@ export default function TestPage() {
         if (window.speechSynthesis.speaking) {
           window.speechSynthesis.cancel();
         }
+
+        // Small delay to ensure cancellation takes effect
         setTimeout(() => {
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = 'en-US';
-          utterance.rate = 1.0;
+          utterance.rate = 0.9; // Slightly slower for better clarity
           utterance.pitch = 1.0;
+
+          // Try to select a better voice
+          const voices = window.speechSynthesis.getVoices();
+          // Prioritize Google US English or Microsoft Zira/David or other high quality voices
+          const preferredVoice = voices.find(voice =>
+            (voice.name.includes('Google') && voice.lang === 'en-US') ||
+            (voice.name.includes('Samantha') && voice.lang === 'en-US') ||
+            (voice.name.includes('Natural') && voice.lang === 'en-US')
+          );
+
+          if (preferredVoice) {
+            utterance.voice = preferredVoice;
+          }
+
           window.speechSynthesis.speak(utterance);
-        }, 100);
+        }, 50);
       };
 
       if (window.speechSynthesis.getVoices().length) {
@@ -189,6 +210,7 @@ export default function TestPage() {
       } else {
         window.speechSynthesis.onvoiceschanged = () => {
           speak();
+          // Remove listener to prevent multiple triggers
           window.speechSynthesis.onvoiceschanged = null;
         };
       }
@@ -437,21 +459,45 @@ export default function TestPage() {
     setShowInstructions(true); // Show instructions before starting
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const evaluateEmailWriting = () => {
-    setTestCompleted(true); // Mark test as completed before navigating
-    // Navigate to ResultPage.js with test results
-    navigate('/result', {
-      state: {
-        testId,
-        typingResults,
-        sentenceAnswers,
-        fillAnswers,
-        jumbledAnswers,
-        passageInputs,
-        emailInput,
-        questions,
-      },
+    setIsSubmitting(true);
+    // 1. Calculate Email Score (0-10) using our new algorithm
+    const emailResult = gradeEmail(emailInput);
+    console.log("Email Grading:", emailResult);
+
+    // 2. Calculate Passage Scores
+    // We compare each user input against the original text in masterData
+    // We need to look up the original passages again.
+    const passageQuestions = questions.filter(q => q.sentences); // Identify passage questions
+    const passageResults = passageInputs.map((input, index) => {
+      const originalText = passageQuestions[index]?.sentences || "";
+      return gradePassage(originalText, input);
     });
+    console.log("Passage Grading:", passageResults);
+
+    setTestCompleted(true); // Mark test as completed before navigating
+
+    // Simulate AI processing delay
+    setTimeout(() => {
+      // Navigate to ResultPage.js with test results
+      navigate('/result', {
+        state: {
+          testId,
+          typingResults,
+          sentenceAnswers,
+          fillAnswers,
+          jumbledAnswers,
+          passageInputs,
+          emailInput,
+          questions,
+          // NEW: Pass the calculated scores
+          emailScore: emailResult,
+          passageScores: passageResults
+        },
+      });
+    }, 2500);
   };
 
   // Auto-focus for email writing textarea
@@ -620,24 +666,36 @@ export default function TestPage() {
     }
   };
 
-  // Test introduction with enhanced validation
+
+
+  // CHECK: Validation logic moved here to ensure all hooks run first
   if (!testId || testId < 1 || testId > 20) {
     return (
-      <>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="test-container-glass">
-            <h2 className="test-title">Invalid Test Selected</h2>
-            <p className="test-subtitle">Please select a test from the dashboard (Test 1 to Test 20).</p>
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="test-btn test-btn-primary"
-            >
-              Go to Dashboard
-            </button>
-          </div>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="test-container-glass p-8 text-center bg-white rounded-xl shadow-xl">
+          <h2 className="test-title text-2xl font-bold text-red-600 mb-4">Invalid Test Selected</h2>
+          <p className="test-subtitle text-gray-600 mb-6">Please go back to the dashboard and select a valid test.</p>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+          >
+            Return to Dashboard
+          </button>
         </div>
-        <Footer />
-      </>
+      </div>
+    );
+  }
+
+  // Loading Overlay
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-90 fixed inset-0 z-50">
+        <div className="text-center p-8 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-emerald-400 mb-4"></div>
+          <h2 className="text-2xl font-bold text-white mb-2">Analyzing Responses...</h2>
+          <p className="text-gray-300">Our AI is evaluating your performance.</p>
+        </div>
+      </div>
     );
   }
 
@@ -677,7 +735,7 @@ export default function TestPage() {
       <>
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="test-container-glass max-w-md">
-             <button onClick={handleExitTest} className="test-btn-exit-corner">
+            <button onClick={handleExitTest} className="test-btn-exit-corner">
               &times;
             </button>
             <h2 className="test-title">Typing Test</h2>

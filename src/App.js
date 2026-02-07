@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
+import { getAuth } from 'firebase/auth';
 import Homepage from './pages/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -16,18 +17,49 @@ import BlogIndex from './pages/BlogIndex';
 import PracticeHub from './pages/PracticeHub';
 
 import PracticeTestPage from './pages/PracticeTestPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminLogin from './pages/AdminLogin';
+import { Navigate } from 'react-router-dom';
+
+// Helper component to handle /admin redirection
+const AdminRedirect = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (user && user.email === 'admin@versantapp.com') {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+  return <Navigate to="/admin/login" replace />;
+};
+
 
 // IMPORTANT: Replace with your own Google Analytics Measurement ID
-const TRACKING_ID = "G-91JD206S3Z"; 
+const TRACKING_ID = "G-91JD206S3Z";
 ReactGA.initialize(TRACKING_ID);
 
-// Component to track page views
+// Component to track page views and user activity
 function PageTracker() {
   const location = useLocation();
 
   useEffect(() => {
+    // 1. Track Page View in GA
     ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+
+    // 2. Track Internal Analytics
+    const trackInternal = async () => {
+      const { trackPageView } = await import('./utils/AnalyticsService');
+      trackPageView(location.pathname);
+    };
+    trackInternal();
   }, [location]);
+
+  // Heartbeat for "Online" status (every 30s)
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const { heartbeat } = await import('./utils/AnalyticsService');
+      heartbeat();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   return null;
 }
@@ -51,6 +83,11 @@ function App() {
         <Route path="/practice" element={<PracticeHub />} />
         <Route path="/practice/:section" element={<PracticeTestPage />} />
         <Route path="/blog/:slug" element={<FullBlogPost />} />
+
+        {/* Admin Routing */}
+        <Route path="/admin" element={<AdminRedirect />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );

@@ -13,6 +13,7 @@ export default function Header({ page }) {
           {page === 'practiceHub' ? (
             <>
               <Link to="/dashboard" className="hover:text-green-200 font-medium">Dashboard</Link>
+              <Link to="/profile" className="hover:text-green-200 font-medium">My Profile</Link>
               <Link to="/blog" className="hover:text-green-200 font-medium">Blog</Link>
               <Link to="/about" className="hover:text-green-200 font-medium">About Us</Link>
               <Link to="/contact" className="hover:text-green-200 font-medium">Contact Us</Link>

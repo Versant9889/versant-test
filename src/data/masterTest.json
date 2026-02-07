@@ -2,1874 +2,417 @@
   "typing": [
     {
       "id": 1,
-      "paragraph": "Hey, can we plan a movie night this Saturday? I’ll grab popcorn and soda. Let’s pick a comedy everyone enjoys. How about 7 PM? Text me your movie ideas, and I’ll set up the living room. Maybe we can order pizza too. Oh, and bring that new board game you mentioned! It’ll be a fun evening with the family."
+      "paragraph": "The quarterly financial report indicates a need for strategic realignment. While revenue has grown steadily in the Asia-Pacific region, operational costs in Europe have exceeded projections. We must conduct a granular analysis of these expenditures to identify inefficiencies. I propose evaluating our vendor contracts and logistics partners to optimize the supply chain. A meeting with the regional directors is essential."
     },
     {
       "id": 2,
-      "paragraph": "I’m heading to the grocery store later. We need milk, eggs, and bread. Should I get anything else? I’m thinking of making pasta for dinner tonight. Maybe some fresh veggies for a salad? Let me know if you want dessert too. I’ll be back by 5 PM, so we can cook together if you’re free."
+      "paragraph": "Customer feedback from the latest product launch highlights several areas for improvement. Specifically, users have reported latency issues during peak usage hours. The technical team should prioritize scalability upgrades immediately. Additionally, the user interface requires refinement to ensure a smoother onboarding experience. Addressing these concerns is critical to maintaining our competitive edge in the market."
     },
     {
       "id": 3,
-      "paragraph": "Can you walk the dog this afternoon? I’m stuck with laundry and cleaning. He needs a good run at the park. Maybe 30 minutes? I’ll handle dinner afterward—thinking tacos. If you’re up for it, we can watch that new series tonight. Let me know your plans so I can organize the evening."
+      "paragraph": "Effective communication is the cornerstone of successful project management. When teams are misaligned, deadlines are missed and quality suffers. It is imperative to establish clear channels for feedback and regular status updates. We should leverage collaborative tools to ensure transparency and accountability across all departments. This approach will foster a more cohesive and productive work environment."
     },
     {
       "id": 4,
-      "paragraph": "Team, let’s prepare for tomorrow’s client meeting. Review the project timeline and budget slides. I’ll need your input on resource allocation. Can someone update the presentation with last quarter’s data? We should aim to wrap up by noon. Also, confirm the meeting room booking. Let’s ensure we’re aligned before presenting."
+      "paragraph": "Sustainable business practices are no longer optional; they are a necessity for long-term viability. Investors and consumers alike are demanding greater corporate responsibility. We need to integrate environmental, social, and governance (ESG) criteria into our core strategy. This includes reducing our carbon footprint and ensuring ethical labor practices throughout our supply chain. The benefits will be substantial."
     },
     {
       "id": 5,
-      "paragraph": "I’m organizing the office holiday party. We’re looking at a local venue for December 15th. Can you suggest food options? I’m thinking buffet-style with vegetarian choices. Also, we need a budget estimate by Friday. Please coordinate with HR for headcount and send me your ideas for entertainment or activities."
+      "paragraph": "The upcoming merger presents both significant opportunities and considerable challenges. Integrating two distinct corporate cultures requires careful planning and sensitive leadership. We must prioritize open communication to alleviate employee concerns and maintain morale. Furthermore, rationalizing redundant systems will be key to achieving the anticipated cost synergies. A dedicated task force should be established to oversee this transition."
     },
     {
       "id": 6,
-      "paragraph": "Hi all, the weekly team sync is scheduled for 10 AM tomorrow. Please come prepared with status updates on your tasks. We’ll discuss the new software rollout and address any blockers. I’ve shared the agenda in the group chat. Let’s keep it to 45 minutes. Reach out if you need to add topics."
+      "paragraph": "Digital transformation is reshaping the competitive landscape across all industries. Companies that fail to adapt risk obsolescence. We must accelerate our adoption of cloud technologies and data analytics to drive innovation. Training our workforce to utilize these new tools effectively is equally important. This investment in human capital will yield high returns in efficiency and agility."
     },
     {
       "id": 7,
-      "paragraph": "We’re hosting a neighborhood cleanup this weekend. I’ll provide gloves and trash bags. Can you spread the word to nearby families? Let’s meet at the park at 9 AM Saturday. We’ll focus on the playground and walking paths. Afterward, we can have coffee at my place to discuss future community events."
+      "paragraph": "Negotiating the new service level agreement with our primary IT provider is a top priority. The current terms no longer align with our expanded operational requirements. We need to secure better guarantees regarding uptime and support response times. Additionally, the pricing structure should be revisited to reflect current market rates. I expect a draft proposal by Monday."
     },
     {
       "id": 8,
-      "paragraph": "Please review the attached sales report for Q2. We need to discuss underperforming regions at the next meeting. Can someone prepare a breakdown of client feedback? I’d like proposals for improving outreach by next week. Let’s schedule a follow-up call for Thursday to align on next steps and targets."
+      "paragraph": "Marketing strategies must evolve to keep pace with changing consumer behavior. Traditional advertising channels are yielding diminishing returns. We should shift our focus towards digital engagement and content marketing. Building a strong brand presence on social media platforms will allow us to target key demographics more effectively. Let's review the campaign metrics and adjust our allocation accordingly."
     },
     {
       "id": 9,
-      "paragraph": "Dear team, our strategic initiative requires immediate attention. Please analyze the market trends report and propose actionable recommendations by Wednesday. Focus on competitive positioning and customer retention strategies. Your insights will shape our Q4 roadmap. Schedule a briefing to present your findings. Precision and clarity are critical."
+      "paragraph": "Regulatory compliance is becoming increasingly complex in the financial sector. Staying ahead of these changes requires a proactive approach to risk management. We need to strengthen our internal controls and conduct regular audits. Training sessions for all compliance officers should be updated to cover the latest regulations. Failure to comply could result in severe penalties and reputational damage."
     },
     {
       "id": 10,
-      "paragraph": "The board has requested a comprehensive audit of operational workflows. I need a detailed analysis of current bottlenecks by Friday. Collaborate with department leads to gather data. Prioritize scalability and cost-efficiency in your recommendations. Submit your report directly to me for review before the executive meeting."
-    },
-    {
-      "id": 11,
-      "paragraph": "We’re facing delays in the product launch. I’ve scheduled a crisis meeting for tomorrow at 2 PM. Please prepare a status update on your deliverables. We need to identify root causes and propose mitigation plans. Your expertise is vital to realigning the timeline. Review the project charter beforehand."
-    },
-    {
-      "id": 12,
-      "paragraph": "Family, we need to discuss our budget for the upcoming vacation. I’ve drafted a plan covering flights, lodging, and activities. Can we meet Sunday to finalize details? I’m proposing a week in July. Please review the itinerary and suggest adjustments. Let’s ensure everyone’s preferences are considered."
-    },
-    {
-      "id": 13,
-      "paragraph": "Colleagues, the merger proposal demands rigorous evaluation. Please scrutinize the financial projections and risk assessments by Tuesday. Your analysis should address synergies and potential liabilities. I expect a succinct report highlighting key findings. Schedule a debrief to align on our negotiation strategy moving forward."
-    },
-    {
-      "id": 14,
-      "paragraph": "The client feedback survey revealed critical gaps in service delivery. I need a task force to investigate these issues by next week. Please coordinate with customer support to gather detailed insights. Propose actionable solutions to enhance client satisfaction. Your report will inform our strategic overhaul."
-    },
-    {
-      "id": 15,
-      "paragraph": "Dear all, the annual performance review cycle begins next month. Please submit your self-assessments by Friday, focusing on achievements and areas for growth. Managers, prepare feedback for your teams. We’ll discuss calibration in the leadership meeting. Ensure alignment with our organizational objectives."
-    },
-    {
-      "id": 16,
-      "paragraph": "Our Q3 projections underscore the need for operational optimization. I propose implementing a predictive analytics platform to streamline inventory management. Review the vendor analysis and budget by Wednesday. Your insights on scalability and ROI will shape board approval. Let’s schedule a strategic alignment session."
-    },
-    {
-      "id": 17,
-      "paragraph": "The regulatory compliance audit is imminent. I need a cross-functional team to validate our adherence to industry standards by next week. Please prioritize data security protocols and reporting accuracy. Submit a comprehensive report for executive review. Your diligence will mitigate potential legal exposures."
-    },
-    {
-      "id": 18,
-      "paragraph": "Dear family, our home renovation project requires meticulous planning. I’ve drafted a timeline for kitchen upgrades and exterior repairs. Can we review Saturday? Please evaluate contractor quotes and suggest priorities. Budget constraints necessitate strategic decisions. Let’s ensure the project aligns with our long-term vision."
-    },
-    {
-      "id": 19,
-      "paragraph": "The digital transformation initiative demands accelerated execution. Please evaluate the proposed technology stack and integration roadmap by Tuesday. Focus on interoperability and user adoption metrics. Your recommendations will inform our enterprise-wide deployment strategy. Schedule a governance meeting to finalize implementation protocols."
-    },
-    {
-      "id": 20,
-      "paragraph": "Colleagues, the sustainability task force must deliver its interim report by Friday. Analyze our carbon footprint and propose reduction strategies aligned with global standards. Engage stakeholders for cross-departmental buy-in. Your insights will drive our commitment to environmental stewardship. Prepare for a board presentation."
+      "paragraph": "The logistics team has faced unprecedented challenges due to global shipping disruptions. To mitigate delays, we are exploring alternative distribution routes. Diversifying our carrier network will reduce dependency on any single provider. We are also increasing safety stock levels for critical components. These measures should stabilize our inventory flow and improve customer satisfaction ratings."
     }
   ],
   "sentenceCompletion": [
-    { "id": 1, "question": "She ___ the dishes after dinner.", "acceptableAnswers": ["washed", "cleaned"], "answer": "washed" },
-    { "id": 2, "question": "They went to the ___ yesterday.", "acceptableAnswers": ["park", "garden"], "answer": "park" },
-    { "id": 3, "question": "He ___ the dog in the evening.", "acceptableAnswers": ["walked", "strolled"], "answer": "walked" },
-    { "id": 4, "question": "We cooked in the ___ tonight.", "acceptableAnswers": ["kitchen", "pantry"], "answer": "kitchen" },
-    { "id": 5, "question": "I ___ the groceries this morning.", "acceptableAnswers": ["bought", "purchased"], "answer": "bought" },
-    { "id": 6, "question": "She went to the ___ for milk.", "acceptableAnswers": ["store", "market"], "answer": "store" },
-    { "id": 7, "question": "They ___ the movie last night.", "acceptableAnswers": ["watched", "viewed"], "answer": "watched" },
-    { "id": 8, "question": "He played in the ___ today.", "acceptableAnswers": ["yard", "field"], "answer": "yard" },
-    { "id": 9, "question": "We ___ the table for guests.", "acceptableAnswers": ["set", "arranged"], "answer": "set" },
-    { "id": 10, "question": "I went to the ___ for books.", "acceptableAnswers": ["library", "bookstore"], "answer": "library" },
-    { "id": 11, "question": "She ___ the laundry yesterday.", "acceptableAnswers": ["folded", "sorted"], "answer": "folded" },
-    { "id": 12, "question": "They went to the ___ for fun.", "acceptableAnswers": ["beach", "shore"], "answer": "beach" },
-    { "id": 13, "question": "He ___ the garden this weekend.", "acceptableAnswers": ["weeded", "pruned"], "answer": "weeded" },
-    { "id": 14, "question": "We stayed in the ___ all day.", "acceptableAnswers": ["house", "home"], "answer": "house" },
-    { "id": 15, "question": "I ___ the kids to school.", "acceptableAnswers": ["drove", "transported"], "answer": "drove" },
-    { "id": 16, "question": "She went to the ___ for coffee.", "acceptableAnswers": ["cafe", "bistro"], "answer": "cafe" },
-    { "id": 17, "question": "They ___ the room before bed.", "acceptableAnswers": ["cleaned", "tidied"], "answer": "cleaned" },
-    { "id": 18, "question": "He went to the ___ for exercise.", "acceptableAnswers": ["gym", "fitness"], "answer": "gym" },
-    { "id": 19, "question": "We ___ the dog food today.", "acceptableAnswers": ["bought", "acquired"], "answer": "bought" },
-    { "id": 20, "question": "I went to the ___ for dinner.", "acceptableAnswers": ["restaurant", "diner"], "answer": "restaurant" },
-    { "id": 21, "question": "She ___ the flowers this morning.", "acceptableAnswers": ["watered", "nurtured"], "answer": "watered" },
-    { "id": 22, "question": "They went to the ___ for a picnic.", "acceptableAnswers": ["meadow", "field"], "answer": "meadow" },
-    { "id": 23, "question": "He ___ the bike after school.", "acceptableAnswers": ["rode", "cycled"], "answer": "rode" },
-    { "id": 24, "question": "We relaxed in the ___ today.", "acceptableAnswers": ["backyard", "patio"], "answer": "backyard" },
-    { "id": 25, "question": "I ___ the mail every evening.", "acceptableAnswers": ["checked", "reviewed"], "answer": "checked" },
-    { "id": 26, "question": "She went to the ___ for bread.", "acceptableAnswers": ["bakery", "market"], "answer": "bakery" },
-    { "id": 27, "question": "They ___ the kids to the zoo.", "acceptableAnswers": ["took", "brought"], "answer": "took" },
-    { "id": 28, "question": "He went to the ___ for a jog.", "acceptableAnswers": ["trail", "path"], "answer": "trail" },
-    { "id": 29, "question": "We ___ the car this weekend.", "acceptableAnswers": ["washed", "cleaned"], "answer": "washed" },
-    { "id": 30, "question": "I went to the ___ for a movie.", "acceptableAnswers": ["theater", "cinema"], "answer": "theater" },
-    { "id": 31, "question": "She ___ the meeting agenda.", "acceptableAnswers": ["prepared", "organized"], "answer": "prepared" },
-    { "id": 32, "question": "They went to the ___ for work.", "acceptableAnswers": ["office", "workplace"], "answer": "office" },
-    { "id": 33, "question": "He ___ the project timeline.", "acceptableAnswers": ["reviewed", "examined"], "answer": "reviewed" },
-    { "id": 34, "question": "We met in the ___ yesterday.", "acceptableAnswers": ["boardroom", "conference"], "answer": "boardroom" },
-    { "id": 35, "question": "I ___ the email to clients.", "acceptableAnswers": ["sent", "dispatched"], "answer": "sent" },
-    { "id": 36, "question": "She went to the ___ for a seminar.", "acceptableAnswers": ["conference", "summit"], "answer": "conference" },
-    { "id": 37, "question": "They ___ the sales report.", "acceptableAnswers": ["analyzed", "studied"], "answer": "analyzed" },
-    { "id": 38, "question": "He went to the ___ for a meeting.", "acceptableAnswers": ["headquarters", "main"], "answer": "headquarters" },
-    { "id": 39, "question": "We ___ the team’s feedback.", "acceptableAnswers": ["collected", "gathered"], "answer": "collected" },
-    { "id": 40, "question": "I went to the ___ for training.", "acceptableAnswers": ["workshop", "session"], "answer": "workshop" },
-    { "id": 41, "question": "She ___ the presentation slides.", "acceptableAnswers": ["designed", "created"], "answer": "designed" },
-    { "id": 42, "question": "They went to the ___ for a pitch.", "acceptableAnswers": ["client", "customer"], "answer": "client" },
-    { "id": 43, "question": "He ___ the budget proposal.", "acceptableAnswers": ["drafted", "wrote"], "answer": "drafted" },
-    { "id": 44, "question": "We worked in the ___ today.", "acceptableAnswers": ["cubicle", "desk"], "answer": "cubicle" },
-    { "id": 45, "question": "I ___ the meeting notes.", "acceptableAnswers": ["shared", "distributed"], "answer": "shared" },
-    { "id": 46, "question": "She went to the ___ for a review.", "acceptableAnswers": ["manager", "supervisor"], "answer": "manager" },
-    { "id": 47, "question": "They ___ the project goals.", "acceptableAnswers": ["aligned", "coordinated"], "answer": "aligned" },
-    { "id": 48, "question": "He went to the ___ for a call.", "acceptableAnswers": ["lobby", "reception"], "answer": "lobby" },
-    { "id": 49, "question": "We ___ the client’s concerns.", "acceptableAnswers": ["addressed", "resolved"], "answer": "addressed" },
-    { "id": 50, "question": "I went to the ___ for a briefing.", "acceptableAnswers": ["auditorium", "hall"], "answer": "auditorium" },
-    { "id": 51, "question": "She ___ the team’s schedule.", "acceptableAnswers": ["coordinated", "arranged"], "answer": "coordinated" },
-    { "id": 52, "question": "They went to the ___ for a deal.", "acceptableAnswers": ["firm", "agency"], "answer": "firm" },
-    { "id": 53, "question": "He ___ the contract terms.", "acceptableAnswers": ["negotiated", "bargained"], "answer": "negotiated" },
-    { "id": 54, "question": "We met in the ___ this morning.", "acceptableAnswers": ["breakroom", "lounge"], "answer": "breakroom" },
-    { "id": 55, "question": "I ___ the task assignments.", "acceptableAnswers": ["distributed", "assigned"], "answer": "distributed" },
-    { "id": 56, "question": "She went to the ___ for feedback.", "acceptableAnswers": ["supervisor", "lead"], "answer": "supervisor" },
-    { "id": 57, "question": "They ___ the project risks.", "acceptableAnswers": ["assessed", "evaluated"], "answer": "assessed" },
-    { "id": 58, "question": "He went to the ___ for a demo.", "acceptableAnswers": ["lab", "studio"], "answer": "lab" },
-    { "id": 59, "question": "We ___ the meeting outcomes.", "acceptableAnswers": ["summarized", "recapped"], "answer": "summarized" },
-    { "id": 60, "question": "I went to the ___ for a discussion.", "acceptableAnswers": ["suite", "room"], "answer": "suite" },
-    { "id": 61, "question": "She ___ the event logistics.", "acceptableAnswers": ["planned", "organized"], "answer": "planned" },
-    { "id": 62, "question": "They went to the ___ for a tour.", "acceptableAnswers": ["facility", "plant"], "answer": "facility" },
-    { "id": 63, "question": "He ___ the team’s progress.", "acceptableAnswers": ["monitored", "tracked"], "answer": "monitored" },
-    { "id": 64, "question": "We worked in the ___ yesterday.", "acceptableAnswers": ["coworking", "space"], "answer": "coworking" },
-    { "id": 65, "question": "I ___ the client’s proposal.", "acceptableAnswers": ["evaluated", "assessed"], "answer": "evaluated" },
-    { "id": 66, "question": "She went to the ___ for a strategy.", "acceptableAnswers": ["executive", "director"], "answer": "executive" },
-    { "id": 67, "question": "They ___ the campaign metrics.", "acceptableAnswers": ["tracked", "monitored"], "answer": "tracked" },
-    { "id": 68, "question": "He went to the ___ for a launch.", "acceptableAnswers": ["venue", "site"], "answer": "venue" },
-    { "id": 69, "question": "We ___ the feedback survey.", "acceptableAnswers": ["compiled", "gathered"], "answer": "compiled" },
-    { "id": 70, "question": "I went to the ___ for a webinar.", "acceptableAnswers": ["platform", "portal"], "answer": "platform" },
-    { "id": 71, "question": "She ___ the team’s resources.", "acceptableAnswers": ["allocated", "distributed"], "answer": "allocated" },
-    { "id": 72, "question": "They went to the ___ for a contract.", "acceptableAnswers": ["agency", "firm"], "answer": "agency" },
-    { "id": 73, "question": "He ___ the market trends.", "acceptableAnswers": ["studied", "analyzed"], "answer": "studied" },
-    { "id": 74, "question": "We met in the ___ last week.", "acceptableAnswers": ["atrium", "foyer"], "answer": "atrium" },
-    { "id": 75, "question": "I ___ the project updates.", "acceptableAnswers": ["communicated", "shared"], "answer": "communicated" },
-    { "id": 76, "question": "She went to the ___ for a plan.", "acceptableAnswers": ["director", "executive"], "answer": "director" },
-    { "id": 77, "question": "They ___ the product features.", "acceptableAnswers": ["tested", "evaluated"], "answer": "tested" },
-    { "id": 78, "question": "He went to the ___ for a session.", "acceptableAnswers": ["studio", "lab"], "answer": "studio" },
-    { "id": 79, "question": "We ___ the team’s performance.", "acceptableAnswers": ["measured", "assessed"], "answer": "measured" },
-    { "id": 80, "question": "I went to the ___ for a workshop.", "acceptableAnswers": ["center", "institute"], "answer": "center" },
-    { "id": 81, "question": "She ___ the merger agreement.", "acceptableAnswers": ["finalized", "concluded"], "answer": "finalized" },
-    { "id": 82, "question": "They went to the ___ for negotiations.", "acceptableAnswers": ["board", "council"], "answer": "board" },
-    { "id": 83, "question": "He ___ the strategic roadmap.", "acceptableAnswers": ["formulated", "developed"], "answer": "formulated" },
-    { "id": 84, "question": "We met in the ___ for planning.", "acceptableAnswers": ["warroom", "bunker"], "answer": "warroom" },
-    { "id": 85, "question": "I ___ the compliance audit.", "acceptableAnswers": ["conducted", "performed"], "answer": "conducted" },
-    { "id": 86, "question": "She went to the ___ for approval.", "acceptableAnswers": ["committee", "panel"], "answer": "committee" },
-    { "id": 87, "question": "They ___ the financial projections.", "acceptableAnswers": ["scrutinized", "examined"], "answer": "scrutinized" },
-    { "id": 88, "question": "He went to the ___ for a review.", "acceptableAnswers": ["council", "board"], "answer": "council" },
-    { "id": 89, "question": "We ___ the risk assessment.", "acceptableAnswers": ["completed", "finalized"], "answer": "completed" },
-    { "id": 90, "question": "I went to the ___ for a summit.", "acceptableAnswers": ["forum", "conference"], "answer": "forum" },
-    { "id": 91, "question": "She ___ the acquisition strategy.", "acceptableAnswers": ["devised", "crafted"], "answer": "devised" },
-    { "id": 92, "question": "They went to the ___ for a deal.", "acceptableAnswers": ["consortium", "alliance"], "answer": "consortium" },
-    { "id": 93, "question": "He ___ the operational workflows.", "acceptableAnswers": ["optimized", "streamlined"], "answer": "optimized" },
-    { "id": 94, "question": "We worked in the ___ for analysis.", "acceptableAnswers": ["thinktank", "lab"], "answer": "thinktank" },
-    { "id": 95, "question": "I ___ the stakeholder feedback.", "acceptableAnswers": ["synthesized", "integrated"], "answer": "synthesized" },
-    { "id": 96, "question": "She went to the ___ for a vote.", "acceptableAnswers": ["assembly", "congress"], "answer": "assembly" },
-    { "id": 97, "question": "They ___ the competitive landscape.", "acceptableAnswers": ["evaluated", "assessed"], "answer": "evaluated" },
-    { "id": 98, "question": "He went to the ___ for a briefing.", "acceptableAnswers": ["cabinet", "committee"], "answer": "cabinet" },
-    { "id": 99, "question": "We ___ the innovation pipeline.", "acceptableAnswers": ["prioritized", "ranked"], "answer": "prioritized" },
-    { "id": 100, "question": "I went to the ___ for a panel.", "acceptableAnswers": ["symposium", "forum"], "answer": "symposium" },
-    { "id": 101, "question": "She ___ the corporate vision.", "acceptableAnswers": ["articulated", "expressed"], "answer": "articulated" },
-    { "id": 102, "question": "They went to the ___ for a merger.", "acceptableAnswers": ["conglomerate", "trust"], "answer": "conglomerate" },
-    { "id": 103, "question": "He ___ the investment portfolio.", "acceptableAnswers": ["diversified", "expanded"], "answer": "diversified" },
-    { "id": 104, "question": "We met in the ___ for strategy.", "acceptableAnswers": ["bunker", "warroom"], "answer": "bunker" },
-    { "id": 105, "question": "I ___ the regulatory compliance.", "acceptableAnswers": ["ensured", "guaranteed"], "answer": "ensured" },
-    { "id": 106, "question": "She went to the ___ for oversight.", "acceptableAnswers": ["regulator", "authority"], "answer": "regulator" },
-    { "id": 107, "question": "They ___ the market positioning.", "acceptableAnswers": ["strengthened", "bolstered"], "answer": "strengthened" },
-    { "id": 108, "question": "He went to the ___ for a contract.", "acceptableAnswers": ["syndicate", "group"], "answer": "syndicate" },
-    { "id": 109, "question": "We ___ the client synergies.", "acceptableAnswers": ["maximized", "optimized"], "answer": "maximized" },
-    { "id": 110, "question": "I went to the ___ for a keynote.", "acceptableAnswers": ["conclave", "summit"], "answer": "conclave" },
-    { "id": 111, "question": "She ___ the budget allocation.", "acceptableAnswers": ["justified", "defended"], "answer": "justified" },
-    { "id": 112, "question": "They went to the ___ for a launch.", "acceptableAnswers": ["exposition", "event"], "answer": "exposition" },
-    { "id": 113, "question": "He ___ the performance metrics.", "acceptableAnswers": ["calibrated", "adjusted"], "answer": "calibrated" },
-    { "id": 114, "question": "We worked in the ___ for planning.", "acceptableAnswers": ["incubator", "hub"], "answer": "incubator" },
-    { "id": 115, "question": "I ___ the project deliverables.", "acceptableAnswers": ["validated", "verified"], "answer": "validated" },
-    { "id": 116, "question": "She went to the ___ for a ruling.", "acceptableAnswers": ["tribunal", "court"], "answer": "tribunal" },
-    { "id": 117, "question": "They ___ the growth strategy.", "acceptableAnswers": ["accelerated", "advanced"], "answer": "accelerated" },
-    { "id": 118, "question": "He went to the ___ for a debate.", "acceptableAnswers": ["colloquium", "forum"], "answer": "colloquium" },
-    { "id": 119, "question": "We ___ the operational risks.", "acceptableAnswers": ["mitigated", "reduced"], "answer": "mitigated" },
-    { "id": 120, "question": "I went to the ___ for a dialogue.", "acceptableAnswers": ["roundtable", "discussion"], "answer": "roundtable" },
-    { "id": 121, "question": "She ___ the family budget.", "acceptableAnswers": ["balanced", "managed"], "answer": "balanced" },
-    { "id": 122, "question": "They went to the ___ for a reunion.", "acceptableAnswers": ["homestead", "manor"], "answer": "homestead" },
-    { "id": 123, "question": "He ___ the home repairs.", "acceptableAnswers": ["supervised", "oversaw"], "answer": "supervised" },
-    { "id": 124, "question": "We met in the ___ for planning.", "acceptableAnswers": ["den", "study"], "answer": "den" },
-    { "id": 125, "question": "I ___ the vacation itinerary.", "acceptableAnswers": ["organized", "planned"], "answer": "organized" },
-    { "id": 126, "question": "She went to the ___ for advice.", "acceptableAnswers": ["elder", "mentor"], "answer": "elder" },
-    { "id": 127, "question": "They ___ the household chores.", "acceptableAnswers": ["divided", "shared"], "answer": "divided" },
-    { "id": 128, "question": "He went to the ___ for a gathering.", "acceptableAnswers": ["patio", "terrace"], "answer": "patio" },
-    { "id": 129, "question": "We ___ the family traditions.", "acceptableAnswers": ["upheld", "maintained"], "answer": "upheld" },
-    { "id": 130, "question": "I went to the ___ for a celebration.", "acceptableAnswers": ["hall", "venue"], "answer": "hall" },
-    { "id": 131, "question": "She ___ the community event.", "acceptableAnswers": ["orchestrated", "coordinated"], "answer": "orchestrated" },
-    { "id": 132, "question": "They went to the ___ for a festival.", "acceptableAnswers": ["plaza", "square"], "answer": "plaza" },
-    { "id": 133, "question": "He ___ the neighborhood watch.", "acceptableAnswers": ["led", "headed"], "answer": "led" },
-    { "id": 134, "question": "We met in the ___ for discussion.", "acceptableAnswers": ["pavilion", "tent"], "answer": "pavilion" },
-    { "id": 135, "question": "I ___ the charity drive.", "acceptableAnswers": ["spearheaded", "initiated"], "answer": "spearheaded" },
-    { "id": 136, "question": "She went to the ___ for a rally.", "acceptableAnswers": ["square", "plaza"], "answer": "square" },
-    { "id": 137, "question": "They ___ the local petition.", "acceptableAnswers": ["endorsed", "supported"], "answer": "endorsed" },
-    { "id": 138, "question": "He went to the ___ for a meeting.", "acceptableAnswers": ["council", "board"], "answer": "council" },
-    { "id": 139, "question": "We ___ the community goals.", "acceptableAnswers": ["promoted", "advanced"], "answer": "promoted" },
-    { "id": 140, "question": "I went to the ___ for a fair.", "acceptableAnswers": ["grounds", "field"], "answer": "grounds" },
-    { "id": 141, "question": "She ___ the event sponsorship.", "acceptableAnswers": ["secured", "obtained"], "answer": "secured" },
-    { "id": 142, "question": "They went to the ___ for a cleanup.", "acceptableAnswers": ["parkland", "reserve"], "answer": "parkland" },
-    { "id": 143, "question": "He ___ the volunteer team.", "acceptableAnswers": ["mobilized", "rallied"], "answer": "mobilized" },
-    { "id": 144, "question": "We met in the ___ for organizing.", "acceptableAnswers": ["clubhouse", "center"], "answer": "clubhouse" },
-    { "id": 145, "question": "I ___ the fundraiser campaign.", "acceptableAnswers": ["launched", "started"], "answer": "launched" },
-    { "id": 146, "question": "She went to the ___ for a workshop.", "acceptableAnswers": ["institute", "academy"], "answer": "institute" },
-    { "id": 147, "question": "They ___ the community outreach.", "acceptableAnswers": ["expanded", "extended"], "answer": "expanded" },
-    { "id": 148, "question": "He went to the ___ for a seminar.", "acceptableAnswers": ["academy", "institute"], "answer": "academy" },
-    { "id": 149, "question": "We ___ the local initiatives.", "acceptableAnswers": ["supported", "backed"], "answer": "supported" },
-    { "id": 150, "question": "I went to the ___ for a conference.", "acceptableAnswers": ["convention", "summit"], "answer": "convention" },
-    { "id": 151, "question": "She ___ the digital transformation.", "acceptableAnswers": ["championed", "advocated"], "answer": "championed" },
-    { "id": 152, "question": "They went to the ___ for a summit.", "acceptableAnswers": ["directorate", "executive"], "answer": "directorate" },
-    { "id": 153, "question": "He ___ the sustainability plan.", "acceptableAnswers": ["spearheaded", "led"], "answer": "spearheaded" },
-    { "id": 154, "question": "We met in the ___ for strategy.", "acceptableAnswers": ["enclave", "retreat"], "answer": "enclave" },
-    { "id": 155, "question": "I ___ the enterprise roadmap.", "acceptableAnswers": ["charted", "mapped"], "answer": "charted" },
-    { "id": 156, "question": "She went to the ___ for governance.", "acceptableAnswers": ["secretariat", "council"], "answer": "secretariat" },
-    { "id": 157, "question": "They ___ the innovation strategy.", "acceptableAnswers": ["pioneered", "initiated"], "answer": "pioneered" },
-    { "id": 158, "question": "He went to the ___ for a review.", "acceptableAnswers": ["congress", "assembly"], "answer": "congress" },
-    { "id": 159, "question": "We ___ the corporate synergies.", "acceptableAnswers": ["harnessed", "leveraged"], "answer": "harnessed" },
-    { "id": 160, "question": "I went to the ___ for a dialogue.", "acceptableAnswers": ["caucus", "forum"], "answer": "caucus" },
-    { "id": 161, "question": "She ___ the operational efficiency.", "acceptableAnswers": ["streamlined", "optimized"], "answer": "streamlined" },
-    { "id": 162, "question": "They went to the ___ for a merger.", "acceptableAnswers": ["coalition", "alliance"], "answer": "coalition" },
-    { "id": 163, "question": "He ___ the regulatory framework.", "acceptableAnswers": ["fortified", "strengthened"], "answer": "fortified" },
-    { "id": 164, "question": "We met in the ___ for oversight.", "acceptableAnswers": ["sanctum", "chamber"], "answer": "sanctum" },
-    { "id": 165, "question": "I ___ the stakeholder alignment.", "acceptableAnswers": ["orchestrated", "coordinated"], "answer": "orchestrated" },
-    { "id": 166, "question": "She went to the ___ for a mandate.", "acceptableAnswers": ["plenum", "assembly"], "answer": "plenum" },
-    { "id": 167, "question": "They ___ the market expansion.", "acceptableAnswers": ["catalyzed", "accelerated"], "answer": "catalyzed" },
-    { "id": 168, "question": "He went to the ___ for a verdict.", "acceptableAnswers": ["arbitration", "tribunal"], "answer": "arbitration" },
-    { "id": 169, "question": "We ___ the technological adoption.", "acceptableAnswers": ["accelerated", "advanced"], "answer": "accelerated" },
-    { "id": 170, "question": "I went to the ___ for a conclave.", "acceptableAnswers": ["nexus", "summit"], "answer": "nexus" },
-    { "id": 171, "question": "She ___ the corporate restructuring.", "acceptableAnswers": ["navigated", "guided"], "answer": "navigated" },
-    { "id": 172, "question": "They went to the ___ for a treaty.", "acceptableAnswers": ["delegation", "embassy"], "answer": "delegation" },
-    { "id": 173, "question": "He ___ the financial oversight.", "acceptableAnswers": ["reinforced", "bolstered"], "answer": "reinforced" },
-    { "id": 174, "question": "We met in the ___ for innovation.", "acceptableAnswers": ["crucible", "hub"], "answer": "crucible" },
-    { "id": 175, "question": "I ___ the strategic pivot.", "acceptableAnswers": ["executed", "implemented"], "answer": "executed" },
-    { "id": 176, "question": "She went to the ___ for a resolution.", "acceptableAnswers": ["parliament", "congress"], "answer": "parliament" },
-    { "id": 177, "question": "They ___ the global integration.", "acceptableAnswers": ["facilitated", "enabled"], "answer": "facilitated" },
-    { "id": 178, "question": "He went to the ___ for a symposium.", "acceptableAnswers": ["coliseum", "arena"], "answer": "coliseum" },
-    { "id": 179, "question": "We ___ the enterprise vision.", "acceptableAnswers": ["redefined", "reshaped"], "answer": "redefined" },
-    { "id": 180, "question": "I went to the ___ for a forum.", "acceptableAnswers": ["agora", "plaza"], "answer": "agora" },
-    { "id": 181, "question": "She ___ the family legacy.", "acceptableAnswers": ["preserved", "maintained"], "answer": "preserved" },
-    { "id": 182, "question": "They went to the ___ for a retreat.", "acceptableAnswers": ["estate", "manor"], "answer": "estate" },
-    { "id": 183, "question": "He ___ the home renovation.", "acceptableAnswers": ["overhauled", "refurbished"], "answer": "overhauled" },
-    { "id": 184, "question": "We met in the ___ for a reunion.", "acceptableAnswers": ["hearth", "lodge"], "answer": "hearth" },
-    { "id": 185, "question": "I ___ the family archives.", "acceptableAnswers": ["curated", "organized"], "answer": "curated" },
-    { "id": 186, "question": "She went to the ___ for counsel.", "acceptableAnswers": ["matriarch", "elder"], "answer": "matriarch" },
-    { "id": 187, "question": "They ___ the household finances.", "acceptableAnswers": ["stabilized", "balanced"], "answer": "stabilized" },
-    { "id": 188, "question": "He went to the ___ for a gathering.", "acceptableAnswers": ["courtyard", "garden"], "answer": "courtyard" },
-    { "id": 189, "question": "We ___ the family values.", "acceptableAnswers": ["reinforced", "upheld"], "answer": "reinforced" },
-    { "id": 190, "question": "I went to the ___ for a ceremony.", "acceptableAnswers": ["sanctuary", "chapel"], "answer": "sanctuary" },
-    { "id": 191, "question": "She ___ the community heritage.", "acceptableAnswers": ["safeguarded", "protected"], "answer": "safeguarded" },
-    { "id": 192, "question": "They went to the ___ for a festival.", "acceptableAnswers": ["commons", "plaza"], "answer": "commons" },
-    { "id": 193, "question": "He ___ the local governance.", "acceptableAnswers": ["strengthened", "fortified"], "answer": "strengthened" },
-    { "id": 194, "question": "We met in the ___ for a summit.", "acceptableAnswers": ["forum", "hall"], "answer": "forum" },
-    { "id": 195, "question": "I ___ the cultural preservation.", "acceptableAnswers": ["championed", "advocated"], "answer": "championed" },
-    { "id": 196, "question": "She went to the ___ for a cause.", "acceptableAnswers": ["assembly", "rally"], "answer": "assembly" },
-    { "id": 197, "question": "They ___ the civic engagement.", "acceptableAnswers": ["galvanized", "mobilized"], "answer": "galvanized" },
-    { "id": 198, "question": "He went to the ___ for a rally.", "acceptableAnswers": ["amphitheater", "stage"], "answer": "amphitheater" },
-    { "id": 199, "question": "We ___ the social initiatives.", "acceptableAnswers": ["bolstered", "supported"], "answer": "bolstered" },
-    { "id": 200, "question": "I went to the ___ for a movement.", "acceptableAnswers": ["citadel", "stronghold"], "answer": "citadel" }
+    {
+      "id": 1,
+      "question": "The manager ___ the proposal before the meeting.",
+      "acceptableAnswers": [
+        "reviewed",
+        "read",
+        "approved"
+      ],
+      "answer": "reviewed"
+    },
+    {
+      "id": 2,
+      "question": "We need to ___ the deadline to ensure quality.",
+      "acceptableAnswers": [
+        "extend",
+        "postpone",
+        "move"
+      ],
+      "answer": "extend"
+    },
+    {
+      "id": 3,
+      "question": "He ___ for the inconvenience caused by the delay.",
+      "acceptableAnswers": [
+        "apologized",
+        "compensated"
+      ],
+      "answer": "apologized"
+    },
+    {
+      "id": 4,
+      "question": "The company ___ a new policy regarding remote work.",
+      "acceptableAnswers": [
+        "implemented",
+        "adopted",
+        "introduced"
+      ],
+      "answer": "implemented"
+    },
+    {
+      "id": 5,
+      "question": "These figures ___ a significant increase in sales.",
+      "acceptableAnswers": [
+        "indicate",
+        "show",
+        "demonstrate"
+      ],
+      "answer": "indicate"
+    },
+    {
+      "id": 6,
+      "question": "Please ___ the attached document for more details.",
+      "acceptableAnswers": [
+        "reference",
+        "review",
+        "check"
+      ],
+      "answer": "review"
+    },
+    {
+      "id": 7,
+      "question": "They decided to ___ the contract due to poor performance.",
+      "acceptableAnswers": [
+        "terminate",
+        "cancel",
+        "end"
+      ],
+      "answer": "terminate"
+    },
+    {
+      "id": 8,
+      "question": "Effective leaders ___ their teams to achieve great results.",
+      "acceptableAnswers": [
+        "inspire",
+        "motivate",
+        "empower"
+      ],
+      "answer": "inspire"
+    },
+    {
+      "id": 9,
+      "question": "We must ___ our resources carefully to stay within budget.",
+      "acceptableAnswers": [
+        "allocate",
+        "manage",
+        "use"
+      ],
+      "answer": "allocate"
+    },
+    {
+      "id": 10,
+      "question": "The client ___ concerns about the project timeline.",
+      "acceptableAnswers": [
+        "expressed",
+        "raised",
+        "voiced"
+      ],
+      "answer": "raised"
+    },
+    {
+      "id": 11,
+      "question": "Technological advancements ___ productivity in the workplace.",
+      "acceptableAnswers": [
+        "enhance",
+        "improve",
+        "boost"
+      ],
+      "answer": "enhance"
+    },
+    {
+      "id": 12,
+      "question": "All employees are expected to ___ the safety regulations.",
+      "acceptableAnswers": [
+        "follow",
+        "observe",
+        "adhere to"
+      ],
+      "answer": "follow"
+    },
+    {
+      "id": 13,
+      "question": "The audit ___ several discrepancies in the accounts.",
+      "acceptableAnswers": [
+        "revealed",
+        "found",
+        "uncovered"
+      ],
+      "answer": "revealed"
+    },
+    {
+      "id": 14,
+      "question": "We aim to ___ customer satisfaction by 20% this year.",
+      "acceptableAnswers": [
+        "increase",
+        "improve",
+        "boost"
+      ],
+      "answer": "increase"
+    },
+    {
+      "id": 15,
+      "question": "She ___ the team effectively during the crisis.",
+      "acceptableAnswers": [
+        "led",
+        "managed",
+        "guided"
+      ],
+      "answer": "led"
+    }
   ],
   "fillBlanks": [
-  {
-    "id": 1,
-    "question": "Which response is best? 'How can I assist you today?'",
-    "options": ["I'd like to inquire about your services.", "Don't bother.", "What do you want?"],
-    "answer": "I'd like to inquire about your services."
-  },
-  {
-    "id": 2,
-    "question": "Fill in the blank: 'The conference is scheduled ___ next week.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 3,
-    "question": "Choose the correct phrase: 'She is responsible ___ managing the team.'",
-    "options": ["for", "on", "at"],
-    "answer": "for"
-  },
-  {
-    "id": 4,
-    "question": "Conversation: A: 'May I speak to the manager?' B: ?",
-    "options": ["Certainly, one moment please.", "No way.", "Why?"],
-    "answer": "Certainly, one moment please."
-  },
-  {
-    "id": 5,
-    "question": "Which sentence is correct?",
-    "options": ["He don’t like coffee.", "He doesn’t like coffee.", "He not like coffee."],
-    "answer": "He doesn’t like coffee."
-  },
-  {
-    "id": 6,
-    "question": "At the hotel: 'Do you have any ___ available?'",
-    "options": ["rooms", "cars", "books"],
-    "answer": "rooms"
-  },
-  {
-    "id": 7,
-    "question": "Fill in the blank: 'I apologize ___ the delay.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 8,
-    "question": "Which is the polite reply to: 'Thank you for your help.'",
-    "options": ["You're welcome.", "No thanks.", "Forget it."],
-    "answer": "You're welcome."
-  },
-  {
-    "id": 9,
-    "question": "Identify the error: 'They was happy with the results.'",
-    "options": ["They", "was", "results"],
-    "answer": "was"
-  },
-  {
-    "id": 10,
-    "question": "You are starting a professional email. Which greeting is correct?",
-    "options": ["Hey,", "Dear Mr. Smith,", "Yo,"],
-    "answer": "Dear Mr. Smith,"
-  },
-  {
-    "id": 11,
-    "question": "Fill in the blank: 'We are committed ___ excellence.'",
-    "options": ["to", "on", "at"],
-    "answer": "to"
-  },
-  {
-    "id": 12,
-    "question": "Which reply is natural? 'Would you like to join us?'",
-    "options": ["Yes, I'd love to.", "No, thanks.", "Maybe."],
-    "answer": "Yes, I'd love to."
-  },
-  {
-    "id": 13,
-    "question": "Choose the correct sentence.",
-    "options": ["I has finished the report.", "I have finished the report.", "I having finished the report."],
-    "answer": "I have finished the report."
-  },
-  {
-    "id": 14,
-    "question": "In a meeting: 'Let's move on to the next ___.'",
-    "options": ["item", "food", "game"],
-    "answer": "item"
-  },
-  {
-    "id": 15,
-    "question": "Which expression is polite in a business call?",
-    "options": ["May I put you on hold?", "Hang on.", "Wait there."],
-    "answer": "May I put you on hold?"
-  },
-  {
-    "id": 16,
-    "question": "Fill in the blank: 'He is experienced ___ project management.'",
-    "options": ["in", "at", "on"],
-    "answer": "in"
-  },
-  {
-    "id": 17,
-    "question": "Spot the error: 'She go to work every day.'",
-    "options": ["She", "go", "every"],
-    "answer": "go"
-  },
-  {
-    "id": 18,
-    "question": "Which is correct?",
-    "options": ["We hope to hear from you soon.", "We hoping to hear from you soon.", "We hope hear from you soon."],
-    "answer": "We hope to hear from you soon."
-  },
-  {
-    "id": 19,
-    "question": "Choose the correct reply: 'How are you today?'",
-    "options": ["I'm fine, thank you.", "Bad.", "Nothing."],
-    "answer": "I'm fine, thank you."
-  },
-  {
-    "id": 20,
-    "question": "Fill in the blank: 'Please feel free to contact me if you have any ___.'",
-    "options": ["questions", "answers", "problems"],
-    "answer": "questions"
-  },
-  {
-    "id": 21,
-    "question": "Conversation: A: 'Is this the right department?' B should reply:",
-    "options": ["Yes, it is.", "No idea.", "Go away."],
-    "answer": "Yes, it is."
-  },
-  {
-    "id": 22,
-    "question": "Which is correct in an email?",
-    "options": ["Attached is the file.", "Attached the file.", "Attach is the file."],
-    "answer": "Attached is the file."
-  },
-  {
-    "id": 23,
-    "question": "Fill in the blank: 'The project was delayed ___ bad weather.'",
-    "options": ["because of", "so", "but"],
-    "answer": "because of"
-  },
-  {
-    "id": 24,
-    "question": "Choose the best opening in a cover letter.",
-    "options": ["I am writing to apply for the position.", "Hey there,", "What's up,"],
-    "answer": "I am writing to apply for the position."
-  },
-  {
-    "id": 25,
-    "question": "Which is polite?",
-    "options": ["Could you please send the report?", "Send the report now!", "Why haven't you sent it?"],
-    "answer": "Could you please send the report?"
-  },
-  {
-    "id": 26,
-    "question": "Spot the mistake: 'You doesn’t need to worry.'",
-    "options": ["You", "doesn’t", "worry"],
-    "answer": "doesn’t"
-  },
-  {
-    "id": 27,
-    "question": "Conversation: 'Welcome to our office.' The visitor replies:",
-    "options": ["Thank you.", "No thanks.", "Bye."],
-    "answer": "Thank you."
-  },
-  {
-    "id": 28,
-    "question": "Which is correct?",
-    "options": ["Let’s meet to discuss.", "Let’s meet for discuss.", "Let’s meet discuss."],
-    "answer": "Let’s meet to discuss."
-  },
-  {
-    "id": 29,
-    "question": "Fill in the blank: 'The office closes ___ 5 p.m.'",
-    "options": ["at", "on", "in"],
-    "answer": "at"
-  },
-  {
-    "id": 30,
-    "question": "Choose the natural reply: 'Sorry for the inconvenience.'",
-    "options": ["No problem.", "You should be.", "Why?"],
-    "answer": "No problem."
-  },
-  {
-    "id": 31,
-    "question": "Which response is best? 'Do you have any questions?'",
-    "options": ["Not at the moment, thank you.", "Yes, many.", "No questions."],
-    "answer": "Not at the moment, thank you."
-  },
-  {
-    "id": 32,
-    "question": "Fill in the blank: 'We arrived ___ the airport early.'",
-    "options": ["at", "in", "on"],
-    "answer": "at"
-  },
-  {
-    "id": 33,
-    "question": "Choose the correct phrase: 'He specializes ___ marketing.'",
-    "options": ["in", "on", "at"],
-    "answer": "in"
-  },
-  {
-    "id": 34,
-    "question": "Conversation: A: 'Can I get your name?' B: ?",
-    "options": ["Yes, it's John Doe.", "No.", "Why ask?"],
-    "answer": "Yes, it's John Doe."
-  },
-  {
-    "id": 35,
-    "question": "Which sentence is correct?",
-    "options": ["They isn’t coming.", "They aren’t coming.", "They not coming."],
-    "answer": "They aren’t coming."
-  },
-  {
-    "id": 36,
-    "question": "At the bank: 'I'd like to open a new ___.'",
-    "options": ["account", "book", "door"],
-    "answer": "account"
-  },
-  {
-    "id": 37,
-    "question": "Fill in the blank: 'Thank you ___ your patience.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 38,
-    "question": "Which is the polite reply to: 'Have a nice day.'",
-    "options": ["You too.", "No.", "Bye."],
-    "answer": "You too."
-  },
-  {
-    "id": 39,
-    "question": "Identify the error: 'I were there yesterday.'",
-    "options": ["I", "were", "yesterday"],
-    "answer": "were"
-  },
-  {
-    "id": 40,
-    "question": "You are replying to a job offer. Which is correct?",
-    "options": ["I accept the position.", "I no accept.", "Accept position."],
-    "answer": "I accept the position."
-  },
-  {
-    "id": 41,
-    "question": "Fill in the blank: 'She is dedicated ___ her work.'",
-    "options": ["to", "on", "at"],
-    "answer": "to"
-  },
-  {
-    "id": 42,
-    "question": "Which reply is natural? 'Can I borrow your pen?'",
-    "options": ["Sure, here you go.", "No, mine.", "Why?"],
-    "answer": "Sure, here you go."
-  },
-  {
-    "id": 43,
-    "question": "Choose the correct sentence.",
-    "options": ["We has a meeting.", "We have a meeting.", "We having a meeting."],
-    "answer": "We have a meeting."
-  },
-  {
-    "id": 44,
-    "question": "In an interview: 'Tell me about your ___.'",
-    "options": ["experience", "hobbies", "pets"],
-    "answer": "experience"
-  },
-  {
-    "id": 45,
-    "question": "Which expression is polite in email?",
-    "options": ["Please find attached.", "Attached here.", "See attachment."],
-    "answer": "Please find attached."
-  },
-  {
-    "id": 46,
-    "question": "Fill in the blank: 'I am proficient ___ Excel.'",
-    "options": ["in", "at", "on"],
-    "answer": "in"
-  },
-  {
-    "id": 47,
-    "question": "Spot the error: 'He like traveling.'",
-    "options": ["He", "like", "traveling"],
-    "answer": "like"
-  },
-  {
-    "id": 48,
-    "question": "Which is correct?",
-    "options": ["I look forward to meeting you.", "I look forward meeting you.", "I looking forward to meeting you."],
-    "answer": "I look forward to meeting you."
-  },
-  {
-    "id": 49,
-    "question": "Choose the correct reply: 'What's your opinion?'",
-    "options": ["I think it's a good idea.", "No opinion.", "Nothing."],
-    "answer": "I think it's a good idea."
-  },
-  {
-    "id": 50,
-    "question": "Fill in the blank: 'Please let me know if that's ___.'",
-    "options": ["convenient", "inconvenient", "boring"],
-    "answer": "convenient"
-  },
-  {
-    "id": 51,
-    "question": "Conversation: A: 'Do you need assistance?' B should reply:",
-    "options": ["Yes, please.", "No need.", "Leave."],
-    "answer": "Yes, please."
-  },
-  {
-    "id": 52,
-    "question": "Which is correct in a report?",
-    "options": ["The data shows.", "The data show.", "Data shows."],
-    "answer": "The data shows."
-  },
-  {
-    "id": 53,
-    "question": "Fill in the blank: 'He left ___ he was tired.'",
-    "options": ["because", "so", "but"],
-    "answer": "because"
-  },
-  {
-    "id": 54,
-    "question": "Choose the best closing for a formal letter.",
-    "options": ["Sincerely,", "Cheers,", "Later,"],
-    "answer": "Sincerely,"
-  },
-  {
-    "id": 55,
-    "question": "Which is polite?",
-    "options": ["Would you mind helping me?", "Help me now!", "Do it."],
-    "answer": "Would you mind helping me?"
-  },
-  {
-    "id": 56,
-    "question": "Spot the mistake: 'She don’t agree.'",
-    "options": ["She", "don’t", "agree"],
-    "answer": "don’t"
-  },
-  {
-    "id": 57,
-    "question": "Conversation: 'Good afternoon, how may I help?' The customer replies:",
-    "options": ["I'd like to make a reservation.", "No help.", "Stop."],
-    "answer": "I'd like to make a reservation."
-  },
-  {
-    "id": 58,
-    "question": "Which is correct?",
-    "options": ["We need to focus on.", "We need to focus about.", "We need focus on."],
-    "answer": "We need to focus on."
-  },
-  {
-    "id": 59,
-    "question": "Fill in the blank: 'The event starts ___ Friday.'",
-    "options": ["on", "at", "in"],
-    "answer": "on"
-  },
-  {
-    "id": 60,
-    "question": "Choose the natural reply: 'I'm running late.'",
-    "options": ["That's fine, take your time.", "Hurry up!", "Why late?"],
-    "answer": "That's fine, take your time."
-  },
-  {
-    "id": 61,
-    "question": "Which response is best? 'Can we reschedule?'",
-    "options": ["Yes, that works for me.", "No.", "Maybe."],
-    "answer": "Yes, that works for me."
-  },
-  {
-    "id": 62,
-    "question": "Fill in the blank: 'Please arrive ___ time.'",
-    "options": ["on", "in", "at"],
-    "answer": "on"
-  },
-  {
-    "id": 63,
-    "question": "Choose the correct phrase: 'I am excited ___ the opportunity.'",
-    "options": ["about", "on", "at"],
-    "answer": "about"
-  },
-  {
-    "id": 64,
-    "question": "Conversation: A: 'What's the status?' B: ?",
-    "options": ["It's in progress.", "Don't know.", "Ask someone else."],
-    "answer": "It's in progress."
-  },
-  {
-    "id": 65,
-    "question": "Which sentence is correct?",
-    "options": ["You is correct.", "You are correct.", "You be correct."],
-    "answer": "You are correct."
-  },
-  {
-    "id": 66,
-    "question": "At the store: 'Do you accept credit ___?'",
-    "options": ["cards", "books", "food"],
-    "answer": "cards"
-  },
-  {
-    "id": 67,
-    "question": "Fill in the blank: 'We are grateful ___ your support.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 68,
-    "question": "Which is the polite reply to: 'Congratulations!'",
-    "options": ["Thank you.", "No.", "Whatever."],
-    "answer": "Thank you."
-  },
-  {
-    "id": 69,
-    "question": "Identify the error: 'Us went to the office.'",
-    "options": ["Us", "went", "office"],
-    "answer": "Us"
-  },
-  {
-    "id": 70,
-    "question": "You are confirming an appointment. Which is correct?",
-    "options": ["I confirm our meeting.", "Confirm meeting.", "I no confirm."],
-    "answer": "I confirm our meeting."
-  },
-  {
-    "id": 71,
-    "question": "Fill in the blank: 'He is passionate ___ innovation.'",
-    "options": ["about", "on", "at"],
-    "answer": "about"
-  },
-  {
-    "id": 72,
-    "question": "Which reply is natural? 'Shall we begin?'",
-    "options": ["Yes, let's.", "No.", "Wait."],
-    "answer": "Yes, let's."
-  },
-  {
-    "id": 73,
-    "question": "Choose the correct sentence.",
-    "options": ["She have an idea.", "She has an idea.", "She having an idea."],
-    "answer": "She has an idea."
-  },
-  {
-    "id": 74,
-    "question": "In a presentation: 'Next, I'll discuss the ___.'",
-    "options": ["results", "weather", "movies"],
-    "answer": "results"
-  },
-  {
-    "id": 75,
-    "question": "Which expression is polite in negotiation?",
-    "options": ["I appreciate your offer.", "Bad offer.", "No way."],
-    "answer": "I appreciate your offer."
-  },
-  {
-    "id": 76,
-    "question": "Fill in the blank: 'They are aware ___ the issue.'",
-    "options": ["of", "at", "on"],
-    "answer": "of"
-  },
-  {
-    "id": 77,
-    "question": "Spot the error: 'I enjoys reading.'",
-    "options": ["I", "enjoys", "reading"],
-    "answer": "enjoys"
-  },
-  {
-    "id": 78,
-    "question": "Which is correct?",
-    "options": ["Please let me know your thoughts.", "Please let know your thoughts.", "Let me know thoughts."],
-    "answer": "Please let me know your thoughts."
-  },
-  {
-    "id": 79,
-    "question": "Choose the correct reply: 'Did you receive my email?'",
-    "options": ["Yes, I did.", "No email.", "What email?"],
-    "answer": "Yes, I did."
-  },
-  {
-    "id": 80,
-    "question": "Fill in the blank: 'Make yourself at ___.'",
-    "options": ["home", "work", "school"],
-    "answer": "home"
-  },
-  {
-    "id": 81,
-    "question": "Conversation: A: 'Is the manager available?' B should reply:",
-    "options": ["Yes, I'll connect you.", "No available.", "Don't ask."],
-    "answer": "Yes, I'll connect you."
-  },
-  {
-    "id": 82,
-    "question": "Which is correct in a proposal?",
-    "options": ["We propose the following.", "We proposing the following.", "Propose following."],
-    "answer": "We propose the following."
-  },
-  {
-    "id": 83,
-    "question": "Fill in the blank: 'The flight was canceled ___ fog.'",
-    "options": ["due to", "so", "but"],
-    "answer": "due to"
-  },
-  {
-    "id": 84,
-    "question": "Choose the best subject line for an email.",
-    "options": ["Follow-up on Meeting", "Hey", "Stuff"],
-    "answer": "Follow-up on Meeting"
-  },
-  {
-    "id": 85,
-    "question": "Which is polite?",
-    "options": ["May I have your attention?", "Listen up!", "Shut up."],
-    "answer": "May I have your attention?"
-  },
-  {
-    "id": 86,
-    "question": "Spot the mistake: 'He aren’t ready.'",
-    "options": ["He", "aren’t", "ready"],
-    "answer": "aren’t"
-  },
-  {
-    "id": 87,
-    "question": "Conversation: 'Thank you for calling.' The caller replies:",
-    "options": ["You're welcome.", "No problem.", "Bye."],
-    "answer": "You're welcome."
-  },
-  {
-    "id": 88,
-    "question": "Which is correct?",
-    "options": ["I would like to inform you.", "I would like inform you.", "Like to inform."],
-    "answer": "I would like to inform you."
-  },
-  {
-    "id": 89,
-    "question": "Fill in the blank: 'We will meet ___ noon.'",
-    "options": ["at", "on", "in"],
-    "answer": "at"
-  },
-  {
-    "id": 90,
-    "question": "Choose the natural reply: 'Excuse me for interrupting.'",
-    "options": ["No worries.", "Don't interrupt.", "Why?"],
-    "answer": "No worries."
-  },
-  {
-    "id": 91,
-    "question": "Which response is best? 'What time is the meeting?'",
-    "options": ["It's at 2 p.m.", "Don't know.", "Ask later."],
-    "answer": "It's at 2 p.m."
-  },
-  {
-    "id": 92,
-    "question": "Fill in the blank: 'The train arrives ___ platform 3.'",
-    "options": ["at", "in", "on"],
-    "answer": "at"
-  },
-  {
-    "id": 93,
-    "question": "Choose the correct phrase: 'We depend ___ your cooperation.'",
-    "options": ["on", "in", "at"],
-    "answer": "on"
-  },
-  {
-    "id": 94,
-    "question": "Conversation: A: 'Can you confirm?' B: ?",
-    "options": ["Yes, confirmed.", "No confirm.", "Why?"],
-    "answer": "Yes, confirmed."
-  },
-  {
-    "id": 95,
-    "question": "Which sentence is correct?",
-    "options": ["It don’t matter.", "It doesn’t matter.", "It not matter."],
-    "answer": "It doesn’t matter."
-  },
-  {
-    "id": 96,
-    "question": "At the airport: 'Please proceed to gate ___.'",
-    "options": ["number", "house", "car"],
-    "answer": "number"
-  },
-  {
-    "id": 97,
-    "question": "Fill in the blank: 'Sorry ___ the misunderstanding.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 98,
-    "question": "Which is the polite reply to: 'Best wishes.'",
-    "options": ["Same to you.", "No.", "Okay."],
-    "answer": "Same to you."
-  },
-  {
-    "id": 99,
-    "question": "Identify the error: 'Them are correct.'",
-    "options": ["Them", "are", "correct"],
-    "answer": "Them"
-  },
-  {
-    "id": 100,
-    "question": "You are declining an invitation. Which is correct?",
-    "options": ["I regret I cannot attend.", "No attend.", "Cannot."],
-    "answer": "I regret I cannot attend."
-  },
-  {
-    "id": 101,
-    "question": "Fill in the blank: 'She is focused ___ her goals.'",
-    "options": ["on", "in", "at"],
-    "answer": "on"
-  },
-  {
-    "id": 102,
-    "question": "Which reply is natural? 'Do you agree?'",
-    "options": ["Absolutely.", "No.", "Maybe."],
-    "answer": "Absolutely."
-  },
-  {
-    "id": 103,
-    "question": "Choose the correct sentence.",
-    "options": ["They is here.", "They are here.", "They be here."],
-    "answer": "They are here."
-  },
-  {
-    "id": 104,
-    "question": "In a email: 'I am writing to ___.'",
-    "options": ["inquire", "eat", "sleep"],
-    "answer": "inquire"
-  },
-  {
-    "id": 105,
-    "question": "Which expression is polite in feedback?",
-    "options": ["I suggest improving this.", "This is bad.", "Fix it."],
-    "answer": "I suggest improving this."
-  },
-  {
-    "id": 106,
-    "question": "Fill in the blank: 'He is satisfied ___ the outcome.'",
-    "options": ["with", "at", "on"],
-    "answer": "with"
-  },
-  {
-    "id": 107,
-    "question": "Spot the error: 'We plays tennis.'",
-    "options": ["We", "plays", "tennis"],
-    "answer": "plays"
-  },
-  {
-    "id": 108,
-    "question": "Which is correct?",
-    "options": ["Thank you for your time.", "Thank for time.", "Your time thank."],
-    "answer": "Thank you for your time."
-  },
-  {
-    "id": 109,
-    "question": "Choose the correct reply: 'How can I reach you?'",
-    "options": ["By email or phone.", "No reach.", "Don't."],
-    "answer": "By email or phone."
-  },
-  {
-    "id": 110,
-    "question": "Fill in the blank: 'Please take a ___.'",
-    "options": ["seat", "walk", "run"],
-    "answer": "seat"
-  },
-  {
-    "id": 111,
-    "question": "Conversation: A: 'Is this available?' B should reply:",
-    "options": ["Yes, it is.", "No available.", "Ask later."],
-    "answer": "Yes, it is."
-  },
-  {
-    "id": 112,
-    "question": "Which is correct in instructions?",
-    "options": ["Follow these steps.", "Follow steps these.", "Steps follow."],
-    "answer": "Follow these steps."
-  },
-  {
-    "id": 113,
-    "question": "Fill in the blank: 'She succeeded ___ hard work.'",
-    "options": ["through", "so", "but"],
-    "answer": "through"
-  },
-  {
-    "id": 114,
-    "question": "Choose the best greeting for a business call.",
-    "options": ["Hello, this is John speaking.", "Hey", "Yo"],
-    "answer": "Hello, this is John speaking."
-  },
-  {
-    "id": 115,
-    "question": "Which is polite?",
-    "options": ["Could you clarify?", "What do you mean?", "Explain again!"],
-    "answer": "Could you clarify?"
-  },
-  {
-    "id": 116,
-    "question": "Spot the mistake: 'I isn’t sure.'",
-    "options": ["I", "isn’t", "sure"],
-    "answer": "isn’t"
-  },
-  {
-    "id": 117,
-    "question": "Conversation: 'We appreciate your business.' The response:",
-    "options": ["Thank you.", "No appreciate.", "Bye."],
-    "answer": "Thank you."
-  },
-  {
-    "id": 118,
-    "question": "Which is correct?",
-    "options": ["Please respond at your earliest convenience.", "Respond now.", "Earliest respond."],
-    "answer": "Please respond at your earliest convenience."
-  },
-  {
-    "id": 119,
-    "question": "Fill in the blank: 'The store opens ___ 9 a.m.'",
-    "options": ["at", "on", "in"],
-    "answer": "at"
-  },
-  {
-    "id": 120,
-    "question": "Choose the natural reply: 'I appreciate your help.'",
-    "options": ["My pleasure.", "No help.", "Why?"],
-    "answer": "My pleasure."
-  },
-  {
-    "id": 121,
-    "question": "Which response is best? 'What's the agenda?'",
-    "options": ["Here it is.", "No agenda.", "Later."],
-    "answer": "Here it is."
-  },
-  {
-    "id": 122,
-    "question": "Fill in the blank: 'We live ___ the city.'",
-    "options": ["in", "at", "on"],
-    "answer": "in"
-  },
-  {
-    "id": 123,
-    "question": "Choose the correct phrase: 'He insists ___ punctuality.'",
-    "options": ["on", "in", "at"],
-    "answer": "on"
-  },
-  {
-    "id": 124,
-    "question": "Conversation: A: 'May I leave early?' B: ?",
-    "options": ["Yes, you may.", "No leave.", "Why?"],
-    "answer": "Yes, you may."
-  },
-  {
-    "id": 125,
-    "question": "Which sentence is correct?",
-    "options": ["We doesn’t know.", "We don’t know.", "We not know."],
-    "answer": "We don’t know."
-  },
-  {
-    "id": 126,
-    "question": "At the office: 'Please sign the ___.'",
-    "options": ["document", "song", "dance"],
-    "answer": "document"
-  },
-  {
-    "id": 127,
-    "question": "Fill in the blank: 'Thanks ___ understanding.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 128,
-    "question": "Which is the polite reply to: 'Good luck.'",
-    "options": ["Thank you.", "No luck.", "Okay."],
-    "answer": "Thank you."
-  },
-  {
-    "id": 129,
-    "question": "Identify the error: 'Her is absent.'",
-    "options": ["Her", "is", "absent"],
-    "answer": "Her"
-  },
-  {
-    "id": 130,
-    "question": "You are introducing yourself. Which is correct?",
-    "options": ["I am John Doe.", "Am John.", "John am."],
-    "answer": "I am John Doe."
-  },
-  {
-    "id": 131,
-    "question": "Fill in the blank: 'They are proud ___ their achievements.'",
-    "options": ["of", "on", "at"],
-    "answer": "of"
-  },
-  {
-    "id": 132,
-    "question": "Which reply is natural? 'Would you like coffee?'",
-    "options": ["Yes, please.", "No coffee.", "Maybe."],
-    "answer": "Yes, please."
-  },
-  {
-    "id": 133,
-    "question": "Choose the correct sentence.",
-    "options": ["He do his best.", "He does his best.", "He doing his best."],
-    "answer": "He does his best."
-  },
-  {
-    "id": 134,
-    "question": "In a contract: 'The parties agree to ___.'",
-    "options": ["terms", "games", "foods"],
-    "answer": "terms"
-  },
-  {
-    "id": 135,
-    "question": "Which expression is polite in refusal?",
-    "options": ["I'm afraid I can't.", "No way.", "Forget it."],
-    "answer": "I'm afraid I can't."
-  },
-  {
-    "id": 136,
-    "question": "Fill in the blank: 'I am impressed ___ your work.'",
-    "options": ["with", "at", "on"],
-    "answer": "with"
-  },
-  {
-    "id": 137,
-    "question": "Spot the error: 'You likes it.'",
-    "options": ["You", "likes", "it"],
-    "answer": "likes"
-  },
-  {
-    "id": 138,
-    "question": "Which is correct?",
-    "options": ["We value your feedback.", "Value feedback your.", "Feedback value."],
-    "answer": "We value your feedback."
-  },
-  {
-    "id": 139,
-    "question": "Choose the correct reply: 'When is the deadline?'",
-    "options": ["It's next Friday.", "No deadline.", "Ask."],
-    "answer": "It's next Friday."
-  },
-  {
-    "id": 140,
-    "question": "Fill in the blank: 'Please be ___ time.'",
-    "options": ["on", "in", "at"],
-    "answer": "on"
-  },
-  {
-    "id": 141,
-    "question": "Conversation: A: 'Do you have the report?' B should reply:",
-    "options": ["Yes, here it is.", "No report.", "Later."],
-    "answer": "Yes, here it is."
-  },
-  {
-    "id": 142,
-    "question": "Which is correct in a memo?",
-    "options": ["To all staff.", "All staff to.", "Staff all."],
-    "answer": "To all staff."
-  },
-  {
-    "id": 143,
-    "question": "Fill in the blank: 'The event was postponed ___ rain.'",
-    "options": ["due to", "so", "but"],
-    "answer": "due to"
-  },
-  {
-    "id": 144,
-    "question": "Choose the best response to a complaint.",
-    "options": ["We apologize for the inconvenience.", "Your fault.", "Too bad."],
-    "answer": "We apologize for the inconvenience."
-  },
-  {
-    "id": 145,
-    "question": "Which is polite?",
-    "options": ["I would appreciate your input.", "Give input now!", "Input!"],
-    "answer": "I would appreciate your input."
-  },
-  {
-    "id": 146,
-    "question": "Spot the mistake: 'They wasn’t there.'",
-    "options": ["They", "wasn’t", "there"],
-    "answer": "wasn’t"
-  },
-  {
-    "id": 147,
-    "question": "Conversation: 'Have a great day.' The reply:",
-    "options": ["You too.", "No day.", "Bye."],
-    "answer": "You too."
-  },
-  {
-    "id": 148,
-    "question": "Which is correct?",
-    "options": ["Enclosed please find.", "Find enclosed please.", "Please enclosed find."],
-    "answer": "Enclosed please find."
-  },
-  {
-    "id": 149,
-    "question": "Fill in the blank: 'Let's schedule ___ next week.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 150,
-    "question": "Choose the natural reply: 'Thank you for the invitation.'",
-    "options": ["You're welcome.", "No invitation.", "Why?"],
-    "answer": "You're welcome."
-  },
-  {
-    "id": 151,
-    "question": "Which response is best? 'How was the trip?'",
-    "options": ["It was productive.", "Bad.", "Nothing."],
-    "answer": "It was productive."
-  },
-  {
-    "id": 152,
-    "question": "Fill in the blank: 'The bus stops ___ the corner.'",
-    "options": ["at", "in", "on"],
-    "answer": "at"
-  },
-  {
-    "id": 153,
-    "question": "Choose the correct phrase: 'She believes ___ teamwork.'",
-    "options": ["in", "on", "at"],
-    "answer": "in"
-  },
-  {
-    "id": 154,
-    "question": "Conversation: A: 'What's your extension?' B: ?",
-    "options": ["It's 1234.", "No extension.", "Why?"],
-    "answer": "It's 1234."
-  },
-  {
-    "id": 155,
-    "question": "Which sentence is correct?",
-    "options": ["I weren’t aware.", "I wasn’t aware.", "I not aware."],
-    "answer": "I wasn’t aware."
-  },
-  {
-    "id": 156,
-    "question": "At the reception: 'Please fill out this ___.'",
-    "options": ["form", "song", "dance"],
-    "answer": "form"
-  },
-  {
-    "id": 157,
-    "question": "Fill in the blank: 'We look forward ___ hearing from you.'",
-    "options": ["to", "at", "on"],
-    "answer": "to"
-  },
-  {
-    "id": 158,
-    "question": "Which is the polite reply to: 'Sorry to bother you.'",
-    "options": ["No bother at all.", "You bother.", "Go away."],
-    "answer": "No bother at all."
-  },
-  {
-    "id": 159,
-    "question": "Identify the error: 'Him is the manager.'",
-    "options": ["Him", "is", "manager"],
-    "answer": "Him"
-  },
-  {
-    "id": 160,
-    "question": "You are requesting information. Which is correct?",
-    "options": ["Could you provide details?", "Provide now.", "Details."],
-    "answer": "Could you provide details?"
-  },
-  {
-    "id": 161,
-    "question": "Fill in the blank: 'He is concerned ___ the budget.'",
-    "options": ["about", "on", "at"],
-    "answer": "about"
-  },
-  {
-    "id": 162,
-    "question": "Which reply is natural? 'Can we postpone?'",
-    "options": ["Sure, no problem.", "No.", "Maybe."],
-    "answer": "Sure, no problem."
-  },
-  {
-    "id": 163,
-    "question": "Choose the correct sentence.",
-    "options": ["You has the key.", "You have the key.", "You having the key."],
-    "answer": "You have the key."
-  },
-  {
-    "id": 164,
-    "question": "In a survey: 'Please rate your ___.'",
-    "options": ["satisfaction", "hunger", "sleep"],
-    "answer": "satisfaction"
-  },
-  {
-    "id": 165,
-    "question": "Which expression is polite in agreement?",
-    "options": ["I concur.", "Wrong.", "No."],
-    "answer": "I concur."
-  },
-  {
-    "id": 166,
-    "question": "Fill in the blank: 'She is familiar ___ the process.'",
-    "options": ["with", "at", "on"],
-    "answer": "with"
-  },
-  {
-    "id": 167,
-    "question": "Spot the error: 'She work hard.'",
-    "options": ["She", "work", "hard"],
-    "answer": "work"
-  },
-  {
-    "id": 168,
-    "question": "Which is correct?",
-    "options": ["Best regards.", "Regards best.", "Best regard."],
-    "answer": "Best regards."
-  },
-  {
-    "id": 169,
-    "question": "Choose the correct reply: 'Is this correct?'",
-    "options": ["Yes, it is.", "No correct.", "Ask."],
-    "answer": "Yes, it is."
-  },
-  {
-    "id": 170,
-    "question": "Fill in the blank: 'Please confirm your ___.'",
-    "options": ["attendance", "absence", "ignorance"],
-    "answer": "attendance"
-  },
-  {
-    "id": 171,
-    "question": "Conversation: A: 'What's the policy?' B should reply:",
-    "options": ["Here it is.", "No policy.", "Later."],
-    "answer": "Here it is."
-  },
-  {
-    "id": 172,
-    "question": "Which is correct in a notice?",
-    "options": ["Meeting canceled.", "Canceled meeting.", "Meeting cancel."],
-    "answer": "Meeting canceled."
-  },
-  {
-    "id": 173,
-    "question": "Fill in the blank: 'He resigned ___ personal reasons.'",
-    "options": ["for", "so", "but"],
-    "answer": "for"
-  },
-  {
-    "id": 174,
-    "question": "Choose the best way to end a call.",
-    "options": ["Thank you, goodbye.", "Bye now.", "Hang up."],
-    "answer": "Thank you, goodbye."
-  },
-  {
-    "id": 175,
-    "question": "Which is polite?",
-    "options": ["Excuse me, may I ask?", "Ask now!", "What?"],
-    "answer": "Excuse me, may I ask?"
-  },
-  {
-    "id": 176,
-    "question": "Spot the mistake: 'We wasn’t prepared.'",
-    "options": ["We", "wasn’t", "prepared"],
-    "answer": "wasn’t"
-  },
-  {
-    "id": 177,
-    "question": "Conversation: 'Pleased to meet you.' The reply:",
-    "options": ["Likewise.", "No pleased.", "Bye."],
-    "answer": "Likewise."
-  },
-  {
-    "id": 178,
-    "question": "Which is correct?",
-    "options": ["I am attaching the file.", "Attaching file I am.", "File attaching."],
-    "answer": "I am attaching the file."
-  },
-  {
-    "id": 179,
-    "question": "Fill in the blank: 'The holiday is ___ December.'",
-    "options": ["in", "at", "on"],
-    "answer": "in"
-  },
-  {
-    "id": 180,
-    "question": "Choose the natural reply: 'Sorry about that.'",
-    "options": ["It's okay.", "Be sorry.", "Why?"],
-    "answer": "It's okay."
-  },
-  {
-    "id": 181,
-    "question": "Which response is best? 'Do you need more time?'",
-    "options": ["No, thank you.", "Yes need.", "Time more."],
-    "answer": "No, thank you."
-  },
-  {
-    "id": 182,
-    "question": "Fill in the blank: 'Please park ___ the lot.'",
-    "options": ["in", "at", "on"],
-    "answer": "in"
-  },
-  {
-    "id": 183,
-    "question": "Choose the correct phrase: 'We apologize ___ any inconvenience.'",
-    "options": ["for", "on", "at"],
-    "answer": "for"
-  },
-  {
-    "id": 184,
-    "question": "Conversation: A: 'Can I transfer you?' B: ?",
-    "options": ["Yes, please.", "No transfer.", "Why?"],
-    "answer": "Yes, please."
-  },
-  {
-    "id": 185,
-    "question": "Which sentence is correct?",
-    "options": ["She weren’t happy.", "She wasn’t happy.", "She not happy."],
-    "answer": "She wasn’t happy."
-  },
-  {
-    "id": 186,
-    "question": "At the meeting: 'Let's review the ___.'",
-    "options": ["agenda", "menu", "playlist"],
-    "answer": "agenda"
-  },
-  {
-    "id": 187,
-    "question": "Fill in the blank: 'I am responsible ___ this task.'",
-    "options": ["for", "at", "on"],
-    "answer": "for"
-  },
-  {
-    "id": 188,
-    "question": "Which is the polite reply to: 'Welcome aboard.'",
-    "options": ["Thank you.", "No welcome.", "Okay."],
-    "answer": "Thank you."
-  },
-  {
-    "id": 189,
-    "question": "Identify the error: 'Me am tired.'",
-    "options": ["Me", "am", "tired"],
-    "answer": "Me"
-  },
-  {
-    "id": 190,
-    "question": "You are offering help. Which is correct?",
-    "options": ["How can I assist?", "Assist how?", "Help."],
-    "answer": "How can I assist?"
-  },
-  {
-    "id": 191,
-    "question": "Fill in the blank: 'The team is excited ___ the project.'",
-    "options": ["about", "on", "at"],
-    "answer": "about"
-  },
-  {
-    "id": 192,
-    "question": "Which reply is natural? 'Is everything okay?'",
-    "options": ["Yes, fine.", "No okay.", "Maybe."],
-    "answer": "Yes, fine."
-  },
-  {
-    "id": 193,
-    "question": "Choose the correct sentence.",
-    "options": ["It seem good.", "It seems good.", "It seeming good."],
-    "answer": "It seems good."
-  },
-  {
-    "id": 194,
-    "question": "In a report: 'The findings indicate ___.'",
-    "options": ["success", "failure", "nothing"],
-    "answer": "success"
-  },
-  {
-    "id": 195,
-    "question": "Which expression is polite in request?",
-    "options": ["Would you be able to?", "Do it.", "Now."],
-    "answer": "Would you be able to?"
-  },
-  {
-    "id": 196,
-    "question": "Fill in the blank: 'He is compliant ___ the rules.'",
-    "options": ["with", "at", "on"],
-    "answer": "with"
-  },
-  {
-    "id": 197,
-    "question": "Spot the error: 'They eats lunch.'",
-    "options": ["They", "eats", "lunch"],
-    "answer": "eats"
-  },
-  {
-    "id": 198,
-    "question": "Which is correct?",
-    "options": ["Kind regards.", "Regards kind.", "Kind regard."],
-    "answer": "Kind regards."
-  },
-  {
-    "id": 199,
-    "question": "Choose the correct reply: 'What's the update?'",
-    "options": ["Everything is on track.", "No update.", "Later."],
-    "answer": "Everything is on track."
-  },
-  {
-    "id": 200,
-    "question": "Fill in the blank: 'Please submit your ___.'",
-    "options": ["application", "complaint", "excuse"],
-    "answer": "application"
-  }
-],
+    {
+      "id": 1,
+      "question": "Which phrase is best? 'We look forward ___ business with you.'",
+      "options": [
+        "to doing",
+        "to do",
+        "doing"
+      ],
+      "answer": "to doing"
+    },
+    {
+      "id": 2,
+      "question": "Fill in the blank: 'The meeting was postponed ___ unforeseen circumstances.'",
+      "options": [
+        "due to",
+        "because",
+        "owing"
+      ],
+      "answer": "due to"
+    },
+    {
+      "id": 3,
+      "question": "Choose the correct preposition: 'He is responsible ___ the entire department.'",
+      "options": [
+        "for",
+        "of",
+        "to"
+      ],
+      "answer": "for"
+    },
+    {
+      "id": 4,
+      "question": "Select the correct word: 'We need to ___ the risks involved.'",
+      "options": [
+        "assess",
+        "access",
+        "excess"
+      ],
+      "answer": "assess"
+    },
+    {
+      "id": 5,
+      "question": "Fill in the blank: 'Please ___ throughout the presentation.'",
+      "options": [
+        "hold your questions",
+        "keep quiets",
+        "no asking"
+      ],
+      "answer": "hold your questions"
+    },
+    {
+      "id": 6,
+      "question": "Which sentence is grammatically correct?",
+      "options": [
+        "The data are accurate.",
+        "The data is accurate.",
+        "The datas is accurate."
+      ],
+      "answer": "The data is accurate."
+    },
+    {
+      "id": 7,
+      "question": "Fill in the blank: 'I apologize ___ not replying sooner.'",
+      "options": [
+        "for",
+        "about",
+        "with"
+      ],
+      "answer": "for"
+    },
+    {
+      "id": 8,
+      "question": "Select the professional response: 'When can we expect the report?'",
+      "options": [
+        "By close of business today.",
+        "Whenever I finish.",
+        "Later."
+      ],
+      "answer": "By close of business today."
+    },
+    {
+      "id": 9,
+      "question": "Fill in the blank: 'Despite the challenges, we managed to meet the ___.'",
+      "options": [
+        "deadline",
+        "finish line",
+        "end time"
+      ],
+      "answer": "deadline"
+    },
+    {
+      "id": 10,
+      "question": "Choose the correct phrase: 'Let's ___ this discussion offline.'",
+      "options": [
+        "take",
+        "bring",
+        "carry"
+      ],
+      "answer": "take"
+    }
+  ],
   "jumbledWords": [
-    { "id": 1, "jumbled": "she/the/cooked/dinner", "answer": "She cooked the dinner." },
-  { "id": 2, "jumbled": "they/the/planned/chai/break", "answer": "They planned the chai break." },
-  { "id": 3, "jumbled": "he/the/sorted/grocery/list", "answer": "He sorted the grocery list." },
-  { "id": 4, "jumbled": "we/the/arranged/Diwali/decor", "answer": "We arranged the Diwali decor." },
-  { "id": 5, "jumbled": "I/the/jotted/meeting/notes", "answer": "I jotted the meeting notes." },
-  { "id": 6, "jumbled": "she/the/folded/kids’/clothes", "answer": "She folded the kids’ clothes." },
-  { "id": 7, "jumbled": "they/the/hosted/office/party", "answer": "They hosted the office party." },
-  { "id": 8, "jumbled": "he/the/fixed/TV/remote", "answer": "He fixed the TV remote." },
-  { "id": 9, "jumbled": "we/the/planned/family/picnic", "answer": "We planned the family picnic." },
-  { "id": 10, "jumbled": "I/the/updated/team’s/roster", "answer": "I updated the team’s roster." },
-  { "id": 11, "jumbled": "she/the/decided/breakfast/menu", "answer": "She decided the breakfast menu." },
-  { "id": 12, "jumbled": "they/the/set/project/timeline", "answer": "They set the project timeline." },
-  { "id": 13, "jumbled": "he/the/checked/kids’/homework", "answer": "He checked the kids’ homework." },
-  { "id": 14, "jumbled": "we/the/ordered/office/snacks", "answer": "We ordered the office snacks." },
-  { "id": 15, "jumbled": "I/the/wrapped/festival/gifts", "answer": "I wrapped the festival gifts." },
-  { "id": 16, "jumbled": "she/the/arranged/team’s/lunch", "answer": "She arranged the team’s lunch." },
-  { "id": 17, "jumbled": "they/the/divided/house/chores", "answer": "They divided the house chores." },
-  { "id": 18, "jumbled": "he/the/booked/meeting/room", "answer": "He booked the meeting room." },
-  { "id": 19, "jumbled": "we/the/bought/Holi/colors", "answer": "We bought the Holi colors." },
-  { "id": 20, "jumbled": "I/the/fixed/kids’/schedule", "answer": "I fixed the kids’ schedule." },
-  { "id": 21, "jumbled": "she/the/planned/family/budget", "answer": "She planned the family budget." },
-  { "id": 22, "jumbled": "they/the/led/team/huddle", "answer": "They led the team huddle." },
-  { "id": 23, "jumbled": "he/the/set/dinner/table", "answer": "He set the dinner table." },
-  { "id": 24, "jumbled": "we/the/organized/office/event", "answer": "We organized the office event." },
-  { "id": 25, "jumbled": "I/the/placed/grocery/order", "answer": "I placed the grocery order." },
-  { "id": 26, "jumbled": "she/the/sorted/kids’/toys", "answer": "She sorted the kids’ toys." },
-  { "id": 27, "jumbled": "they/the/assigned/project/tasks", "answer": "They assigned the project tasks." },
-  { "id": 28, "jumbled": "he/the/ordered/festival/sweets", "answer": "He ordered the festival sweets." },
-  { "id": 29, "jumbled": "we/the/discussed/team’s/goals", "answer": "We discussed the team’s goals." },
-  { "id": 30, "jumbled": "I/the/watered/house/plants", "answer": "I watered the house plants." },
-  { "id": 31, "jumbled": "she/the/cleaned/kitchen/floor", "answer": "She cleaned the kitchen floor." },
-  { "id": 32, "jumbled": "they/the/planned/Diwali/party", "answer": "They planned the Diwali party." },
-  { "id": 33, "jumbled": "he/the/washed/family/car", "answer": "He washed the family car." },
-  { "id": 34, "jumbled": "we/the/booked/team’s/retreat", "answer": "We booked the team’s retreat." },
-  { "id": 35, "jumbled": "I/the/packed/kids’/lunch", "answer": "I packed the kids’ lunch." },
-  { "id": 36, "jumbled": "she/the/organized/festival/playlist", "answer": "She organized the festival playlist." },
-  { "id": 37, "jumbled": "they/the/reviewed/project/budget", "answer": "They reviewed the project budget." },
-  { "id": 38, "jumbled": "he/the/fixed/leaky/faucet", "answer": "He fixed the leaky faucet." },
-  { "id": 39, "jumbled": "we/the/arranged/team’s/workshop", "answer": "We arranged the team’s workshop." },
-  { "id": 40, "jumbled": "I/the/sorted/family/photos", "answer": "I sorted the family photos." },
-  { "id": 41, "jumbled": "she/the/prepared/meeting/agenda", "answer": "She prepared the meeting agenda." },
-  { "id": 42, "jumbled": "they/the/booked/family/vacation", "answer": "They booked the family vacation." },
-  { "id": 43, "jumbled": "he/the/managed/grocery/budget", "answer": "He managed the grocery budget." },
-  { "id": 44, "jumbled": "we/the/hosted/Diwali/party", "answer": "We hosted the Diwali party." },
-  { "id": 45, "jumbled": "I/the/compiled/team’s/report", "answer": "I compiled the team’s report." },
-  { "id": 46, "jumbled": "she/the/arranged/house/repairs", "answer": "She arranged the house repairs." },
-  { "id": 47, "jumbled": "they/the/restocked/office/supplies", "answer": "They restocked the office supplies." },
-  { "id": 48, "jumbled": "he/the/planned/kids’/outing", "answer": "He planned the kids’ outing." },
-  { "id": 49, "jumbled": "we/the/gathered/team’s/feedback", "answer": "We gathered the team’s feedback." },
-  { "id": 50, "jumbled": "I/the/sent/festival/invites", "answer": "I sent the festival invites." },
-  { "id": 51, "jumbled": "she/the/managed/household/tasks", "answer": "She managed the household tasks." },
-  { "id": 52, "jumbled": "they/the/shared/project/updates", "answer": "They shared the project updates." },
-  { "id": 53, "jumbled": "he/the/tracked/family/savings", "answer": "He tracked the family savings." },
-  { "id": 54, "jumbled": "we/the/updated/office/decor", "answer": "We updated the office decor." },
-  { "id": 55, "jumbled": "I/the/scheduled/grocery/delivery", "answer": "I scheduled the grocery delivery." },
-  { "id": 56, "jumbled": "she/the/revised/team’s/roster", "answer": "She revised the team’s roster." },
-  { "id": 57, "jumbled": "they/the/finalized/Holi/plans", "answer": "They finalized the Holi plans." },
-  { "id": 58, "jumbled": "he/the/summarized/meeting/notes", "answer": "He summarized the meeting notes." },
-  { "id": 59, "jumbled": "we/the/monitored/family/expenses", "answer": "We monitored the family expenses." },
-  { "id": 60, "jumbled": "I/the/coordinated/office/schedule", "answer": "I coordinated the office schedule." },
-  { "id": 61, "jumbled": "she/the/planned/festival/menu", "answer": "She planned the festival menu." },
-  { "id": 62, "jumbled": "they/the/set/team’s/targets", "answer": "They set the team’s targets." },
-  { "id": 63, "jumbled": "he/the/guided/kids’/studies", "answer": "He guided the kids’ studies." },
-  { "id": 64, "jumbled": "we/the/allocated/office/budget", "answer": "We allocated the office budget." },
-  { "id": 65, "jumbled": "I/the/packed/kids’/backpacks", "answer": "I packed the kids’ backpacks." },
-  { "id": 66, "jumbled": "she/the/delegated/team’s/tasks", "answer": "She delegated the team’s tasks." },
-  { "id": 67, "jumbled": "they/the/organized/family/reunion", "answer": "They organized the family reunion." },
-  { "id": 68, "jumbled": "he/the/assessed/project/risks", "answer": "He assessed the project risks." },
-  { "id": 69, "jumbled": "we/the/distributed/Diwali/gifts", "answer": "We distributed the Diwali gifts." },
-  { "id": 70, "jumbled": "I/the/supervised/kids’/projects", "answer": "I supervised the kids’ projects." },
-  { "id": 71, "jumbled": "she/the/prioritized/household/chores", "answer": "She prioritized the household chores." },
-  { "id": 72, "jumbled": "they/the/met/project/deadlines", "answer": "They met the project deadlines." },
-  { "id": 73, "jumbled": "he/the/evaluated/family/investments", "answer": "He evaluated the family investments." },
-  { "id": 74, "jumbled": "we/the/revised/office/policies", "answer": "We revised the office policies." },
-  { "id": 75, "jumbled": "I/the/coordinated/kids’/activities", "answer": "I coordinated the kids’ activities." },
-  { "id": 76, "jumbled": "she/the/enhanced/team’s/synergy", "answer": "She enhanced the team’s synergy." },
-  { "id": 77, "jumbled": "they/the/upheld/family/traditions", "answer": "They upheld the family traditions." },
-  { "id": 78, "jumbled": "he/the/clarified/project/scope", "answer": "He clarified the project scope." },
-  { "id": 79, "jumbled": "we/the/orchestrated/Holi/celebrations", "answer": "We orchestrated the Holi celebrations." },
-  { "id": 80, "jumbled": "I/the/boosted/team’s/morale", "answer": "I boosted the team’s morale." },
-  { "id": 81, "jumbled": "she/the/tracked/grocery/expenses", "answer": "She tracked the grocery expenses." },
-  { "id": 82, "jumbled": "they/the/managed/office/logistics", "answer": "They managed the office logistics." },
-  { "id": 83, "jumbled": "he/the/monitored/kids’/exams", "answer": "He monitored the kids’ exams." },
-  { "id": 84, "jumbled": "we/the/coordinated/Diwali/events", "answer": "We coordinated the Diwali events." },
-  { "id": 85, "jumbled": "I/the/communicated/project/updates", "answer": "I communicated the project updates." },
-  { "id": 86, "jumbled": "she/the/resolved/family/disputes", "answer": "She resolved the family disputes." },
-  { "id": 87, "jumbled": "they/the/nailed/client/pitch", "answer": "They nailed the client pitch." },
-  { "id": 88, "jumbled": "he/the/balanced/festival/budget", "answer": "He balanced the festival budget." },
-  { "id": 89, "jumbled": "we/the/conducted/team’s/appraisal", "answer": "We conducted the team’s appraisal." },
-  { "id": 90, "jumbled": "I/the/organized/kids’/playdate", "answer": "I organized the kids’ playdate." },
-  { "id": 91, "jumbled": "she/the/managed/household/budget", "answer": "She managed the household budget." },
-  { "id": 92, "jumbled": "they/the/reviewed/project/plans", "answer": "They reviewed the project plans." },
-  { "id": 93, "jumbled": "he/the/cleaned/garage/shelves", "answer": "He cleaned the garage shelves." },
-  { "id": 94, "jumbled": "we/the/arranged/team’s/huddle", "answer": "We arranged the team’s huddle." },
-  { "id": 95, "jumbled": "I/the/packed/festival/snacks", "answer": "I packed the festival snacks." },
-  { "id": 96, "jumbled": "she/the/prepared/team’s/presentation", "answer": "She prepared the team’s presentation." },
-  { "id": 97, "jumbled": "they/the/booked/family/trip", "answer": "They booked the family trip." },
-  { "id": 98, "jumbled": "he/the/fixed/kitchen/light", "answer": "He fixed the kitchen light." },
-  { "id": 99, "jumbled": "we/the/ordered/office/equipment", "answer": "We ordered the office equipment." },
-  { "id": 100, "jumbled": "I/the/sorted/kids’/books", "answer": "I sorted the kids’ books." },
-  { "id": 101, "jumbled": "she/the/arranged/festival/games", "answer": "She arranged the festival games." },
-  { "id": 102, "jumbled": "they/the/discussed/team’s/strategy", "answer": "They discussed the team’s strategy." },
-  { "id": 103, "jumbled": "he/the/planned/kids’/party", "answer": "He planned the kids’ party." },
-  { "id": 104, "jumbled": "we/the/restocked/kitchen/supplies", "answer": "We restocked the kitchen supplies." },
-  { "id": 105, "jumbled": "I/the/updated/family/calendar", "answer": "I updated the family calendar." },
-  { "id": 106, "jumbled": "she/the/delegated/project/tasks", "answer": "She delegated the project tasks." },
-  { "id": 107, "jumbled": "they/the/finalized/office/renovation", "answer": "They finalized the office renovation." },
-  { "id": 108, "jumbled": "he/the/monitored/house/repairs", "answer": "He monitored the house repairs." },
-  { "id": 109, "jumbled": "we/the/coordinated/team’s/outreach", "answer": "We coordinated the team’s outreach." },
-  { "id": 110, "jumbled": "I/the/sent/team’s/invites", "answer": "I sent the team’s invites." },
-  { "id": 111, "jumbled": "she/the/prioritized/festival/plans", "answer": "She prioritized the festival plans." },
-  { "id": 112, "jumbled": "they/the/met/client/deadlines", "answer": "They met the client deadlines." },
-  { "id": 113, "jumbled": "he/the/tracked/kids’/progress", "answer": "He tracked the kids’ progress." },
-  { "id": 114, "jumbled": "we/the/revised/team’s/schedule", "answer": "We revised the team’s schedule." },
-  { "id": 115, "jumbled": "I/the/organized/household/chores", "answer": "I organized the household chores." },
-  { "id": 116, "jumbled": "she/the/enhanced/project/outcomes", "answer": "She enhanced the project outcomes." },
-  { "id": 117, "jumbled": "they/the/upheld/office/standards", "answer": "They upheld the office standards." },
-  { "id": 118, "jumbled": "he/the/clarified/family/goals", "answer": "He clarified the family goals." },
-  { "id": 119, "jumbled": "we/the/orchestrated/Diwali/celebrations", "answer": "We orchestrated the Diwali celebrations." },
-  { "id": 120, "jumbled": "I/the/boosted/kids’/confidence", "answer": "I boosted the kids’ confidence." },
-  { "id": 121, "jumbled": "she/the/tracked/household/savings", "answer": "She tracked the household savings." },
-  { "id": 122, "jumbled": "they/the/managed/project/logistics", "answer": "They managed the project logistics." },
-  { "id": 123, "jumbled": "he/the/guided/team’s/efforts", "answer": "He guided the team’s efforts." },
-  { "id": 124, "jumbled": "we/the/coordinated/festival/events", "answer": "We coordinated the festival events." },
-  { "id": 125, "jumbled": "I/the/communicated/team’s/feedback", "answer": "I communicated the team’s feedback." },
-  { "id": 126, "jumbled": "she/the/resolved/household/issues", "answer": "She resolved the household issues." },
-  { "id": 127, "jumbled": "they/the/nailed/project/presentation", "answer": "They nailed the project presentation." },
-  { "id": 128, "jumbled": "he/the/balanced/family/budget", "answer": "He balanced the family budget." },
-  { "id": 129, "jumbled": "we/the/conducted/office/survey", "answer": "We conducted the office survey." },
-  { "id": 130, "jumbled": "I/the/organized/kids’/schedule", "answer": "I organized the kids’ schedule." },
-  { "id": 131, "jumbled": "she/the/managed/festival/expenses", "answer": "She managed the festival expenses." },
-  { "id": 132, "jumbled": "they/the/reviewed/team’s/performance", "answer": "They reviewed the team’s performance." },
-  { "id": 133, "jumbled": "he/the/cleaned/backyard/patio", "answer": "He cleaned the backyard patio." },
-  { "id": 134, "jumbled": "we/the/arranged/client/meeting", "answer": "We arranged the client meeting." },
-  { "id": 135, "jumbled": "I/the/packed/kids’/snacks", "answer": "I packed the kids’ snacks." },
-  { "id": 136, "jumbled": "she/the/prepared/project/report", "answer": "She prepared the project report." },
-  { "id": 137, "jumbled": "they/the/booked/team’s/workshop", "answer": "They booked the team’s workshop." },
-  { "id": 138, "jumbled": "he/the/fixed/house/plumbing", "answer": "He fixed the house plumbing." },
-  { "id": 139, "jumbled": "we/the/ordered/festival/decor", "answer": "We ordered the festival decor." },
-  { "id": 140, "jumbled": "I/the/sorted/family/documents", "answer": "I sorted the family documents." },
-  { "id": 141, "jumbled": "she/the/arranged/team’s/retreat", "answer": "She arranged the team’s retreat." },
-  { "id": 142, "jumbled": "they/the/discussed/project/goals", "answer": "They discussed the project goals." },
-  { "id": 143, "jumbled": "he/the/planned/family/outing", "answer": "He planned the family outing." },
-  { "id": 144, "jumbled": "we/the/restocked/office/snacks", "answer": "We restocked the office snacks." },
-  { "id": 145, "jumbled": "I/the/updated/team’s/plan", "answer": "I updated the team’s plan." },
-  { "id": 146, "jumbled": "she/the/delegated/household/tasks", "answer": "She delegated the household tasks." },
-  { "id": 147, "jumbled": "they/the/finalized/Diwali/plans", "answer": "They finalized the Diwali plans." },
-  { "id": 148, "jumbled": "he/the/monitored/kids’/studies", "answer": "He monitored the kids’ studies." },
-  { "id": 149, "jumbled": "we/the/coordinated/team’s/efforts", "answer": "We coordinated the team’s efforts." },
-  { "id": 150, "jumbled": "I/the/sent/festival/greetings", "answer": "I sent the festival greetings." },
-  { "id": 151, "jumbled": "she/the/reconciled/family/finances", "answer": "She reconciled the family finances." },
-  { "id": 152, "jumbled": "they/the/aligned/team’s/strategy", "answer": "They aligned the team’s strategy." },
-  { "id": 153, "jumbled": "he/the/addressed/client/concerns", "answer": "He addressed the client concerns." },
-  { "id": 154, "jumbled": "we/the/streamlined/festival/plans", "answer": "We streamlined the festival plans." },
-  { "id": 155, "jumbled": "I/the/evaluated/team’s/progress", "answer": "I evaluated the team’s progress." },
-  { "id": 156, "jumbled": "she/the/optimized/household/budget", "answer": "She optimized the household budget." },
-  { "id": 157, "jumbled": "they/the/mitigated/project/risks", "answer": "They mitigated the project risks." },
-  { "id": 158, "jumbled": "he/the/nurtured/kids’/hobbies", "answer": "He nurtured the kids’ hobbies." },
-  { "id": 159, "jumbled": "we/the/refined/office/workflows", "answer": "We refined the office workflows." },
-  { "id": 160, "jumbled": "I/the/orchestrated/family/events", "answer": "I orchestrated the family events." },
-  { "id": 161, "jumbled": "she/the/strengthened/team’s/dynamics", "answer": "She strengthened the team’s dynamics." },
-  { "id": 162, "jumbled": "they/the/allocated/Holi/budget", "answer": "They allocated the Holi budget." },
-  { "id": 163, "jumbled": "he/the/validated/project/deliverables", "answer": "He validated the project deliverables." },
-  { "id": 164, "jumbled": "we/the/synchronized/kids’/schedules", "answer": "We synchronized the kids’ schedules." },
-  { "id": 165, "jumbled": "I/the/prioritized/office/tasks", "answer": "I prioritized the office tasks." },
-  { "id": 166, "jumbled": "she/the/preserved/family/traditions", "answer": "She preserved the family traditions." },
-  { "id": 167, "jumbled": "they/the/coordinated/project/efforts", "answer": "They coordinated the project efforts." },
-  { "id": 168, "jumbled": "he/the/managed/festival/logistics", "answer": "He managed the festival logistics." },
-  { "id": 169, "jumbled": "we/the/assessed/project/outcomes", "answer": "We assessed the project outcomes." },
-  { "id": 170, "jumbled": "I/the/monitored/kids’/progress", "answer": "I monitored the kids’ progress." },
-  { "id": 171, "jumbled": "she/the/resolved/office/conflicts", "answer": "She resolved the office conflicts." },
-  { "id": 172, "jumbled": "they/the/realigned/family/priorities", "answer": "They realigned the family priorities." },
-  { "id": 173, "jumbled": "he/the/incorporated/client/feedback", "answer": "He incorporated the client feedback." },
-  { "id": 174, "jumbled": "we/the/streamlined/Diwali/logistics", "answer": "We streamlined the Diwali logistics." },
-  { "id": 175, "jumbled": "I/the/clarified/team’s/objectives", "answer": "I clarified the team’s objectives." },
-  { "id": 176, "jumbled": "she/the/minimized/household/expenses", "answer": "She minimized the household expenses." },
-  { "id": 177, "jumbled": "they/the/tracked/project/milestones", "answer": "They tracked the project milestones." },
-  { "id": 178, "jumbled": "he/the/fostered/kids’/talents", "answer": "He fostered the kids’ talents." },
-  { "id": 179, "jumbled": "we/the/upheld/office/standards", "answer": "We upheld the office standards." },
-  { "id": 180, "jumbled": "I/the/oversaw/festival/preparations", "answer": "I oversaw the festival preparations." },
-  { "id": 181, "jumbled": "she/the/evaluated/team’s/performance", "answer": "She evaluated the team’s performance." },
-  { "id": 182, "jumbled": "they/the/prioritized/family/goals", "answer": "They prioritized the family goals." },
-  { "id": 183, "jumbled": "he/the/addressed/project/constraints", "answer": "He addressed the project constraints." },
-  { "id": 184, "jumbled": "we/the/orchestrated/Holi/events", "answer": "We orchestrated the Holi events." },
-  { "id": 185, "jumbled": "I/the/enhanced/team’s/synergy", "answer": "I enhanced the team’s synergy." },
-  { "id": 186, "jumbled": "she/the/optimized/family/savings", "answer": "She optimized the family savings." },
-  { "id": 187, "jumbled": "they/the/streamlined/project/timelines", "answer": "They streamlined the project timelines." },
-  { "id": 188, "jumbled": "he/the/structured/kids’/routines", "answer": "He structured the kids’ routines." },
-  { "id": 189, "jumbled": "we/the/refined/office/processes", "answer": "We refined the office processes." },
-  { "id": 190, "jumbled": "I/the/balanced/festival/budget", "answer": "I balanced the festival budget." },
-  { "id": 191, "jumbled": "she/the/tackled/team’s/challenges", "answer": "She tackled the team’s challenges." },
-  { "id": 192, "jumbled": "they/the/strengthened/family/dynamics", "answer": "They strengthened the family dynamics." },
-  { "id": 193, "jumbled": "he/the/exceeded/client/expectations", "answer": "He exceeded the client expectations." },
-  { "id": 194, "jumbled": "we/the/coordinated/Diwali/preparations", "answer": "We coordinated the Diwali preparations." },
-  { "id": 195, "jumbled": "I/the/reprioritized/team’s/priorities", "answer": "I reprioritized the team’s priorities." },
-  { "id": 196, "jumbled": "she/the/streamlined/household/logistics", "answer": "She streamlined the household logistics." },
-  { "id": 197, "jumbled": "they/the/maximized/project/outcomes", "answer": "They maximized the project outcomes." },
-  { "id": 198, "jumbled": "he/the/nurtured/kids’/aspirations", "answer": "He nurtured the kids’ aspirations." },
-  { "id": 199, "jumbled": "we/the/optimized/office/efficiency", "answer": "We optimized the office efficiency." },
-  { "id": 200, "jumbled": "I/the/orchestrated/festival/events", "answer": "I orchestrated the festival events." },
-  { "id": 201, "jumbled": "she/the/mediated/team’s/conflicts", "answer": "She mediated the team’s conflicts." },
-  { "id": 202, "jumbled": "they/the/recalibrated/family/plans", "answer": "They recalibrated the family plans." },
-  { "id": 203, "jumbled": "he/the/steered/client/negotiations", "answer": "He steered the client negotiations." },
-  { "id": 204, "jumbled": "we/the/streamlined/Holi/logistics", "answer": "We streamlined the Holi logistics." },
-  { "id": 205, "jumbled": "I/the/redefined/team’s/objectives", "answer": "I redefined the team’s objectives." },
-  { "id": 206, "jumbled": "she/the/restructured/household/expenses", "answer": "She restructured the household expenses." },
-  { "id": 207, "jumbled": "they/the/leveraged/project/synergies", "answer": "They leveraged the project synergies." },
-  { "id": 208, "jumbled": "he/the/fostered/kids’/goals", "answer": "He fostered the kids’ goals." },
-  { "id": 209, "jumbled": "we/the/elevated/office/standards", "answer": "We elevated the office standards." },
-  { "id": 210, "jumbled": "I/the/reprioritized/festival/priorities", "answer": "I reprioritized the festival priorities." },
-  { "id": 211, "jumbled": "she/the/articulated/team’s/vision", "answer": "She articulated the team’s vision." },
-  { "id": 212, "jumbled": "they/the/restored/family/harmony", "answer": "They restored the family harmony." },
-  { "id": 213, "jumbled": "he/the/cultivated/client/rapport", "answer": "He cultivated the client rapport." },
-  { "id": 214, "jumbled": "we/the/orchestrated/Diwali/events", "answer": "We orchestrated the Diwali events." },
-  { "id": 215, "jumbled": "I/the/sustained/team’s/momentum", "answer": "I sustained the team’s momentum." },
-  { "id": 216, "jumbled": "she/the/reconciled/household/finances", "answer": "She reconciled the household finances." },
-  { "id": 217, "jumbled": "they/the/optimized/project/efficiency", "answer": "They optimized the project efficiency." },
-  { "id": 218, "jumbled": "he/the/bolstered/kids’/confidence", "answer": "He bolstered the kids’ confidence." },
-  { "id": 219, "jumbled": "we/the/streamlined/office/workflows", "answer": "We streamlined the office workflows." },
-  { "id": 220, "jumbled": "I/the/navigated/festival/logistics", "answer": "I navigated the festival logistics." },
-  { "id": 221, "jumbled": "she/the/arbitrated/team’s/disputes", "answer": "She arbitrated the team’s disputes." },
-  { "id": 222, "jumbled": "they/the/restored/household/harmony", "answer": "They restored the household harmony." },
-  { "id": 223, "jumbled": "he/the/fortified/client/trust", "answer": "He fortified the client trust." },
-  { "id": 224, "jumbled": "we/the/orchestrated/Holi/celebrations", "answer": "We orchestrated the Holi celebrations." },
-  { "id": 225, "jumbled": "I/the/recalibrated/team’s/strategy", "answer": "I recalibrated the team’s strategy." },
-  { "id": 226, "jumbled": "she/the/restructured/family/finances", "answer": "She restructured the family finances." },
-  { "id": 227, "jumbled": "they/the/maximized/project/efficiency", "answer": "They maximized the project efficiency." },
-  { "id": 228, "jumbled": "he/the/unlocked/kids’/potential", "answer": "He unlocked the kids’ potential." },
-  { "id": 229, "jumbled": "we/the/transformed/office/culture", "answer": "We transformed the office culture." },
-  { "id": 230, "jumbled": "I/the/orchestrated/festival/logistics", "answer": "I orchestrated the festival logistics." },
-  { "id": 231, "jumbled": "she/the/navigated/team’s/challenges", "answer": "She navigated the team’s challenges." },
-  { "id": 232, "jumbled": "they/the/reprioritized/family/priorities", "answer": "They reprioritized the family priorities." },
-  { "id": 233, "jumbled": "he/the/strengthened/client/partnerships", "answer": "He strengthened the client partnerships." },
-  { "id": 234, "jumbled": "we/the/streamlined/Diwali/logistics", "answer": "We streamlined the Diwali logistics." },
-  { "id": 235, "jumbled": "I/the/reoriented/team’s/direction", "answer": "I reoriented the team’s direction." },
-  { "id": 236, "jumbled": "she/the/harmonized/household/dynamics", "answer": "She harmonized the household dynamics." },
-  { "id": 237, "jumbled": "they/the/optimized/project/outcomes", "answer": "They optimized the project outcomes." },
-  { "id": 238, "jumbled": "he/the/championed/kids’/aspirations", "answer": "He championed the kids’ aspirations." },
-  { "id": 239, "jumbled": "we/the/maximized/office/synergy", "answer": "We maximized the office synergy." },
-  { "id": 240, "jumbled": "I/the/overcame/festival/challenges", "answer": "I overcame the festival challenges." },
-  { "id": 241, "jumbled": "she/the/arbitrated/team’s/conflicts", "answer": "She arbitrated the team’s conflicts." },
-  { "id": 242, "jumbled": "they/the/restored/family/harmony", "answer": "They restored the family harmony." },
-  { "id": 243, "jumbled": "he/the/fortified/client/trust", "answer": "He fortified the client trust." },
-  { "id": 244, "jumbled": "we/the/orchestrated/Diwali/celebrations", "answer": "We orchestrated the Diwali celebrations." },
-  { "id": 245, "jumbled": "I/the/recalibrated/team’s/strategy", "answer": "I recalibrated the team’s strategy." },
-  { "id": 246, "jumbled": "she/the/restructured/household/finances", "answer": "She restructured the household finances." },
-  { "id": 247, "jumbled": "they/the/maximized/project/efficiency", "answer": "They maximized the project efficiency." },
-  { "id": 248, "jumbled": "he/the/unlocked/kids’/potential", "answer": "He unlocked the kids’ potential." },
-  { "id": 249, "jumbled": "we/the/transformed/office/culture", "answer": "We transformed the office culture." },
-  { "id": 250, "jumbled": "I/the/orchestrated/festival/logistics", "answer": "I orchestrated the festival logistics." },
-  { "id": 251, "jumbled": "she/the/navigated/budget/constraints", "answer": "She navigated the budget constraints." },
-  { "id": 252, "jumbled": "they/the/maximized/team’s/synergy", "answer": "They maximized the team’s synergy." },
-  { "id": 253, "jumbled": "he/the/fortified/client/confidence", "answer": "He fortified the client confidence." },
-  { "id": 254, "jumbled": "we/the/recalibrated/family/priorities", "answer": "We recalibrated the family priorities." },
-  { "id": 255, "jumbled": "I/the/overcame/project/challenges", "answer": "I overcame the project challenges." },
-  { "id": 256, "jumbled": "she/the/harmonized/household/dynamics", "answer": "She harmonized the household dynamics." },
-  { "id": 257, "jumbled": "they/the/enriched/office/culture", "answer": "They enriched the office culture." },
-  { "id": 258, "jumbled": "he/the/championed/kids’/ambitions", "answer": "He championed the kids’ ambitions." },
-  { "id": 259, "jumbled": "we/the/orchestrated/Diwali/logistics", "answer": "We orchestrated the Diwali logistics." },
-  { "id": 260, "jumbled": "I/the/reoriented/team’s/strategy", "answer": "I reoriented the team’s strategy." },
-  { "id": 261, "jumbled": "she/the/mediated/family/conflicts", "answer": "She mediated the family conflicts." },
-  { "id": 262, "jumbled": "they/the/maximized/project/outcomes", "answer": "They maximized the project outcomes." },
-  { "id": 263, "jumbled": "he/the/nurtured/client/relationships", "answer": "He nurtured the client relationships." },
-  { "id": 264, "jumbled": "we/the/streamlined/Holi/preparations", "answer": "We streamlined the Holi preparations." },
-  { "id": 265, "jumbled": "I/the/rearticulated/team’s/vision", "answer": "I rearticulated the team’s vision." },
-  { "id": 266, "jumbled": "she/the/reprioritized/household/tasks", "answer": "She reprioritized the household tasks." },
-  { "id": 267, "jumbled": "they/the/optimized/office/efficiency", "answer": "They optimized the office efficiency." },
-  { "id": 268, "jumbled": "he/the/fostered/kids’/dreams", "answer": "He fostered the kids’ dreams." },
-  { "id": 269, "jumbled": "we/the/leveraged/project/synergies", "answer": "We leveraged the project synergies." },
-  { "id": 270, "jumbled": "I/the/navigated/festival/challenges", "answer": "I navigated the festival challenges." },
-  { "id": 271, "jumbled": "she/the/arbitrated/team’s/disputes", "answer": "She arbitrated the team’s disputes." },
-  { "id": 272, "jumbled": "they/the/restored/family/harmony", "answer": "They restored the family harmony." },
-  { "id": 273, "jumbled": "he/the/bolstered/client/confidence", "answer": "He bolstered the client confidence." },
-  { "id": 274, "jumbled": "we/the/orchestrated/Diwali/events", "answer": "We orchestrated the Diwali events." },
-  { "id": 275, "jumbled": "I/the/recalibrated/team’s/priorities", "answer": "I recalibrated the team’s priorities." },
-  { "id": 276, "jumbled": "she/the/restructured/household/budget", "answer": "She restructured the household budget." },
-  { "id": 277, "jumbled": "they/the/maximized/project/efficiency", "answer": "They maximized the project efficiency." },
-  { "id": 278, "jumbled": "he/the/unlocked/kids’/potential", "answer": "He unlocked the kids’ potential." },
-  { "id": 279, "jumbled": "we/the/transformed/office/culture", "answer": "We transformed the office culture." },
-  { "id": 280, "jumbled": "I/the/orchestrated/festival/logistics", "answer": "I orchestrated the festival logistics." },
-  { "id": 281, "jumbled": "she/the/navigated/project/challenges", "answer": "She navigated the project challenges." },
-  { "id": 282, "jumbled": "they/the/reprioritized/family/goals", "answer": "They reprioritized the family goals." },
-  { "id": 283, "jumbled": "he/the/strengthened/client/partnerships", "answer": "He strengthened the client partnerships." },
-  { "id": 284, "jumbled": "we/the/streamlined/Diwali/preparations", "answer": "We streamlined the Diwali preparations." },
-  { "id": 285, "jumbled": "I/the/reoriented/team’s/direction", "answer": "I reoriented the team’s direction." },
-  { "id": 286, "jumbled": "she/the/harmonized/household/dynamics", "answer": "She harmonized the household dynamics." },
-  { "id": 287, "jumbled": "they/the/optimized/project/outcomes", "answer": "They optimized the project outcomes." },
-  { "id": 288, "jumbled": "he/the/championed/kids’/aspirations", "answer": "He championed the kids’ aspirations." },
-  { "id": 289, "jumbled": "we/the/maximized/office/synergy", "answer": "We maximized the office synergy." },
-  { "id": 290, "jumbled": "I/the/overcame/festival/challenges", "answer": "I overcame the festival challenges." },
-  { "id": 291, "jumbled": "she/the/arbitrated/team’s/conflicts", "answer": "She arbitrated the team’s conflicts." },
-  { "id": 292, "jumbled": "they/the/restored/household/harmony", "answer": "They restored the household harmony." },
-  { "id": 293, "jumbled": "he/the/fortified/client/trust", "answer": "He fortified the client trust." },
-  { "id": 294, "jumbled": "we/the/orchestrated/Holi/celebrations", "answer": "We orchestrated the Holi celebrations." },
-  { "id": 295, "jumbled": "I/the/recalibrated/team’s/strategy", "answer": "I recalibrated the team’s strategy." },
-  { "id": 296, "jumbled": "she/the/restructured/family/finances", "answer": "She restructured the family finances." },
-  { "id": 297, "jumbled": "they/the/maximized/project/efficiency", "answer": "They maximized the project efficiency." },
-  { "id": 298, "jumbled": "he/the/unlocked/kids’/potential", "answer": "He unlocked the kids’ potential." },
-  { "id": 299, "jumbled": "we/the/transformed/office/culture", "answer": "We transformed the office culture." },
-  { "id": 300, "jumbled": "I/the/orchestrated/festival/logistics", "answer": "I orchestrated the festival logistics." }
+    {
+      "id": 1,
+      "jumbled": "manager/the/report/approved/budget/the",
+      "answer": "The manager approved the budget report."
+    },
+    {
+      "id": 2,
+      "jumbled": "team/project/completed/deadline/the/before/the",
+      "answer": "The team completed the project before the deadline."
+    },
+    {
+      "id": 3,
+      "jumbled": "customers/quality/service/expect/high",
+      "answer": "Customers expect high quality service."
+    },
+    {
+      "id": 4,
+      "jumbled": "meeting/scheduled/conference/room/is/the/in/the",
+      "answer": "The meeting is scheduled in the conference room."
+    },
+    {
+      "id": 5,
+      "jumbled": "technician/fixed/server/issue/quickly/the",
+      "answer": "The technician fixed the server issue quickly."
+    },
+    {
+      "id": 6,
+      "jumbled": "training/employees/required/new/attend/to/are",
+      "answer": "New employees are required to attend training."
+    },
+    {
+      "id": 7,
+      "jumbled": "sales/quarter/figures/improved/last/have/significantly",
+      "answer": "Sales figures have improved significantly last quarter."
+    },
+    {
+      "id": 8,
+      "jumbled": "policy/company/strict/a/harassment/has/against",
+      "answer": "The company has a strict policy against harassment."
+    },
+    {
+      "id": 9,
+      "jumbled": "feedback/client/improvement/valuable/provides/for",
+      "answer": "Client feedback provides valuable improvement for."
+    },
+    {
+      "id": 10,
+      "jumbled": "innovation/key/success/market/is/to/in/the",
+      "answer": "Innovation is key to success in the market."
+    },
+    {
+      "id": 11,
+      "jumbled": "supply/disruptions/chain/affected/production/have",
+      "answer": "Supply chain disruptions have affected production."
+    },
+    {
+      "id": 12,
+      "jumbled": "negotiate/better/terms/supplier/we/with/must/the",
+      "answer": "We must negotiate better terms with the supplier."
+    },
+    {
+      "id": 13,
+      "jumbled": "marketing/strategy/target/audience/identifying/involves",
+      "answer": "Marketing strategy involves identifying target audience."
+    },
+    {
+      "id": 14,
+      "jumbled": "financial/audit/revealed/discrepancies/several/the",
+      "answer": "The financial audit revealed several discrepancies."
+    },
+    {
+      "id": 15,
+      "jumbled": "leadership/strong/essential/times/crisis/is/during",
+      "answer": "Strong leadership is essential during times of crisis."
+    }
   ],
   "emailWriting": [
-      { "id": 1, "prompt": "Write a formal email to your professor requesting an extension on a project deadline due to unforeseen personal circumstances." },
-      { "id": 2, "prompt": "Compose an informal email to a friend inviting them to your birthday party next weekend, including details about the time, place, and theme." },
-      { "id": 3, "prompt": "Write a professional email to a colleague proposing a new idea for a team project, explaining its benefits and implementation steps." },
-      { "id": 4, "prompt": "Draft a polite email to a customer service representative inquiring about the status of a delayed order you placed two weeks ago." },
-      { "id": 5, "prompt": "Create a persuasive email to your manager requesting approval to attend a professional development workshop, highlighting its value to your role." },
-      { "id": 6, "prompt": "Write an apologetic email to a client for a mistake made in a recent report, offering a solution to rectify the error." },
-      { "id": 7, "prompt": "Compose a thank-you email to a mentor who provided valuable advice during a recent career consultation session." },
-      { "id": 8, "prompt": "Draft a formal email to a hiring manager following up on a job application you submitted last month, expressing continued interest." },
-      { "id": 9, "prompt": "Write an informal email to a family member sharing exciting news about a recent accomplishment and asking about their well-being." },
-      { "id": 10, "prompt": "Create a professional email to a supplier requesting a detailed quote for bulk materials needed for an upcoming project." },
-      { "id": 11, "prompt": "Compose a courteous email to a neighbor asking them to keep noise levels down during late hours due to your early work schedule." },
-      { "id": 12, "prompt": "Write a formal email to a conference organizer confirming your attendance and requesting additional information about the event schedule." },
-      { "id": 13, "prompt": "Draft a persuasive email to a local business owner proposing a partnership to promote their products at a community event." },
-      { "id": 14, "prompt": "Create an email to a teammate apologizing for missing a group meeting and suggesting a plan to catch up on the discussion." },
-      { "id": 15, "prompt": "Write a professional email to your supervisor requesting a day off for a personal commitment, ensuring coverage for your tasks." },
-      { "id": 16, "prompt": "Compose an informal email to a classmate asking for notes from a lecture you missed due to illness." },
-      { "id": 17, "prompt": "Draft a formal email to a charity organization expressing interest in volunteering and inquiring about available opportunities." },
-      { "id": 18, "prompt": "Write a thank-you email to a colleague who helped you complete a challenging task under a tight deadline." },
-      { "id": 19, "prompt": "Create a polite email to a travel agency requesting a refund for a canceled trip, providing necessary booking details." },
-      { "id": 20, "prompt": "Compose a professional email to a client confirming the details of an upcoming meeting, including the agenda and location." }
+    {
+      "id": 1,
+      "prompt": "Write a formal email to a client explaining that the project delivery will be delayed by one week due to unforeseen technical issues. Apologize for the inconvenience and propose a new timeline."
+    },
+    {
+      "id": 2,
+      "prompt": "Compose an email to your team announcing a mandatory training session on the new cybersecurity protocols. Include the date, time, and importance of attendance."
+    },
+    {
+      "id": 3,
+      "prompt": "Write a persuasive email to your department head requesting budget approval for a new software tool that could improve team productivity. Highlight the return on investment."
+    },
+    {
+      "id": 4,
+      "prompt": "Draft a follow-up email to a potential client who expressed interest in your services at a recent conference but hasn't responded to your initial contact."
+    },
+    {
+      "id": 5,
+      "prompt": "Write a formal resignation email to your supervisor, giving two weeks' notice and offering to help with the transition of your responsibilities."
+    }
   ],
   "passageReconstruction": [
-    { "id": 1, "sentences": "She cooked a spicy dinner for the family tonight at home. The kids loved the tasty curry and asked for seconds. Everyone ate happily together in the kitchen, sharing stories. The evening felt warm and joyful." },
-  { "id": 2, "sentences": "The team planned a chai break for the office staff this afternoon. They arranged snacks and shared project ideas casually. Everyone enjoyed the relaxed discussion in the meeting room. It boosted morale for the day." },
-  { "id": 3, "sentences": "He cleaned the kids’ room before dinner with great care. Toys were sorted quickly and neatly into boxes. The family appreciated his effort, and the house felt tidy. Everyone relaxed comfortably that evening." },
-  { "id": 4, "sentences": "We ordered Diwali sweets for the neighbors to share joy. Everyone enjoyed the festive treats during the evening celebration. The house was filled with laughter and warmth. It was a memorable night for all." },
-  { "id": 5, "sentences": "I jotted meeting notes for the team in the conference room. The discussion was productive, with clear ideas shared. Everyone contributed enthusiastically to the project plan. The session ended with high spirits." },
-  { "id": 6, "sentences": "She folded the kids’ clothes after lunch in the bedroom. The room looked tidy and well-organized afterward. The family felt relaxed at home, enjoying the neat space. It made the day smoother." },
-  { "id": 7, "sentences": "They hosted an office party for Diwali with great enthusiasm. Snacks and music filled the evening with joy. The staff enjoyed the festive vibe in the office. It strengthened team bonds significantly." },
-  { "id": 8, "sentences": "He fixed the TV remote before dinner in the living room. The kids watched their favorite show happily. Everyone was content, and the evening passed smoothly. His quick fix saved the night." },
-  { "id": 9, "sentences": "We planned a family picnic for Sunday at the park. The kids packed games and snacks excitedly. Everyone looked forward to the outing with joy. It promised to be a fun day." },
-  { "id": 10, "sentences": "I updated the team’s roster for the project this morning. Tasks were assigned clearly to each member. The group started work with confidence and focus. The project kicked off smoothly." },
-  { "id": 11, "sentences": "She decided the breakfast menu for tomorrow with the family. Pancakes and juice were chosen enthusiastically. The kids were excited for the meal. It set a cheerful tone for the day." },
-  { "id": 12, "sentences": "They set a project timeline in the meeting this afternoon. Deadlines were clear and achievable for all. The team felt ready to start work immediately. Confidence was high among everyone." },
-  { "id": 13, "sentences": "He checked the kids’ homework after dinner at the table. Their math was correct and neatly done. The family praised their hard work proudly. It was a productive evening." },
-  { "id": 14, "sentences": "We ordered snacks for the office team for a break. The delivery arrived on time with variety. Everyone enjoyed the quick chai break together. It refreshed the team’s energy." },
-  { "id": 15, "sentences": "I wrapped gifts for the Holi celebration with colorful paper. The kids loved the vibrant packages eagerly. The family shared festive joy during the event. It was a delightful moment." },
-  { "id": 16, "sentences": "The team was reviewing the project plan during a chai break in the office. Deadlines were set confidently, and everyone contributed valuable ideas. The discussion was productive, boosting morale. They left the meeting ready to start." },
-  { "id": 17, "sentences": "She was organizing the Diwali party with care at home. Lights and sweets were arranged beautifully for guests. The family enjoyed the evening, filled with laughter. The celebration brought everyone closer together joyfully." },
-  { "id": 18, "sentences": "He was tracking the grocery budget this month with precision. Savings were higher than expected, pleasing the family. They planned a small treat to celebrate. The household felt financially secure and happy." },
-  { "id": 19, "sentences": "We were discussing the team’s goals in the huddle this morning. New ideas emerged quickly from everyone. The session was motivating, setting a clear path. The team left energized for the project." },
-  { "id": 20, "sentences": "I was scheduling a grocery delivery for tomorrow afternoon online. Fresh vegetables and fruits were prioritized carefully. The family looked forward to a healthy dinner. It simplified the day’s planning significantly." },
-  { "id": 21, "sentences": "She was delegating tasks for the festival at home. The kids handled decorations happily with creativity. The house was ready for Holi celebrations. Everyone felt the festive spirit growing stronger daily." },
-  { "id": 22, "sentences": "They were finalizing the office renovation plans this week. Budget and timeline were set with precision. The team was excited for the upcoming changes. It promised a better workspace for everyone." },
-  { "id": 23, "sentences": "He was guiding the kids’ science project at home patiently. Their ideas were creative and well-executed. The family cheered their effort with pride. It was a rewarding experience for all." },
-  { "id": 24, "sentences": "We were coordinating a team workshop for next week in the office. Topics and speakers were chosen thoughtfully. Everyone anticipated learning new skills. The event was set to boost productivity." },
-  { "id": 25, "sentences": "I was packing snacks for the kids’ outing this weekend. Fruits and cookies were included for variety. The family planned a fun day outdoors. Everyone was excited for the adventure." },
-  { "id": 26, "sentences": "She was managing the household budget this week with care. Expenses were tracked meticulously for savings. The family saved enough for a vacation. It brought a sense of financial relief." },
-  { "id": 27, "sentences": "They were sharing project updates in the meeting this morning. Progress was steady, with clear milestones. The team felt confident moving forward together. The discussion set a positive tone for work." },
-  { "id": 28, "sentences": "He was fixing the kitchen light after dinner with skill. The room became bright and welcoming again. The family appreciated his quick work immensely. It made the evening more comfortable." },
-  { "id": 29, "sentences": "We were arranging a client meeting for tomorrow in the office. The agenda was prepared thoroughly with details. Everyone was ready to present confidently. It promised a successful discussion." },
-  { "id": 30, "sentences": "I was sorting the family’s festival photos from last year. Memories of Diwali were cherished by all. The kids loved seeing the pictures fondly. It brought the family closer together." },
-  { "id": 31, "sentences": "She was preparing the team’s presentation for the client meticulously. Slides were clear, engaging, and professional. Everyone felt well-prepared for the pitch. The effort ensured a strong impression." },
-  { "id": 32, "sentences": "They were booking a family trip for the holidays with excitement. Destinations were discussed, and kids wanted a beach. The planning brought joy to everyone. It promised a memorable adventure." },
-  { "id": 33, "sentences": "He was monitoring the kids’ exam preparations at home daily. Study schedules were followed with discipline. The family supported their efforts warmly. It built confidence for the tests." },
-  { "id": 34, "sentences": "We were restocking office supplies for the team this week. Pens, notebooks, and printers were ordered promptly. Everyone was set for productive work. The office ran smoothly as a result." },
-  { "id": 35, "sentences": "I was organizing the kids’ playdate this weekend at home. Games and snacks were planned with care. The family expected a fun, lively day. The kids were thrilled already." },
-  { "id": 36, "sentences": "She was prioritizing chores for the festival with efficiency. Decorations were set up early and beautifully. The house sparkled, ready for celebration. The family felt the festive excitement growing." },
-  { "id": 37, "sentences": "They were assessing project risks in the huddle this morning. Solutions were proposed quickly and effectively. The team felt ready to proceed confidently. The discussion strengthened their approach to challenges." },
-  { "id": 38, "sentences": "He was balancing the festival budget carefully for Holi. Sweets and colors were affordable yet vibrant. The family enjoyed a grand celebration together. The planning made the event truly special." },
-  { "id": 39, "sentences": "We were conducting a team appraisal this month in the office. Feedback was shared constructively with care. Everyone aimed to improve performance steadily. The process boosted motivation across the team." },
-  { "id": 40, "sentences": "I was coordinating the kids’ activities for the week thoughtfully. Sports and homework were balanced effectively. The family stayed on track smoothly. It kept the household organized and stress-free." },
-  { "id": 41, "sentences": "She had navigated the budget constraints for the Diwali celebration with great skill. The family enjoyed a grand festive evening with vibrant lights and delicious sweets. Everyone shared laughter, making it unforgettable. The planning effort paid off beautifully." },
-  { "id": 42, "sentences": "They had aligned the team’s strategy for the quarter effectively in the office. Goals were clear, ambitious, and well-communicated. Everyone was motivated to achieve success together. The meeting set a strong foundation for progress." },
-  { "id": 43, "sentences": "He had addressed client concerns during the meeting with confidence and clarity. Solutions were proposed swiftly, earning trust. The project moved forward smoothly. His approach strengthened the partnership significantly." },
-  { "id": 44, "sentences": "We had streamlined the festival plans for Holi with great efficiency. Colors, music, and snacks were organized perfectly. The family celebrated with immense joy and laughter. The event was a vibrant success for all." },
-  { "id": 45, "sentences": "I had evaluated the team’s progress for the project with thorough analysis. Milestones were met consistently, boosting morale. Everyone was proud of the collective effort. The project was on track for success." },
-  { "id": 46, "sentences": "She had reconciled the family finances for the month with great care. Savings were secured for emergencies and future plans. The household felt financially stable. The effort brought peace of mind to all." },
-  { "id": 47, "sentences": "They had mitigated project risks during the planning phase with precision. Contingencies were set confidently, ensuring stability. The team proceeded smoothly with focus. The proactive approach prevented potential issues effectively." },
-  { "id": 48, "sentences": "He had nurtured the kids’ hobbies with dedication and thoughtful guidance. Their talents shone brightly in their projects. The family cheered their achievements proudly. It was a rewarding journey for everyone." },
-  { "id": 49, "sentences": "We had refined the office workflows for better efficiency this quarter. Tasks were streamlined, saving time and effort. Everyone noticed the improved pace significantly. The changes enhanced productivity across the team." },
-  { "id": 50, "sentences": "I had orchestrated the family events for the festival with great care. Gatherings were warm, joyful, and well-planned. The kids loved the celebrations immensely. The festive spirit brought everyone closer together." },
-  { "id": 51, "sentences": "She had strengthened the team’s dynamics through open and honest discussions. Collaboration improved significantly, fostering trust. Everyone felt valued and motivated to contribute. The team’s unity was a key to success." },
-  { "id": 52, "sentences": "They had prioritized family goals for the year with careful thought. Education and savings were planned strategically. The household was optimistic about the future. The process unified everyone’s efforts beautifully." },
-  { "id": 53, "sentences": "He had incorporated client feedback into the project with great skill. Adjustments were made swiftly, enhancing quality. The partnership grew stronger as a result. His approach earned significant trust and respect." },
-  { "id": 54, "sentences": "We had coordinated the Diwali preparations with meticulous attention to detail. Lights and decorations were stunning and vibrant. The family enjoyed the festive spirit fully. The celebration was a heartwarming success for all." },
-  { "id": 55, "sentences": "I had clarified the team’s objectives for the quarter with precision. Focus was sharpened, aligning everyone’s efforts. The team worked with clear purpose daily. The direction led to consistent progress." },
-  { "id": 56, "sentences": "She had minimized household expenses for the month with great skill. Savings were allocated wisely for future plans. The family planned a small trip happily. The effort ensured financial stability." },
-  { "id": 57, "sentences": "They had tracked project milestones with precision throughout the quarter diligently. Progress was consistent, with strong results. The team celebrated their success proudly. The effort laid a solid foundation for future work." },
-  { "id": 58, "sentences": "He had fostered the kids’ talents with dedication and thoughtful care. Their skills improved remarkably over time. The family was immensely proud of their growth. It strengthened their bond significantly." },
-  { "id": 59, "sentences": "We had optimized the office efficiency through strategic and thoughtful changes. Workflows were smoother, saving valuable time. Everyone appreciated the improvements greatly. The team’s productivity reached new heights consistently." },
-  { "id": 60, "sentences": "I had navigated the festival logistics for Holi with great expertise. Colors, music, and snacks were perfectly organized. The family’s celebration was vibrant and unforgettable. The planning made the event truly special." }
-   ]
-  }
-
+    {
+      "id": 1,
+      "sentences": "The annual shareholder meeting was held yesterday in New York. The CEO presented the financial results, which showed a 15% increase in profit. Investors were pleased with the company's strategic direction. The session concluded with a Q&A segment regarding future expansion plans."
+    },
+    {
+      "id": 2,
+      "sentences": "Our customer support team has reported a surge in recurring technical complaints. The engineering department investigated the root cause and identified a software bug. A patch was deployed overnight to resolve the issue. Early feedback indicates that the system is now stable."
+    },
+    {
+      "id": 3,
+      "sentences": "Supply chain disruptions have delayed the shipment of raw materials. Consequently, production at the main plant has slowed down this week. We are currently sourcing alternative suppliers to mitigate the impact. Normal operations are expected to resume by next Monday."
+    },
+    {
+      "id": 4,
+      "sentences": "The marketing department launched a new digital campaign targeting young professionals. Early metrics show high engagement rates across social media platforms. The sales team is already seeing an increase in qualified leads. We plan to increase the ad spend incrementally next month."
+    },
+    {
+      "id": 5,
+      "sentences": "Employee retention has become a key focus for HR this year. A new survey revealed that career development is a top priority for staff. In response, we are introducing a mentorship program and more training workshops. These initiatives aim to boost morale and reduce turnover."
+    }
+  ]
+}

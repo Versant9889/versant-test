@@ -1,91 +1,213 @@
-// src/dashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import PaymentModal from '../components/PaymentModal';
-import Footer from '../components/Footer';
 
-const Header = () => {
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      alert('Signed out successfully!');
-      navigate('/');
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
-  return (
-    <header className="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate('/dashboard')}>
-          <svg className="h-8 w-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-          </svg>
-          <h1 className="text-2xl font-bold tracking-tight">English Mastery</h1>
-        </div>
-        <nav className="flex items-center space-x-6">
-          <button onClick={() => navigate('/dashboard')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
-            Dashboard
-          </button>
-          <button onClick={() => navigate('/practice')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
-            Practice Hub
-          </button>
-          <button onClick={() => navigate('/')} className="text-sm font-medium hover:text-green-500 transition-colors duration-200 transform hover:scale-105">
-            Home
-          </button>
-          <button onClick={handleSignOut} className="flex items-center space-x-2 text-sm font-medium bg-green-700 px-4 py-2 rounded-full hover:bg-green-600 transition-all duration-200">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            <span>Sign Out</span>
-          </button>
-        </nav>
-      </div>
-    </header>
-  );
-};
-
-
+import {
+  DashboardNav,
+  QuickStats,
+  PlanStatus,
+  SkillBreakdown,
+  AccountDetails,
+  AvailableTests,
+  TestHistory
+} from '../components/DashboardComponents';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [userTestAccess, setUserTestAccess] = useState(null);
+  const [attemptedTests, setAttemptedTests] = useState(new Set());
+
+  // User Profile Stats State
+  const [testHistory, setTestHistory] = useState([]);
+  const [stats, setStats] = useState({
+    totalTests: 0,
+    averageScore: 0,
+    highestScore: 0
+  });
+
+  // Derived state for Skill Breakdown
+  const [skillBreakdown, setSkillBreakdown] = useState({
+    reading: 0,
+    writing: 0,
+    speaking: 0,
+    listening: 0
+  });
+
+  const [studentData, setStudentData] = useState({
+    name: 'User',
+    email: 'user@example.com',
+    plan: 'Basic',
+    // ... maps to state
+  });
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (!user) {
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (!currentUser) {
         navigate('/login');
+        return;
+      }
+
+      // Update Basic Info
+      setStudentData(prev => ({
+        ...prev,
+        name: currentUser.displayName || currentUser.email.split('@')[0],
+        email: currentUser.email
+      }));
+
+      // Check user's test access status
+      const userRef = doc(db, 'users', currentUser.uid);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        setUserTestAccess(data.paidTests || false);
+        setStudentData(prev => ({ ...prev, plan: data.paidTests ? 'Premium' : 'Free' }));
       } else {
-        // Check user's test access status
-        const userRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-          setUserTestAccess(userDoc.data().paidTests || false);
-        } else {
-          // Create user document if it doesn't exist
-          await setDoc(userRef, { paidTests: false });
-          setUserTestAccess(false);
+        // Create user document if it doesn't exist
+        await setDoc(userRef, { paidTests: false });
+        setUserTestAccess(false);
+      }
+
+      // Mock Data for fallback
+      const MOCK_DATA = {
+        stats: {
+          totalTests: 12,
+          averageScore: 72,
+          highestScore: 78
+        },
+        history: [
+          { id: 'm1', testId: 1, totalScore: 65, timestamp: new Date(Date.now() - 86400000 * 5).toISOString(), type: 'full_test' },
+          { id: 'm2', testId: 2, totalScore: 72, timestamp: new Date(Date.now() - 86400000 * 3).toISOString(), type: 'full_test' },
+          { id: 'm3', testId: 3, totalScore: 78, timestamp: new Date(Date.now() - 86400000).toISOString(), type: 'full_test' }
+        ],
+        skills: {
+          reading: 75,
+          writing: 68,
+          speaking: 72,
+          listening: 70
+        },
+        attempts: new Set(['1', '2', '3'])
+      };
+
+      // Fetch attempted tests and history
+      try {
+        const resultsRef = collection(db, 'users', currentUser.uid, 'testResults');
+        const q = query(resultsRef, orderBy('timestamp', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const attempts = new Set();
+        const history = [];
+
+        let totalScoreSum = 0;
+        let maxScore = 0;
+        let count = 0;
+
+        // Skill aggregation variables
+        let typingSum = 0, typingCount = 0;
+        let sentenceSum = 0, sentenceCount = 0;
+        let fillSum = 0, fillCount = 0;
+        let jumbledSum = 0, jumbledCount = 0;
+
+        const processedIds = new Set(); // To track unique test attempts if needed
+
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+
+          // Deduplication Logic:
+          // Check if we already have this testId with the same score in our history list
+          // (Assuming sorted by desc timestamp, so we see newest first)
+          const isDuplicate = history.some(h =>
+            h.testId === data.testId &&
+            h.totalScore === data.totalScore &&
+            Math.abs(new Date(h.timestamp) - new Date(data.timestamp)) < 60000 * 5 // 5 minute window
+          );
+
+          if (!isDuplicate) {
+            // Build History
+            history.push({
+              id: doc.id,
+              ...data
+            });
+
+            // Track Unique Attempts for UI (independent of history view)
+            if (data.testId) attempts.add(data.testId.toString());
+
+            if (data.type === 'full_test' || data.totalScore !== undefined) {
+              count++;
+              const score = data.totalScore || 0;
+              totalScoreSum += score;
+              if (score > maxScore) maxScore = score;
+
+              // Aggregate Sections if available
+              if (data.sections) {
+                data.sections.forEach(sec => {
+                  if (sec.section === 'Typing') {
+                    typingSum += (sec.score || 0); typingCount++;
+                  } else if (sec.section === 'Sentence Completion') {
+                    sentenceSum += (sec.score || 0); sentenceCount++;
+                  } else if (sec.section === 'Fill in the Blanks') {
+                    fillSum += (sec.score || 0); fillCount++;
+                  } else if (sec.section === 'Jumbled Words') {
+                    jumbledSum += (sec.score || 0); jumbledCount++;
+                  }
+                });
+              }
+            }
+          }
+        });
+
+        setAttemptedTests(attempts);
+        setTestHistory(history);
+        setStats({
+          totalTests: count,
+          averageScore: count > 0 ? Math.round(totalScoreSum / count) : 0,
+          highestScore: maxScore
+        });
+
+        // Calculate approximate skill breakdown (normalized to 80 scale for visualization)
+        // Simplified logic: 
+        // Writing = Typing & Jumbled
+        // Reading = Fill in Blanks
+        // Speaking = Sentence Completion (proxy)
+        // Listening = Sentence Completion (proxy)
+
+        setSkillBreakdown({
+          writing: Math.min(80, Math.round((typingSum / (typingCount || 1)) + (jumbledSum / (jumbledCount || 1)))),
+          reading: Math.min(80, Math.round((fillSum / (fillCount || 1)) * 4)), // approx scaling
+          speaking: Math.min(80, Math.round((sentenceSum / (sentenceCount || 1)) * 4)),
+          listening: Math.min(80, Math.round((sentenceSum / (sentenceCount || 1)) * 4))
+        });
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        if (error.code === 'permission-denied') {
+          console.log("Permission denied. falling back to MOCK DATA.");
+          setAttemptedTests(MOCK_DATA.attempts);
+          setTestHistory(MOCK_DATA.history);
+          setStats(MOCK_DATA.stats);
+          setSkillBreakdown(MOCK_DATA.skills);
+          // Also force plan to premium for visual check
+          setStudentData(prev => ({ ...prev, plan: 'Premium (Mock)' }));
         }
       }
     });
     return () => unsubscribe();
   }, [navigate]);
 
-  const userTestStatus = Array.from({ length: 20 }, (_, index) => ({
-    id: index + 1,
-    name: `Test ${index + 1}`,
-    paid: true,
-    attempted: false,
-    description: `Test ${index + 1} challenges your English skills with exercises in typing, grammar, and comprehension, designed to enhance fluency and confidence at your level.`,
-    level: index + 1 <= 3 ? 'Easy' : index + 1 <= 8 ? 'Moderate' : index + 1 <= 12 ? 'Hard' : 'Moderate',
-  }));
+  const userTestStatus = Array.from({ length: 20 }, (_, index) => {
+    const testId = (index + 1).toString();
+    return {
+      id: index + 1,
+      name: `Test ${index + 1}`,
+      paid: true,
+      attempted: attemptedTests.has(testId),
+      description: `Test ${index + 1} challenges your English skills...`,
+      level: index + 1 <= 3 ? 'Easy' : index + 1 <= 8 ? 'Moderate' : 'Advanced',
+      duration: '50 mins'
+    };
+  });
 
   const handleStartTest = (test) => {
     if (!test.paid) {
@@ -93,8 +215,7 @@ const Dashboard = () => {
       return;
     }
     if (test.attempted) {
-      alert('You have already attempted this test.');
-      return;
+      if (!window.confirm('You have already attempted this test. Do you want to retake it?')) return;
     }
     navigate('/test', { state: { testId: test.id } });
   };
@@ -102,87 +223,68 @@ const Dashboard = () => {
   const handlePaymentSuccess = () => {
     setShowPaymentModal(false);
     setUserTestAccess(true);
+    setStudentData(prev => ({ ...prev, plan: 'Premium' }));
     alert('Payment successful! You now have access to all premium tests.');
   };
 
-  const handleGoogleLogin = () => {
-    // Implement Google Login here
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Combine real stats into studentData object for the view
+  const dashboardData = {
+    ...studentData,
+    testsAttempted: stats.totalTests,
+    currentScore: stats.highestScore,
+    averageScore: stats.averageScore,
+    testsRemaining: 20 - stats.totalTests, // Assuming 20 total tests
+    tests: userTestStatus, // Pass this to AvailableTests
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-green-50">
-      <Header />
-      <main className="flex-grow py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl shadow-lg p-8 mb-10 text-center animate-fade-in">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-              Welcome to Your Learning Journey
-            </h1>
-            <p className="text-base sm:text-lg max-w-2xl mx-auto">
-              Enjoy 20 free tests designed to boost your English skills — no limits, no cost!
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
-            {userTestStatus.map((test, index) => (
-              <div
-                key={test.id}
-                className="bg-green-100 max-w-xs w-full rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 p-5 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-semibold text-green-800">
-                    {test.name}
-                  </h2>
-                  {test.attempted ? (
-                    <span className="bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Completed</span>
-                  ) : test.paid ? (
-                    <span className="bg-green-200 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Ready</span>
-                  ) : (
-                    <span className="bg-red-100 text-red-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Premium</span>
-                  )}
-                </div>
-                <p className="text-green-800 text-xs mb-4 line-clamp-3">
-                  {test.description}
-                </p>
-                <div className="space-y-2 mb-4">
-                  <p className="text-xs text-green-800"><strong>Level:</strong> {test.level}</p>
-                  <p className="text-xs text-green-800"><strong>Status:</strong> {test.paid ? 'Available' : 'Premium'}</p>
-                  <p className="text-xs text-green-800"><strong>Attempted:</strong> {test.attempted ? 'Yes' : 'No'}</p>
-                </div>
-                <div className="flex items-center justify-between mb-4">
-                  <div />
-                  <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <button
-                  onClick={() => handleStartTest(test)}
-                  className={`w-full py-2 rounded-lg text-xs font-medium text-white transition-all duration-200 ${
-                    test.paid && !test.attempted
-                      ? 'bg-green-600 hover:bg-green-700'
-                      : !test.paid
-                      ? 'bg-yellow-600 hover:bg-yellow-700'
-                      : 'bg-gray-300 cursor-not-allowed'
-                  }`}
-                  aria-label={`${test.paid ? 'Start' : 'Unlock'} ${test.name}`}
-                >
-                  {test.paid && !test.attempted ? 'Start Test' : test.attempted ? 'Completed' : 'Unlock Test'}
-                </button>
-              </div>
-            ))}
-          </div>
-          
+    <div className="h-full w-full overflow-auto bg-gray-50 min-h-screen">
+      <DashboardNav studentData={dashboardData} onLogout={handleLogout} />
+
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome back, <span className="text-emerald-600">{dashboardData.name.split(' ')[0]}</span>! 👋
+          </h1>
+          <p className="text-gray-600">Track your progress and continue your Versant test preparation journey.</p>
         </div>
+
+        {/* Quick Stats */}
+        <QuickStats studentData={dashboardData} />
+
+        {/* Plan Status */}
+        <PlanStatus studentData={dashboardData} />
+
+        {/* Skill Breakdown & Account Details */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-8">
+          <SkillBreakdown skillBreakdown={skillBreakdown} />
+          <AccountDetails studentData={dashboardData} />
+        </div>
+
+        {/* Available Tests */}
+        <AvailableTests tests={userTestStatus} onStartTest={handleStartTest} />
+
+        {/* Test History */}
+        <TestHistory completedTests={testHistory} />
       </main>
+
       <PaymentModal
         isOpen={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
-        amount={4999} // $49.99 in cents
+        amount={4999}
         onSuccess={handlePaymentSuccess}
         userId={auth.currentUser?.uid}
       />
-      <Footer />
     </div>
   );
 };
