@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 export default function AboutUs() {
   return (
@@ -10,6 +11,7 @@ export default function AboutUs() {
         <title>About Us | Versant Practice Test Experts</title>
         <meta name="description" content="Learn about our mission to help you succeed on the Versant test. Discover how our expert-designed Versant practice tests can boost your English skills and confidence." />
       </Helmet>
+      <Header />
       <div className="min-h-screen bg-gray-50">
         <div className="py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">

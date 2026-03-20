@@ -5,6 +5,7 @@ import { doc, getDoc, setDoc, collection, query, getDocs, orderBy } from 'fireba
 import { auth, db } from '../firebaseConfig';
 import { readingTests, speakingTests } from '../data/mockTests';
 import { FaLock, FaUnlock } from 'react-icons/fa';
+import Header from '../components/Header';
 
 import {
   DashboardNav,
@@ -234,6 +235,7 @@ const Dashboard = () => {
 
   return (
     <div className="h-full w-full overflow-auto bg-gray-50 min-h-screen">
+      <Header page="dashboard" />
       <DashboardNav studentData={dashboardData} onLogout={handleLogout} />
 
       <main className="max-w-7xl mx-auto px-6 py-8">

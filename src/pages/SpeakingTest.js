@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import speakingData from '../data/speakingTest.json';
-import { FaMicrophone, FaStop, FaPlay, FaCheck, FaVolumeUp } from 'react-icons/fa';
+import { FaMicrophone, FaStop, FaPlay, FaCheck, FaVolumeUp, FaHeadphones, FaVolumeMute, FaCheckCircle } from 'react-icons/fa';
 import '../App.css';
 
 // --- Helper Functions for Scoring ---
@@ -46,7 +46,8 @@ const SpeakingTest = () => {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-    const [isInstruction, setIsInstruction] = useState(true); // Start with instructions
+    const [showPreTestInstruction, setShowPreTestInstruction] = useState(true); // Full test env check
+    const [isInstruction, setIsInstruction] = useState(true); // Section instruction
     const [isRecording, setIsRecording] = useState(false);
     const [isListening, setIsListening] = useState(false); // True when TTS is playing
     const [transcript, setTranscript] = useState('');
@@ -233,7 +234,10 @@ const SpeakingTest = () => {
     }, [isRecording]);
 
 
-    // --- Improved TTS ---
+    // Global array to prevent garbage collection bugs in Web Speech API (Chrome/Safari)
+    window.utterances = window.utterances || [];
+
+    // --- Stable TTS ---
     const speakText = (text, onEnd) => {
         if (!text) { if (onEnd) onEnd(); return; }
 
@@ -241,21 +245,36 @@ const SpeakingTest = () => {
         window.speechSynthesis.cancel();
 
         const utter = new SpeechSynthesisUtterance(text);
+        window.utterances.push(utter); // Prevent garbage collection mid-speech
 
-        // Voice Selection Strategy: Prefer "Google US English" or any "Female" voice
+        // Voice Selection Strategy: Prioritize high-quality LOCAL voices to prevent network stutter
         const voices = window.speechSynthesis.getVoices();
-        const preferredVoice = voices.find(v => v.name === 'Google US English') ||
-            voices.find(v => v.name.includes('Samantha')) ||
-            voices.find(v => v.name.includes('Female')) ||
-            voices.find(v => v.lang === 'en-US');
+        
+        let preferredVoice = 
+            voices.find(v => v.name === 'Samantha') ||                 // macOS Premium (Offline)
+            voices.find(v => v.name === 'Karen') ||                    // macOS Premium AU (Offline)
+            voices.find(v => v.name === 'Daniel') ||                   // macOS Premium UK (Offline)
+            voices.find(v => v.lang.startsWith('en') && v.localService && Object.values(v).some(val => typeof val === 'string' && val.includes('Premium'))) ||
+            voices.find(v => v.name === 'Google US English' && v.localService) || 
+            voices.find(v => v.lang === 'en-US' && v.localService);    // Any offline US voice
 
-        if (preferredVoice) utter.voice = preferredVoice;
+        if (preferredVoice) {
+            utter.voice = preferredVoice;
+        }
 
         utter.lang = 'en-US';
-        utter.rate = 1.0; // Slightly faster/natural
+        utter.rate = 1.0; 
+        utter.pitch = 1.0; // Restored natural 1.0 pitch to prevent robotic distortion
 
         utter.onend = () => {
-            if (onEnd) onEnd();
+             if (onEnd) onEnd();
+             window.utterances = window.utterances.filter(u => u !== utter); // Cleanup
+        };
+
+        utter.onerror = (e) => {
+             console.error("SpeechSynthesis Error:", e);
+             if (onEnd) onEnd();
+             window.utterances = window.utterances.filter(u => u !== utter); // Cleanup
         };
 
         window.speechSynthesis.speak(utter);
@@ -265,6 +284,11 @@ const SpeakingTest = () => {
     // --- Auto-Flow Logic ---
     // --- Auto-Flow Logic ---
     useEffect(() => {
+        // Prevent background timers/audio if the initial instructions are showing
+        if (showPreTestInstruction) {
+            return;
+        }
+
         // 0. Handle Instruction Phase
         if (isInstruction) {
             const instructionText = speakingData.instructions ? speakingData.instructions[sectionName] : "Please follow the instructions.";
@@ -370,7 +394,7 @@ const SpeakingTest = () => {
             stopAudioStream();
         };
 
-    }, [currentQuestionIndex, sectionName, questions, isInstruction]);
+    }, [currentQuestionIndex, sectionName, questions, isInstruction, showPreTestInstruction]);
 
     // --- Handlers ---
     const handleStartRecording = () => {
@@ -537,7 +561,83 @@ const SpeakingTest = () => {
         );
     }
 
-    // Instruction View
+    // Pre-Test Environment Check View
+    if (showPreTestInstruction) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
+                <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-3xl overflow-hidden animate-fade-in flex flex-col lg:flex-row">
+
+                    {/* Header Side (Left on desktop, Top on mobile) */}
+                    <div className="bg-gradient-to-br from-indigo-900 to-indigo-700 p-8 lg:p-12 text-white text-center flex flex-col justify-center relative lg:w-2/5">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-md shadow-inner border border-white/20">
+                            <FaHeadphones className="text-3xl sm:text-4xl text-indigo-100" />
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-black mb-3 tracking-tight">Environment Check</h2>
+                        <p className="text-indigo-200 text-sm sm:text-base font-medium leading-relaxed">
+                            Please review these critical guidelines before diving into Test {testId}.
+                        </p>
+                    </div>
+
+                    {/* Body Side (Right on desktop, Bottom on mobile) */}
+                    <div className="p-6 sm:p-8 lg:p-10 flex flex-col justify-between lg:w-3/5">
+                        <div className="space-y-4 mb-8">
+
+                            {/* Card 1 */}
+                            <div className="bg-gray-50/50 p-4 sm:p-5 rounded-2xl border border-gray-100 flex items-start gap-4 transition-all hover:bg-white hover:shadow-md hover:border-indigo-100 group">
+                                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                    <FaMicrophone className="text-xl" />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-gray-900 text-base mb-1">Use a Quality Mic</h4>
+                                    <p className="text-sm text-gray-600 leading-relaxed">For high AI accuracy, use a dedicated headset or external microphone. Avoid laptop built-in mics.</p>
+                                </div>
+                            </div>
+
+                            {/* Card 2 */}
+                            <div className="bg-gray-50/50 p-4 sm:p-5 rounded-2xl border border-gray-100 flex items-start gap-4 transition-all hover:bg-white hover:shadow-md hover:border-indigo-100 group">
+                                <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                    <FaVolumeMute className="text-xl" />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-gray-900 text-base mb-1">Find a Quiet Space</h4>
+                                    <p className="text-sm text-gray-600 leading-relaxed">Background noise, static, or other people speaking will negatively impact your final Versant score.</p>
+                                </div>
+                            </div>
+
+                            {/* Card 3 */}
+                            <div className="bg-gray-50/50 p-4 sm:p-5 rounded-2xl border border-gray-100 flex items-start gap-4 transition-all hover:bg-white hover:shadow-md hover:border-indigo-100 group">
+                                <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                                    <FaCheckCircle className="text-xl" />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-gray-900 text-base mb-1">Speak Naturally</h4>
+                                    <p className="text-sm text-gray-600 leading-relaxed">Speak at a normal volume. Do not rush or shout. The test will progress automatically.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-3 items-center justify-end w-full border-t border-gray-100 pt-6">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="px-6 py-3.5 rounded-xl font-bold text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors w-full sm:w-auto text-sm"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => setShowPreTestInstruction(false)}
+                                className="px-8 py-3.5 rounded-xl font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] hover:shadow-[0_6px_20px_rgba(79,70,229,0.23)] hover:-translate-y-0.5 transition-all w-full sm:w-auto flex items-center justify-center gap-2 text-sm"
+                            >
+                                I Understand, Begin Test <FaPlay className="text-[10px]" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Section Instruction View
     if (isInstruction) {
         return (
             <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center animate-fade-in">

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import blogPostsData from '../data/blogPosts.json'; // Renamed to avoid conflict
+import Header from '../components/Header';
 
 const POSTS_PER_LOAD = 6; // Number of posts to load at a time
 
@@ -49,6 +50,7 @@ export default function BlogIndex() {
         <meta name="description" content="Discover expert insights, tips, and strategies to improve your English proficiency for the Versant Test and drive more organic traffic." />
         <meta name="keywords" content="Versant, blog, English test, test prep, language learning, SEO" />
       </Helmet>
+      <Header />
 
       {/* Header Section */}
       <header className="gradient-bg text-white py-16">

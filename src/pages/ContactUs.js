@@ -32,7 +32,7 @@ export default function ContactUs() {
                 Get in Touch
               </h1>
               <p className="mt-2 text-center text-sm text-gray-600">
-                Have a question or feedback? Fill out the form below or email us at <a href="mailto:support@versantpracticetest.com" className="font-medium text-green-600 hover:text-green-500">support@versantpracticetest.com</a>.
+                Have a question or feedback? Fill out the form below or email us at <a href="mailto:sds1369@gmail.com" className="font-medium text-green-600 hover:text-green-500">sds1369@gmail.com</a>.
               </p>
             </div>
             {submitted ? (

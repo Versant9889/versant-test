@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaMicrophone, FaHeadphones, FaQuestion, FaPuzzlePiece, FaBookOpen, FaCommentDots, FaLock, FaUnlock, FaPlay } from 'react-icons/fa';
+import { FaMicrophone, FaHeadphones, FaQuestion, FaPuzzlePiece, FaBookOpen, FaCommentDots, FaLock, FaUnlock, FaPlay, FaVolumeMute, FaCheckCircle } from 'react-icons/fa';
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -161,6 +161,7 @@ const SpeakingHub = () => {
             </main>
 
             <Footer />
+
         </div>
     );
 };

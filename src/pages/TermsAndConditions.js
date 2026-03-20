@@ -1,5 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function TermsAndConditions() {
   return (
@@ -8,6 +10,7 @@ export default function TermsAndConditions() {
         <title>Terms and Conditions | Versant Practice Test</title>
         <meta name="description" content="Read the terms and conditions for using the Versant Practice Test website." />
       </Helmet>
+      <Header />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto bg-white p-10 rounded-lg shadow-md">
           <h1 className="text-3xl font-extrabold text-gray-900 mb-6">Terms and Conditions</h1>
@@ -34,6 +37,7 @@ export default function TermsAndConditions() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
