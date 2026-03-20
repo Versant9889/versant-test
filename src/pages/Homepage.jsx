@@ -49,8 +49,8 @@ export default function VersantHomepage() {
   return (
     <div className="h-full w-full min-h-screen overflow-auto gradient-bg text-white font-sans">
       <Helmet>
-        <title>Versant Practice Test | Master English Communication</title>
-        <meta name="description" content="Ace your Versant exam with our realistic practice tests and instant AI feedback." />
+        <title>Free Versant Practice Test 2026 | Accurate AI Speaking Simulator</title>
+        <meta name="description" content="Pass the Versant English Test with our free online mock tests. Get instant AI grading on pronunciation, sentence builds, and story retelling." />
       </Helmet>
 
       {/* Restored Header Component */}

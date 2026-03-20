@@ -51,112 +51,112 @@ export function AdminStatCard({ title, value, icon, color }) {
 // User List Table
 export function UserTable({ users, loading }) {
     if (loading) {
-        return <div className="text-center py-10 text-slate-400">Loading users...</div>;
+        return <div className="text-center py-10 text-slate-400">Loading tracking grid...</div>;
     }
 
     return (
-        <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
-            <div className="p-6 border-b border-slate-700">
-                <h3 className="text-lg font-bold text-white">Registered Users</h3>
-            </div>
-            <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                    <thead className="bg-slate-900/50 text-xs uppercase text-slate-400 font-semibold">
-                        <tr>
-                            <th className="px-6 py-4">User</th>
-                            <th className="px-6 py-4">Status</th>
-                            <th className="px-6 py-4">Tests Taken</th>
-                            <th className="px-6 py-4">Last Active</th>
-                            <th className="px-6 py-4">Current Page</th>
-                            <th className="px-6 py-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-700">
-                        {users.map((user) => (
-                            <tr key={user.id} className="hover:bg-slate-700/50 transition-colors group">
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="relative">
-                                            <div className="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-xs font-bold text-white">
-                                                {user.email[0].toUpperCase()}
-                                            </div>
-                                            {user.isOnline && (
-                                                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-slate-800 rounded-full"></span>
-                                            )}
+        <div className="overflow-x-auto">
+            <table className="w-full text-left">
+                <thead className="bg-slate-900/50 text-xs uppercase text-slate-400 font-semibold border-b border-slate-700/50">
+                    <tr>
+                        <th className="px-6 py-4">Identity</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4">Total Actions</th>
+                        <th className="px-6 py-4">Last Ping</th>
+                        <th className="px-6 py-4">Current URL Path</th>
+                        <th className="px-6 py-4">Live Track</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                    {users.map((session) => (
+                        <tr key={session.userId} className="hover:bg-slate-800/50 transition-colors group">
+                            <td className="px-6 py-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="relative">
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-inner ${session.isRegistered ? 'bg-indigo-600' : 'bg-slate-600'}`}>
+                                            {session.email[0].toUpperCase()}
                                         </div>
-                                        <div>
-                                            <div className="text-sm font-medium text-white">{user.name || 'User'}</div>
-                                            <div className="text-xs text-slate-400">{user.email}</div>
-                                        </div>
+                                        {session.isOnline && (
+                                            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-slate-900 rounded-full animate-pulse"></span>
+                                        )}
                                     </div>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${user.plan === 'Premium'
-                                        ? 'bg-emerald-500/10 text-emerald-400'
-                                        : 'bg-slate-600/20 text-slate-400'
-                                        }`}>
-                                        {user.plan || 'Free'}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-slate-300">
-                                    {user.testsCount || 0}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-slate-400">
-                                    {user.lastActive ? new Date(user.lastActive).toLocaleString() : 'N/A'}
-                                </td>
-                                <td className="px-6 py-4 text-sm text-slate-400 truncate max-w-xs font-mono">
-                                    {user.currentPath || 'Unknown'}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <button
-                                        onClick={() => window.dispatchEvent(new CustomEvent('open-user-modal', { detail: user }))}
-                                        className="text-indigo-400 hover:text-indigo-300 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                        Inspect
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        {users.length === 0 && (
-                            <tr>
-                                <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
-                                    No users found.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                                    <div>
+                                        <div className="text-sm font-bold text-white tracking-wide">
+                                            {session.isRegistered ? session.email : 'Anonymous Guest'}
+                                        </div>
+                                        <div className="text-xs font-mono text-slate-500">{session.userId.slice(0, 15)}...</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="px-6 py-4">
+                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${session.isRegistered
+                                    ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                                    : 'bg-slate-700/30 text-slate-400 border border-slate-600/30'
+                                    }`}>
+                                    {session.isRegistered ? 'Registered User' : 'Web Traffic'}
+                                </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-mono text-slate-300">
+                                {session.totalClicks} <span className="text-slate-500 text-xs font-sans">clicks</span>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-mono text-slate-400">
+                                {new Date(session.lastActive).toLocaleTimeString()}
+                            </td>
+                            <td className="px-6 py-4">
+                                <span className="text-xs font-mono text-emerald-400 bg-emerald-900/10 px-2 py-1 rounded inline-block truncate max-w-[150px]">
+                                    {session.currentPath}
+                                </span>
+                            </td>
+                            <td className="px-6 py-4">
+                                <button
+                                    onClick={() => window.dispatchEvent(new CustomEvent('open-user-modal', { detail: session }))}
+                                    className="px-3 py-1.5 bg-slate-800 hover:bg-indigo-600 rounded text-xs font-bold text-white transition-colors"
+                                >
+                                    Inspect Route
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    {users.length === 0 && (
+                        <tr>
+                            <td colSpan="6" className="px-6 py-12 text-center text-slate-500 font-mono">
+                                No radar contacts found.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 }
 
-// User Details Modal
-export function UserDetailsModal({ user, onClose }) {
-    if (!user) return null;
+// Detailed Session Tracking Modal
+export function UserDetailsModal({ user: session, onClose }) {
+    if (!session) return null;
+
+    // session.history contains the chronological array of analytics_events
+    // We reverse it to show newest at the top, or oldest at top. Let's do newest at top.
+    const history = [...(session.history || [])].sort((a,b) => b.time - a.time);
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm font-sans">
+            <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                 {/* Header */}
-                <div className="p-6 border-b border-slate-800 flex justify-between items-start bg-slate-900 sticky top-0">
+                <div className="p-6 border-b border-slate-800 flex justify-between items-start bg-slate-900 sticky top-0 z-10">
                     <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
-                            {user.email[0].toUpperCase()}
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-bold text-white shadow-lg ${session.isRegistered ? 'bg-indigo-600' : 'bg-slate-700'}`}>
+                            {session.email[0].toUpperCase()}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold text-white">{user.name}</h2>
-                            <p className="text-slate-400">{user.email}</p>
-                            <div className="flex gap-2 mt-2">
-                                <span className={`px-2 py-0.5 rounded text-xs font-bold ${user.plan === 'Premium' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-300'}`}>
-                                    {user.plan} Plan
-                                </span>
-                                {user.isOnline && (
-                                    <span className="px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/20">
-                                        ● Online Now
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-white">{session.isRegistered ? session.email : 'Anonymous Web Guest'}</h2>
+                                {session.isOnline && (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-green-500/20 text-green-400 border border-green-500/30 animate-pulse">
+                                        Live Now
                                     </span>
                                 )}
                             </div>
+                            <p className="text-slate-400 font-mono text-xs mt-1">ID: {session.userId}</p>
                         </div>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 transition-colors">
@@ -165,63 +165,49 @@ export function UserDetailsModal({ user, onClose }) {
                 </div>
 
                 {/* Body */}
-                <div className="p-6 overflow-y-auto space-y-8">
-                    {/* Activity Stats */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                            <div className="text-slate-400 text-sm mb-1">Joined</div>
-                            <div className="text-white font-mono">{user.joinedAt ? new Date(user.joinedAt).toLocaleDateString() : 'N/A'}</div>
+                <div className="p-6 overflow-y-auto bg-slate-950 flex-1">
+                    
+                    {/* Security Info */}
+                    <div className="bg-slate-900/80 p-4 rounded-xl border border-slate-800 mb-8 flex justify-between items-center">
+                        <div>
+                            <div className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-1">Session Data</div>
+                            <div className="text-white font-mono text-sm">{history.length} Event Packets Intercepted</div>
                         </div>
-                        <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                            <div className="text-slate-400 text-sm mb-1">Last Active</div>
-                            <div className="text-white font-mono">{user.lastActive ? new Date(user.lastActive).toLocaleString() : 'Never'}</div>
-                        </div>
-                    </div>
-
-                    {/* Quick Stats */}
-                    <div className="bg-gradient-to-br from-indigo-900/50 to-violet-900/50 p-5 rounded-2xl border border-indigo-500/20 flex divide-x divide-indigo-500/20">
-                        <div className="flex-1 text-center">
-                            <div className="text-2xl font-bold text-white">{user.testsCount}</div>
-                            <div className="text-indigo-300 text-xs uppercase tracking-wider mt-1">Tests Completed</div>
-                        </div>
-                        <div className="flex-1 text-center">
-                            <div className="text-2xl font-bold text-white">
-                                {user.totalTimeSpent ? Math.round(user.totalTimeSpent) + "m" : "< 1m"}
-                            </div>
-                            <div className="text-indigo-300 text-xs uppercase tracking-wider mt-1">Total Time Spent</div>
+                        <div className="text-right">
+                            <div className="text-slate-500 text-xs font-bold tracking-widest uppercase mb-1">User Agent</div>
+                            <div className="text-slate-400 font-mono text-xs truncate max-w-[200px]" title={history[0]?.userAgent}>{history[0]?.userAgent || 'Unknown System'}</div>
                         </div>
                     </div>
 
-                    {/* Timeline (Mock) */}
+                    {/* True Chronological Timeline */}
                     <div>
-                        <h3 className="text-lg font-bold text-white mb-4">Activity Timeline</h3>
-                        <div className="relative pl-4 border-l-2 border-slate-800 space-y-6">
-                            <div className="relative">
-                                <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-slate-700 border-2 border-slate-900"></div>
-                                <div className="text-slate-300 text-sm">Account Created</div>
-                                <div className="text-slate-500 text-xs">{user.joinedAt ? new Date(user.joinedAt).toLocaleString() : 'N/A'}</div>
-                            </div>
-
-                            {/* If we had session data, we would map it here. For now, showing current status */}
-                            {user.currentPath && (
-                                <div className="relative">
-                                    <div className="absolute -left-[21px] top-1 w-4 h-4 rounded-full bg-indigo-500 border-2 border-slate-900 animate-pulse"></div>
-                                    <div className="text-indigo-300 text-sm font-bold">Currently Viewing</div>
-                                    <div className="text-slate-400 text-xs font-mono bg-slate-800 inline-block px-2 py-1 rounded mt-1">{user.currentPath}</div>
-                                </div>
-                            )}
+                        <h3 className="text-sm font-bold text-slate-300 tracking-widest uppercase mb-6 flex items-center gap-2">
+                            <span>📡</span> Real-Time Action Log
+                        </h3>
+                        
+                        <div className="relative pl-4 border-l-2 border-slate-800/80 space-y-6">
+                            {history.map((evt, idx) => {
+                                const isLatest = idx === 0;
+                                return (
+                                    <div key={evt.id || idx} className="relative group">
+                                        <div className={`absolute -left-[21px] top-1 w-3 h-3 rounded-full border-2 border-slate-950 ${isLatest ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-slate-600'}`}></div>
+                                        
+                                        <div className="flex gap-4 items-start">
+                                            <div className="w-20 pt-0.5 text-xs font-mono text-slate-500 flex-shrink-0">
+                                                {evt.time.toLocaleTimeString()}
+                                            </div>
+                                            <div className={`flex-1 rounded-lg p-3 border border-transparent group-hover:bg-slate-900 group-hover:border-slate-800 transition-colors ${isLatest ? 'bg-slate-900/50 border-slate-800/50' : ''}`}>
+                                                <div className="text-xs font-bold tracking-wider text-indigo-400 mb-1">[{evt.eventType}]</div>
+                                                <div className="text-sm text-white font-mono flex items-center gap-2">
+                                                    <span className="text-slate-500">→</span> {evt.path}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
-                </div>
-
-                {/* Footer */}
-                <div className="p-6 border-t border-slate-800 bg-slate-900 flex justify-end gap-3 sticky bottom-0">
-                    <button className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-medium transition-colors">
-                        Reset Password
-                    </button>
-                    <button className="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-lg text-sm font-medium transition-colors">
-                        Ban User
-                    </button>
                 </div>
             </div>
         </div>

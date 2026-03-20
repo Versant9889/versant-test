@@ -237,47 +237,79 @@ const SpeakingTest = () => {
     // Global array to prevent garbage collection bugs in Web Speech API (Chrome/Safari)
     window.utterances = window.utterances || [];
 
-    // --- Stable TTS ---
+    // --- Stable TTS with Chunking ---
     const speakText = (text, onEnd) => {
         if (!text) { if (onEnd) onEnd(); return; }
 
-        // Cancel any ongoing speech
         window.speechSynthesis.cancel();
+        window.utterances = []; // Clear previous refs
 
-        const utter = new SpeechSynthesisUtterance(text);
-        window.utterances.push(utter); // Prevent garbage collection mid-speech
+        // 1. Chunking text to prevent SpeechSynthesis from cutting off/glitching out on long strings
+        const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
+        let currentChunk = 0;
 
-        // Voice Selection Strategy: Prioritize high-quality LOCAL voices to prevent network stutter
-        const voices = window.speechSynthesis.getVoices();
-        
-        let preferredVoice = 
-            voices.find(v => v.name === 'Samantha') ||                 // macOS Premium (Offline)
-            voices.find(v => v.name === 'Karen') ||                    // macOS Premium AU (Offline)
-            voices.find(v => v.name === 'Daniel') ||                   // macOS Premium UK (Offline)
-            voices.find(v => v.lang.startsWith('en') && v.localService && Object.values(v).some(val => typeof val === 'string' && val.includes('Premium'))) ||
-            voices.find(v => v.name === 'Google US English' && v.localService) || 
-            voices.find(v => v.lang === 'en-US' && v.localService);    // Any offline US voice
+        const speakNextChunk = () => {
+             if (currentChunk >= sentences.length) {
+                 if (onEnd) onEnd();
+                 return;
+             }
+             
+             const chunkText = sentences[currentChunk].trim();
+             if (!chunkText) {
+                 currentChunk++;
+                 speakNextChunk();
+                 return;
+             }
 
-        if (preferredVoice) {
-            utter.voice = preferredVoice;
+             const utter = new SpeechSynthesisUtterance(chunkText);
+             window.utterances.push(utter); // Prevent GC
+
+             const voices = window.speechSynthesis.getVoices();
+             let preferredVoice = 
+                 voices.find(v => v.name === 'Samantha') ||
+                 voices.find(v => v.name === 'Karen') ||
+                 voices.find(v => v.name === 'Daniel') ||
+                 voices.find(v => v.name.includes('Microsoft Zira')) || // Windows Stable
+                 voices.find(v => v.name === 'Google US English') ||
+                 voices.find(v => v.lang === 'en-US' && v.localService) ||
+                 voices.find(v => v.lang === 'en-US') ||
+                 (voices.length > 0 ? voices[0] : null);
+
+             if (preferredVoice) {
+                 utter.voice = preferredVoice;
+             }
+             
+             utter.lang = 'en-US';
+             utter.rate = 1.0; 
+             utter.pitch = 1.0;
+
+             utter.onend = () => {
+                  currentChunk++;
+                  speakNextChunk(); // Chain the next sentence
+             };
+
+             utter.onerror = (e) => {
+                  console.error("SpeechSynthesis Error:", e);
+                  currentChunk++;
+                  speakNextChunk(); // Continue even if one chunk fails
+             };
+
+             window.speechSynthesis.speak(utter);
+        };
+
+        // Wait for voices if not loaded (fixes initial robotic voice issue)
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.onvoiceschanged = null; // unset
+                speakNextChunk();
+            };
+            // Fallback timeout
+            setTimeout(() => {
+                if (currentChunk === 0) speakNextChunk();
+            }, 500);
+        } else {
+            speakNextChunk();
         }
-
-        utter.lang = 'en-US';
-        utter.rate = 1.0; 
-        utter.pitch = 1.0; // Restored natural 1.0 pitch to prevent robotic distortion
-
-        utter.onend = () => {
-             if (onEnd) onEnd();
-             window.utterances = window.utterances.filter(u => u !== utter); // Cleanup
-        };
-
-        utter.onerror = (e) => {
-             console.error("SpeechSynthesis Error:", e);
-             if (onEnd) onEnd();
-             window.utterances = window.utterances.filter(u => u !== utter); // Cleanup
-        };
-
-        window.speechSynthesis.speak(utter);
     };
 
 

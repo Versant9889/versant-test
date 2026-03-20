@@ -23,6 +23,7 @@ import SpeakingTest from './pages/SpeakingTest';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import { Navigate } from 'react-router-dom';
+import { useActivityTracker } from './hooks/useActivityTracker';
 
 // Helper component to handle /admin redirection
 const AdminRedirect = () => {
@@ -42,6 +43,8 @@ ReactGA.initialize(TRACKING_ID);
 // Component to track page views and user activity
 function PageTracker() {
   const location = useLocation();
+
+  useActivityTracker(); // <--- New Global Real-time Tracker
 
   useEffect(() => {
     // 1. Track Page View in GA
