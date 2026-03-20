@@ -1,28 +1,31 @@
 import React from 'react';
+import { FaUserCircle, FaSignOutAlt, FaTrophy, FaClipboardList, FaChartLine, FaStar, FaCheckCircle } from 'react-icons/fa';
 
 // Dashboard Navigation Component
 export function DashboardNav({ studentData, onLogout }) {
     return (
-        <nav className="w-full bg-white border-b border-gray-200 sticky top-0 z-10 font-sans">
+        <nav className="w-full bg-white border-b border-gray-100/50 sticky top-0 z-30 font-sans backdrop-blur-md bg-white/80">
             <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-200">
                         <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                         </svg>
                     </div>
-                    <span className="text-2xl font-bold text-gray-900">VersantPro</span>
+                    <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
+                        VersantPro
+                    </span>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                     <div className="text-right hidden md:block">
                         <div className="text-sm font-bold text-gray-900">{studentData.name}</div>
                         <div className="text-xs text-gray-500">{studentData.email}</div>
                     </div>
                     <button
                         onClick={onLogout}
-                        className="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-500 font-semibold rounded-lg transition-all border border-gray-200 hover:border-red-200"
                     >
-                        Logout
+                        <FaSignOutAlt className="text-sm" /> Logout
                     </button>
                 </div>
             </div>
@@ -34,140 +37,96 @@ export function DashboardNav({ studentData, onLogout }) {
 export function QuickStats({ studentData }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 font-sans">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+            {/* Highest Score */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <FaTrophy />
                     </div>
+                    <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">Score</span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">
-                    {studentData.currentScore > 0 ? studentData.currentScore : '-'}/80
+                <div className="text-3xl font-extrabold text-gray-900 mb-1">
+                    {studentData.currentScore > 0 ? studentData.currentScore : '-'}<span className="text-gray-400 text-lg">/80</span>
                 </div>
-                <div className="text-sm text-gray-600 font-medium">Highest Score</div>
-                <div className="mt-3 flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>Target: 80</span>
-                </div>
+                <div className="text-sm text-gray-500 font-medium">Highest Score</div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
+            {/* Tests Completed */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <FaClipboardList />
                     </div>
+                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">Activity</span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{studentData.testsAttempted}</div>
-                <div className="text-sm text-gray-600 font-medium">Tests Completed</div>
-                <div className="mt-3 text-blue-600 text-sm font-semibold">Keep practicing!</div>
+                <div className="text-3xl font-extrabold text-gray-900 mb-1">{studentData.testsAttempted}</div>
+                <div className="text-sm text-gray-500 font-medium">Tests Completed</div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+            {/* Average Score */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <FaChartLine />
                     </div>
+                    <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-full">Avg</span>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{studentData.testsRemaining}</div>
-                <div className="text-sm text-gray-600 font-medium">Tests Remaining</div>
-                <div className="mt-3 text-purple-600 text-sm font-semibold">Plan active</div>
+                <div className="text-3xl font-extrabold text-gray-900 mb-1">
+                    {studentData.averageScore > 0 ? studentData.averageScore : '-'}
+                </div>
+                <div className="text-sm text-gray-500 font-medium">Average Score</div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                        <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                        </svg>
+            {/* Plan Status (Mini) */}
+            <div className="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-2xl p-6 shadow-lg text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-8 -mt-8 blur-xl group-hover:bg-white/20 transition-all"></div>
+                <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-4 opacity-90">
+                        <FaStar className="text-yellow-300" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Plan Status</span>
                     </div>
+                    <div className="text-2xl font-bold mb-1">{studentData.plan}</div>
+                    <div className="text-emerald-100 text-sm">Active Member</div>
                 </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{studentData.averageScore > 0 ? studentData.averageScore : '-'}</div>
-                <div className="text-sm text-gray-600 font-medium">Average Score</div>
-                <div className="mt-3 text-orange-600 text-sm font-semibold">Consistent effort!</div>
             </div>
         </div>
     );
 }
 
-// Plan Status Component
+// Plan Status Component (Legacy - can be removed if not used, or kept for full width)
 export function PlanStatus({ studentData }) {
-    const formatDate = (dateString) => {
-        return new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
-
-    return (
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-6 mb-8 text-white shadow-lg font-sans">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div className="text-2xl font-bold mb-1">{studentData.plan} Plan</div>
-                        <div className="text-emerald-100">Valid until {formatDate()}</div>
-                    </div>
-                </div>
-                <button className="px-6 py-3 bg-white text-emerald-600 font-bold rounded-xl hover:bg-emerald-50 transition-colors">
-                    Upgrade Plan
-                </button>
-            </div>
-        </div>
-    );
+    return null; // Merged into Quick Stats or not needed
 }
 
 // Skill Breakdown Component
 export function SkillBreakdown({ skillBreakdown }) {
     const skills = [
-        { name: 'Reading', score: skillBreakdown.reading, color: 'from-emerald-500 to-teal-500' },
-        { name: 'Writing', score: skillBreakdown.writing, color: 'from-emerald-500 to-teal-500' },
-        { name: 'Speaking', score: skillBreakdown.speaking, color: 'from-emerald-500 to-teal-500' },
-        { name: 'Listening', score: skillBreakdown.listening, color: 'from-emerald-500 to-teal-500' }
+        { name: 'Reading', score: skillBreakdown.reading, color: 'bg-emerald-500' },
+        { name: 'Writing', score: skillBreakdown.writing, color: 'bg-teal-500' },
+        { name: 'Speaking', score: skillBreakdown.speaking, color: 'bg-blue-500' },
+        { name: 'Listening', score: skillBreakdown.listening, color: 'bg-indigo-500' }
     ];
 
     return (
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-200 font-sans">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Skill Breakdown</h2>
-            <div className="space-y-5">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <FaChartLine className="text-emerald-600" /> Skill Analysis
+            </h2>
+            <div className="space-y-6">
                 {skills.map((skill) => (
                     <div key={skill.name}>
-                        <div className="flex justify-between mb-2">
-                            <span className="text-gray-700 font-semibold">{skill.name}</span>
-                            <span className="text-emerald-600 font-bold">{skill.score || 0}/80</span>
+                        <div className="flex justify-between mb-2 text-sm">
+                            <span className="text-gray-600 font-medium">{skill.name}</span>
+                            <span className="text-gray-900 font-bold">{skill.score || 0}/80</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                             <div
-                                className={`bg-gradient-to-r ${skill.color} h-3 rounded-full transition-all`}
+                                className={`${skill.color} h-2.5 rounded-full transition-all duration-1000 ease-out`}
                                 style={{ width: `${((skill.score || 0) / 80) * 100}%` }}
                             ></div>
                         </div>
                     </div>
                 ))}
-            </div>
-            <div className="mt-6 p-4 bg-emerald-50 rounded-xl">
-                <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-emerald-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div>
-                        <div className="font-semibold text-emerald-900 mb-1">Recommendation</div>
-                        <div className="text-sm text-emerald-700">
-                            Focus on all areas to improve your overall Versant score.
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
@@ -175,141 +134,87 @@ export function SkillBreakdown({ skillBreakdown }) {
 
 // Account Details Component
 export function AccountDetails({ studentData }) {
-    const formatDate = (dateString) => {
-        return new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
-
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 font-sans">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Account Details</h2>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <FaUserCircle className="text-emerald-600" /> Profile
+            </h2>
             <div className="space-y-4">
-                <div>
-                    <div className="text-xs text-gray-500 font-semibold uppercase mb-1">Full Name</div>
+                <div className="p-3 bg-gray-50 rounded-xl">
+                    <div className="text-xs text-gray-500 font-semibold uppercase mb-1">Name</div>
                     <div className="text-gray-900 font-medium">{studentData.name}</div>
                 </div>
-                <div>
+                <div className="p-3 bg-gray-50 rounded-xl">
                     <div className="text-xs text-gray-500 font-semibold uppercase mb-1">Email</div>
                     <div className="text-gray-900 font-medium">{studentData.email}</div>
                 </div>
-                <div>
-                    <div className="text-xs text-gray-500 font-semibold uppercase mb-1">Status</div>
-                    <div className="text-gray-900 font-medium text-sm">Active Member</div>
-                </div>
-                <div>
-                    <div className="text-xs text-gray-500 font-semibold uppercase mb-1">Last Login</div>
-                    <div className="text-gray-900 font-medium">{formatDate()}</div>
+                <div className="p-3 bg-emerald-50 rounded-xl">
+                    <div className="text-xs text-emerald-600 font-semibold uppercase mb-1">Plan</div>
+                    <div className="text-emerald-900 font-bold">{studentData.plan}</div>
                 </div>
             </div>
         </div>
     );
 }
 
-// Available Tests Component
+// Available Tests Component (Deprecated in new design, but kept for safety if needed)
 export function AvailableTests({ tests, onStartTest }) {
-    return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 mb-8 font-sans">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Available Tests</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {tests.map((test) => (
-                    <div key={test.id} className="border-2 border-gray-200 rounded-xl p-5 hover:border-emerald-300 hover:shadow-md transition-all">
-                        {test.recommended && (
-                            <div className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold mb-3">
-                                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                RECOMMENDED
-                            </div>
-                        )}
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">{test.name}</h4>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                            <span className="flex items-center gap-1">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {test.duration || '50 mins'}
-                            </span>
-                            <span className="px-2 py-1 bg-gray-100 rounded text-xs font-semibold">{test.level || 'Intermediate'}</span>
-                        </div>
-                        <button
-                            onClick={() => onStartTest(test)}
-                            disabled={!test.paid}
-                            className={`w-full text-white font-semibold py-3 rounded-lg transition-all ${test.paid
-                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700'
-                                    : 'bg-gray-400 cursor-not-allowed'
-                                }`}
-                        >
-                            {test.paid ? 'Start Test' : 'Locked'}
-                        </button>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+    return null;
 }
 
 // Test History Component
 export function TestHistory({ completedTests }) {
-    const formatDate = (dateString, timeString) => {
-        // If we have a timestamp, use it. If separate date/time, handle accordingly.
-        // Assuming dateString might be a timestamp number or string
+    const formatDate = (dateString) => {
         const d = new Date(dateString);
         if (isNaN(d.getTime())) return 'N/A';
-        return d.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        });
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
     const getScoreColor = (score) => {
-        if (score >= 70) return 'bg-green-100 text-green-700';
-        if (score >= 60) return 'bg-yellow-100 text-yellow-700';
-        return 'bg-red-100 text-red-700';
+        if (score >= 70) return 'text-emerald-600 bg-emerald-50';
+        if (score >= 60) return 'text-yellow-600 bg-yellow-50';
+        return 'text-red-600 bg-red-50';
     };
 
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 font-sans">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Test History</h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="p-6 border-b border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900">Recent Activity</h2>
+            </div>
+
             {completedTests.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No tests completed yet.</p>
+                <div className="p-8 text-center text-gray-500">
+                    No tests completed yet. Start your first test today!
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead>
-                            <tr className="border-b-2 border-gray-200">
-                                <th className="text-left px-6 py-3 text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                    Test Name
-                                </th>
-                                <th className="text-left px-6 py-3 text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                    Date
-                                </th>
-                                <th className="text-left px-6 py-3 text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                    Score
-                                </th>
-                                <th className="text-left px-6 py-3 text-xs font-bold text-gray-600 uppercase tracking-wider">
-                                    Result
-                                </th>
+                        <thead className="bg-gray-50/50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Test</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Score</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {completedTests.map((test) => (
-                                <tr key={test.id} className="border-b border-gray-100 hover:bg-gray-50">
-                                    <td className="px-6 py-4 text-gray-900 font-medium">
-                                        {test.testId && test.testId !== 'unknown' ? `Test ${test.testId}` : 'Versant Test'}
-                                    </td>
-                                    <td className="px-6 py-4 text-gray-600">{formatDate(test.timestamp)}</td>
+                        <tbody className="divide-y divide-gray-100">
+                            {completedTests.slice(0, 5).map((test) => (
+                                <tr key={test.id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${getScoreColor(test.totalScore || 0)}`}>
+                                        <div className="font-medium text-gray-900">
+                                            {test.testId && test.testId !== 'unknown' ? `Test ${test.testId}` : 'Versant Practice'}
+                                        </div>
+                                        <div className="text-xs text-gray-500 capitalize">{test.type || 'Full Test'}</div>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-600">{formatDate(test.timestamp)}</td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getScoreColor(test.totalScore || 0)}`}>
                                             {test.totalScore}/80
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className="text-emerald-600 font-semibold text-sm">
-                                            Completed
+                                        <span className="flex items-center gap-1 text-emerald-600 text-xs font-bold uppercase">
+                                            <FaCheckCircle className="text-emerald-500" /> Completed
                                         </span>
                                     </td>
                                 </tr>
@@ -321,3 +226,5 @@ export function TestHistory({ completedTests }) {
         </div>
     );
 }
+
+

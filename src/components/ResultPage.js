@@ -4,6 +4,8 @@ import { doc, getDoc, setDoc, updateDoc, arrayUnion, collection, addDoc, serverT
 import { auth, db } from '../firebaseConfig';
 import Footer from './Footer';
 import Header from './Header';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar } from 'react-icons/fa';
 
 const ResultPage = () => {
   const { state } = useLocation();
@@ -18,23 +20,124 @@ const ResultPage = () => {
   const [loading, setLoading] = useState(true);
   const dataSavedRef = React.useRef(false);
 
+  // Reusable Save Function
+  const saveResult = React.useCallback(async (resultData, testId) => {
+    if (dataSavedRef.current) return;
+    try {
+      const lastSaved = sessionStorage.getItem(`last_saved_${testId}`);
+      if (lastSaved && (Date.now() - parseInt(lastSaved)) < 60000 * 5) {
+        console.log("Result already saved recently. Skipping.");
+        return;
+      }
+
+      const user = auth.currentUser;
+      if (user) {
+        dataSavedRef.current = true;
+        const userResultsRef = collection(db, 'users', user.uid, 'testResults');
+        await addDoc(userResultsRef, {
+          ...resultData,
+          timestamp: new Date().toISOString(),
+          createdAt: serverTimestamp()
+        });
+        console.log("Result saved successfully");
+        sessionStorage.setItem(`last_saved_${testId}`, Date.now().toString());
+      }
+    } catch (error) {
+      console.error("Error saving result:", error);
+    }
+  }, []);
+
   // AI Evaluation Effect
   useEffect(() => {
-    if (!state || !state.emailInput) return;
+    if (!state) return;
 
     const runAIEvaluation = async () => {
       // Avoid re-running if we already have AI data or if key is missing/limit reached
       if (state.aiAnalysisDone) return;
 
-      // Import lazily to avoid load issues if SDK not handy (though we installed it)
       const { evaluateWithAI } = await import('../utils/geminiScoring');
-
-      // 1. Evaluate Email
-      // We use a functional update or just local variables if we want to batch
-      // But here we might want to show partial progress if we had a complex UI.
-      // For now, let's do parallel execution.
-
       console.log("Starting AI Evaluation...");
+
+      // --- SPEAKING TEST AI EVALUATION ---
+      if (state.mode === 'speaking' || state.mode === 'speaking_practice') {
+        try {
+          const testResponses = state.testResponses || [];
+          if (results.length > 0 && results[0].aiGraded) return;
+
+          // Fetch the speaking mock data so our offline engine can look up the keywords
+          const specificTest = await import('../data/speakingTest.json');
+
+          // We can evaluate everything instantly offline!
+          const { evaluateOffline } = await import('../utils/offlineScoring');
+
+          const rootJSON = specificTest.default || specificTest;
+
+          let aiUpdatedResponses = testResponses.map(r => {
+            const testIdToUse = r.testId || state.testId || "1";
+            const currentMockData = rootJSON[testIdToUse] || rootJSON["1"] || {};
+            const aiFeedback = evaluateOffline(r.section, r, currentMockData);
+            return {
+              ...r,
+              aiFeedback: aiFeedback.aiFeedback,
+              score: aiFeedback.score || 0
+            }
+          });
+
+          // Setup final groupings for UI (similar to reading/writing detailedResults)
+          const getGroup = (secName, displayName, maxScorePerQ) => {
+            const qs = aiUpdatedResponses.filter(r => r.section === secName).map(r => ({
+              question: r.questionText,
+              userAnswer: r.transcript,
+              score: r.score,
+              aiFeedback: r.aiFeedback
+            }));
+            if (qs.length === 0) return null;
+            return {
+              section: displayName,
+              questions: qs,
+              score: qs.reduce((sum, q) => sum + (q.score || 0), 0),
+              total: qs.length * maxScorePerQ,
+              aiGraded: true
+            };
+          };
+
+          const groupedResults = [
+            getGroup('readAloud', 'Read Aloud', 10),
+            getGroup('repeats', 'Repeats', 10),
+            getGroup('shortAnswer', 'Short Answer', 10),
+            getGroup('sentenceBuilds', 'Sentence Builds', 10),
+            getGroup('storyRetelling', 'Story Retelling', 10),
+            getGroup('openQuestions', 'Open Questions', 10)
+          ].filter(Boolean);
+
+          const totalCalculated = groupedResults.reduce((sum, g) => sum + g.score, 0);
+
+          // Map raw 0-630 to standard Versant 20-80 Scale
+          const normalizedVersantScore = Math.round(20 + (totalCalculated / 630) * 60);
+
+          setResults(groupedResults);
+          setScore(normalizedVersantScore);
+          setLoading(false);
+
+          // Save Speaking Result
+          if (state.mode === 'speaking') {
+            saveResult({
+              testId: state.testId || 'unknown_speaking',
+              totalScore: totalCalculated,
+              sections: groupedResults,
+              type: 'speaking_full'
+            }, state.testId || 'unknown_speaking');
+          }
+        } catch (err) {
+          console.error("Critical error in speaking AI evaluation:", err);
+          setLoading(false);
+        }
+
+        return;
+      }
+
+      // --- READING/WRITING TEST AI EVALUATION ---
+      if (!state.emailInput) return; // Not a writing test
 
       try {
         // Sequential execution to respect rate limits/reliability
@@ -114,7 +217,7 @@ const ResultPage = () => {
     runAIEvaluation();
   }, [state]);
 
-  // Handle case where state is missing (e.g., direct navigation to /results)
+  // Synchronous Result Formatting (For generic tests / writing)
   useEffect(() => {
     if (!state) {
       setLoading(false);
@@ -123,50 +226,8 @@ const ResultPage = () => {
 
     if (dataSavedRef.current) return;
 
-    const saveResult = async (resultData) => {
-      try {
-        // Safe guard: Check session storage to prevent duplicate saves on refresh/back-nav
-        const savedTests = JSON.parse(sessionStorage.getItem('versant_saved_tests') || '[]');
-        const resultSignature = `${testId}_${new Date().toDateString()}`; // Simple daily check or strictly by ID if ID is unique per attempt
-        // actually testId is 1..20, reusing it is possible. 
-        // But in a single session, we shouldn't save the EXACT same result twice.
-        // Let's use a flag in history state if possible, but sessionStorage is easier.
-        // We will assume if the exact same test items are present, it's a dupe.
-
-        // Better: Use a session-lived ID for the attempt? 
-        // For now, let's just ensure we don't save the SAME testId twice in the last 1 minute?
-        // Or simply trust the user won't take the saved test again immediately?
-
-        // Let's use the 'dataSavedRef' for strict single-mount, and sessionStorage for refresh.
-        // We can store a unique token for the *current evaluation*.
-        // But we don't have a unique token in state. 
-
-        // fallback: check if we saved this testId very recently?
-        const lastSaved = sessionStorage.getItem(`last_saved_${testId}`);
-        if (lastSaved && (Date.now() - parseInt(lastSaved)) < 60000 * 5) {
-          console.log("Result already saved recently. Skipping.");
-          return;
-        }
-
-        const user = auth.currentUser;
-        if (user) {
-          const userResultsRef = collection(db, 'users', user.uid, 'testResults');
-          await addDoc(userResultsRef, {
-            ...resultData,
-            timestamp: new Date().toISOString(),
-            createdAt: serverTimestamp()
-          });
-          console.log("Result saved successfully");
-          sessionStorage.setItem(`last_saved_${testId}`, Date.now().toString());
-        }
-      } catch (error) {
-        console.error("Error saving result:", error);
-      }
-    };
-
     if (isPractice) {
-      // This is the logic for the practice hub tests, which the user said is working.
-      // I am not touching this.
+      // This is the logic for the practice hub tests
       const { questions: practiceQuestions, answers: practiceAnswers } = state;
       let calculatedScore = 0;
       const detailedResults = practiceQuestions.map((q, index) => {
@@ -202,8 +263,8 @@ const ResultPage = () => {
       // It implies main tests, but saving practice tests might be nice too. 
       // For now, I will focus on the main test as per the variable naming in the prompt logic block below.
 
-    } else {
-      // This is the logic for the full test from the dashboard.
+    } else if (!state.mode || state.mode === 'writing') {
+      // This is the logic for the full test from the dashboard (reading/writing).
       const detailedResults = [];
       let totalScore = 0;
 
@@ -290,21 +351,39 @@ const ResultPage = () => {
       setResults(detailedResults);
 
       // Save to Firebase
-      dataSavedRef.current = true; // Mark as saved
       saveResult({
         testId: testId || 'unknown',
         totalScore,
         sections: detailedResults,
         type: 'full_test'
-      });
+      }, testId || 'unknown');
     }
 
-    setLoading(false);
-  }, [state]);
+    // Set loading false for writing tests, but keep true for speaking tests until AI finishes
+    if (state.mode !== 'speaking' && state.mode !== 'speaking_practice') {
+      setLoading(false);
+    }
+  }, [state, saveResult]);
 
+
+  if (loading) {
+    return (
+      <div className="bg-gray-100 min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex flex-col items-center justify-center p-4">
+          <div className="bg-white p-8 rounded-2xl shadow-xl max-w-sm w-full text-center">
+            <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-6"></div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Analyzing Results</h2>
+            <p className="text-gray-500 text-sm">Our system is instantly grading your spoken responses...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen flex flex-col">
       <Header />
       {isPractice ? (
         // --- Practice Mode Result Display ---
@@ -362,162 +441,277 @@ const ResultPage = () => {
         </main>
       ) : (
         // --- Full Test Result Display ---
-        <main className="max-w-4xl mx-auto py-12 px-4">
-          <div className="bg-white rounded-lg shadow-xl p-8">
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">Test Result</h1>
-            <p className="text-center text-gray-600 mb-6">Test ID: {testId}</p>
-
-            <div className="text-center mb-8">
-              <p className="text-lg font-medium text-gray-700">Overall Score</p>
-              <p className="text-6xl font-bold text-green-600">{score}</p>
+        <main className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
+          <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100">
+            {/* Header Section */}
+            <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-900 p-10 sm:p-14 text-white text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(99,102,241,0.4)] border border-white/20">
+                  <FaTrophy className="text-5xl text-yellow-400 drop-shadow-lg" />
+                </div>
+                <h1 className="text-4xl md:text-5xl font-black mb-3 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">
+                  Performance Report
+                </h1>
+                <p className="text-indigo-200 text-lg flex items-center gap-2 font-medium">
+                  <FaClipboardList className="text-indigo-300" /> Test ID: {testId} <span className="text-indigo-500 mx-2">•</span> {state.mode === 'speaking' ? 'Speaking & Listening' : 'Reading & Writing'}
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-8">
-              {Array.isArray(results) && results.map((sectionResult, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center border-b-2 border-gray-200 pb-2 mb-4">
-                    <h2 className="text-2xl font-bold text-gray-800">
-                      {sectionResult.section}
-                    </h2>
-                    {sectionResult.section === 'Typing' ? (
-                      <span className="text-xl font-bold text-gray-700">{sectionResult.wpm} WPM</span>
-                    ) : (
-                      typeof sectionResult.score !== 'undefined' && (
-                        <span className="text-xl font-bold text-gray-700">{sectionResult.score} / {sectionResult.total}</span>
-                      )
-                    )}
+            <div className="p-6 sm:p-12 bg-gray-50/50">
+              {/* Top Analytics Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+                {/* Score Card */}
+                <div className="lg:col-span-4 bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col items-center justify-center group hover:-translate-y-1 transition-transform duration-300">
+                  <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                    <FaBullseye className="text-[12rem] text-indigo-900" />
                   </div>
+                  <h3 className="text-gray-400 font-bold tracking-[0.2em] uppercase text-xs mb-6 relative z-10">Versant Score</h3>
+                  <div className="relative z-10 flex items-baseline gap-2 mb-2">
+                    <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 drop-shadow-sm">
+                      {score}
+                    </span>
+                    <span className="text-2xl text-gray-300 font-bold">/ 80</span>
+                  </div>
+                  <div className="mt-4 inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
+                    <FaStar className="text-emerald-500" /> Global Scale of English
+                  </div>
+                </div>
 
-                  {sectionResult.section === 'Typing' && (
-                    <div className="p-4 rounded-lg border bg-gray-50 border-gray-200">
-                      <p>Accuracy: <span className="font-bold">{sectionResult.accuracy}%</span></p>
+                {/* Radar Chart */}
+                <div className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 transition-transform duration-300">
+                  <h3 className="text-gray-800 font-extrabold text-xl mb-6 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                      <FaChartLine />
                     </div>
-                  )}
+                    Skill Breakdown
+                  </h3>
+                  <div className="h-64 md:h-80 w-full relative -ml-4 sm:ml-0">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart cx="50%" cy="50%" outerRadius="65%" data={
+                        Array.isArray(results) ? results.map(r => ({
+                          subject: r.section.replace(' ', '\n'),
+                          Accuracy: (typeof r.score !== 'undefined' && r.total) ? Math.round((r.score / r.total) * 100) : (r.score || 0),
+                          fullMark: 100
+                        })) : []
+                      }>
+                        <PolarGrid stroke="#f3f4f6" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: '#6b7280', fontSize: 13, fontWeight: 600 }} />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                        <Radar name="Accuracy %" dataKey="Accuracy" stroke="#6366f1" strokeWidth={4} fill="#818cf8" fillOpacity={0.3} dot={{ r: 4, fill: '#4f46e5' }} />
+                        <Tooltip
+                          formatter={(value) => [`${value}%`, 'Accuracy']}
+                          contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', fontWeight: 'bold', padding: '12px' }}
+                        />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
 
-                  {sectionResult.questions && sectionResult.questions.map((res, qIndex) => (
-                    <div key={qIndex} className={`p-4 mt-4 rounded-lg border ${res.isCorrect === false ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
-                      <p className="font-semibold text-gray-700 mb-2">
-                        Q{qIndex + 1}: {res.question?.replace('___', '...')?.replace(/\//g, ' ')}
-                      </p>
-                      <p className={`text-sm ${res.isCorrect ? 'text-green-700' : 'text-gray-800'}`}>
-                        Your Answer: <span className="font-bold">{res.userAnswer}</span>
-                      </p>
+              {/* Detailed Breakdown */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-black text-gray-900 mb-8 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shadow-md">
+                    <FaClipboardList />
+                  </div>
+                  Detailed Analysis
+                </h3>
 
-                      {/* Sub-score display for Passage/Email */}
-                      {typeof res.score !== 'undefined' && (
-                        <div className="mt-2 text-sm text-indigo-600 font-medium bg-indigo-50 p-2 rounded">
-                          Score: {res.score}/10
-                          {res.matchPercentage && ` (Keywords Matched: ${res.matchPercentage}%)`}
-                        </div>
-                      )}
-
-                      {/* AI Feedback Display */}
-                      {res.aiFeedback && !res.aiFeedback.error && (
-                        <div className="mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
-                          <h4 className="text-indigo-900 font-bold flex items-center gap-2">
-                            <span className="text-xl">✨</span> AI Analysis
-                          </h4>
-                          <div className="text-sm text-indigo-800 mt-1">
-                            {res.aiFeedback.grammar_feedback && <p><strong>Grammar:</strong> {res.aiFeedback.grammar_feedback}</p>}
-                            {res.aiFeedback.missing_points && res.aiFeedback.missing_points.length > 0 && (
-                              <div className="mt-1">
-                                <strong>Missing Points:</strong>
-                                <ul className="list-disc pl-5 mt-1">
-                                  {res.aiFeedback.missing_points.map((pt, k) => <li key={k}>{pt}</li>)}
-                                </ul>
-                              </div>
-                            )}
-                            {!res.aiFeedback.grammar_feedback && !res.aiFeedback.missing_points && (
-                              <p className="italic text-indigo-600">No specific improvements found.</p>
-                            )}
-
-                            {res.aiFeedback.ideal_response && (
-                              <div className="mt-3 pt-2 border-t border-indigo-200">
-                                <strong>🌟 Possible Response:</strong>
-                                <p className="italic text-indigo-900 bg-white/50 p-2 rounded mt-1 border border-indigo-100">
-                                  "{res.aiFeedback.ideal_response}"
-                                </p>
-                              </div>
-                            )}
+                <div className="space-y-6">
+                  {Array.isArray(results) && results.map((sectionResult, index) => (
+                    <div key={index} className="bg-white rounded-3xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+                      {/* Section Header */}
+                      <div className="bg-gray-50/80 px-6 py-5 border-b border-gray-100 flex justify-between items-center flex-wrap gap-4">
+                        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                          <span className="w-2 h-6 bg-indigo-500 rounded-full mr-1"></span>
+                          {sectionResult.section}
+                        </h2>
+                        {sectionResult.section === 'Typing' ? (
+                          <div className="bg-white px-4 py-2 rounded-xl border border-gray-200 shadow-sm flex items-center gap-3">
+                            <span className="text-sm text-gray-500 font-medium">Speed:</span>
+                            <span className="text-lg font-black text-indigo-600">{sectionResult.wpm} WPM</span>
+                            <span className="w-px h-4 bg-gray-300 mx-1"></span>
+                            <span className="text-sm text-gray-500 font-medium">Accuracy:</span>
+                            <span className="text-lg font-black text-green-600">{sectionResult.accuracy}%</span>
                           </div>
-                        </div>
-                      )}
-
-                      {/* AI Error Fallback */}
-                      {res.aiFeedback && res.aiFeedback.error && (
-                        <div className="mt-3 p-2 text-xs text-red-500 bg-red-50 border border-red-100 rounded">
-                          AI Analysis Failed: {res.aiFeedback.details || "Unknown Error"}
-                        </div>
-                      )}
-
-                      {/* Fallback/Legacy Feedback for Email (modified to prioritize AI) */}
-                      {!res.aiFeedback && res.feedback && (
-                        <div className="mt-2 text-sm text-orange-600 bg-orange-50 p-2 rounded border border-orange-100">
-                          <strong>Feedback:</strong> {res.feedback}
-                        </div>
-                      )}
-
-                      {/* Email AI Analysis Specific UI */}
-                      {sectionResult.aiAnalysis && sectionResult.section === 'Email Writing' && (
-                        <div className="mt-3 p-4 bg-violet-50 border border-violet-200 rounded-lg shadow-sm">
-                          {sectionResult.aiAnalysis.error ? (
-                            <div className="text-red-500 font-bold">
-                              AI Grading Error: {sectionResult.aiAnalysis.details || sectionResult.aiAnalysis.error}
+                        ) : (
+                          typeof sectionResult.score !== 'undefined' && (
+                            <div className="bg-white px-5 py-2 rounded-xl border border-gray-200 shadow-sm flex items-baseline gap-2">
+                              <span className="text-xl font-black text-indigo-600">{sectionResult.score}</span>
+                              <span className="text-gray-400 font-bold">/ {sectionResult.total}</span>
                             </div>
-                          ) : (
-                            <>
-                              <div className="flex items-center justify-between mb-2">
-                                <h4 className="text-violet-900 font-bold flex items-center gap-2">
-                                  <span className="text-xl">🤖</span> AI Advanced Grader
-                                </h4>
-                                <span className="px-2 py-1 bg-violet-200 text-violet-800 rounded text-xs font-bold">
-                                  CEFR Level: {sectionResult.aiAnalysis.cefr_level || 'N/A'}
-                                </span>
+                          )
+                        )}
+                      </div>
+
+                      {/* Questions List */}
+                      <div className="p-6 space-y-4">
+                        {sectionResult.questions && sectionResult.questions.map((res, qIndex) => (
+                          <div key={qIndex} className="p-5 rounded-2xl bg-gray-50/50 border border-gray-100 hover:border-indigo-100 transition-colors">
+                            <div className="flex items-start gap-4">
+                              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm shadow-sm">
+                                {qIndex + 1}
                               </div>
-                              <div className="text-sm text-violet-800 space-y-2">
-                                <p><strong>Feedback:</strong> {sectionResult.aiAnalysis.feedback || "No feedback generated."}</p>
-                                {sectionResult.aiAnalysis.corrections && sectionResult.aiAnalysis.corrections.length > 0 && (
-                                  <div>
-                                    <strong>Corrections:</strong>
-                                    <ul className="list-disc pl-5 mt-1 bg-white/50 p-2 rounded">
-                                      {sectionResult.aiAnalysis.corrections.map((c, k) => <li key={k}>{c}</li>)}
-                                    </ul>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-gray-800 mb-3 text-lg leading-snug">
+                                  {res.question?.replace('___', '...')?.replace(/\//g, ' ')}
+                                </p>
+
+                                <div className={`inline-block px-4 py-3 rounded-xl border mb-3 shadow-sm w-full sm:w-auto ${res.score === 0 || res.isCorrect === false ? 'bg-red-50/50 border-red-100' : 'bg-white border-gray-200'}`}>
+                                  <span className="text-xs uppercase tracking-wider font-bold text-gray-400 block mb-1">Your Answer</span>
+                                  <span className={`font-semibold text-base break-words ${res.score === 0 || res.isCorrect === false ? 'text-red-700' : 'text-gray-900'}`}>
+                                    {res.userAnswer || "No Answer Given"}
+                                  </span>
+                                </div>
+
+                                {/* Sub-score display for Passage/Email */}
+                                {typeof res.score !== 'undefined' && (
+                                  <div className="mt-1 mb-3 inline-flex items-center gap-2 text-sm text-indigo-700 font-bold bg-indigo-50/80 px-3 py-1.5 rounded-lg border border-indigo-100">
+                                    Score: {res.score}/10
+                                    {res.matchPercentage && <span className="text-indigo-500 font-medium ml-2 border-l border-indigo-200 pl-2">Keywords Matched: {res.matchPercentage}%</span>}
                                   </div>
                                 )}
-                                <p><strong>Tone:</strong> {sectionResult.aiAnalysis.tone_analysis || "Not analyzed"}</p>
 
-                                {sectionResult.aiAnalysis.ideal_response && (
-                                  <div className="mt-3 pt-3 border-t border-violet-200">
-                                    <strong>🌟 Improved AI Draft:</strong>
-                                    <div className="italic text-violet-900 bg-white/60 p-3 rounded mt-2 border border-violet-100 whitespace-pre-wrap font-serif">
-                                      {sectionResult.aiAnalysis.ideal_response}
+                                {/* AI Feedback Display */}
+                                {res.aiFeedback && !res.aiFeedback.error && (
+                                  <div className="mt-4 overflow-hidden rounded-2xl border border-indigo-100/50 bg-gradient-to-r from-indigo-50/30 to-violet-50/30">
+                                    <div className="bg-indigo-50/80 px-4 py-2 border-b border-indigo-100/50 flex items-center gap-2">
+                                      <span className="text-xl">✨</span>
+                                      <h4 className="text-indigo-900 font-black text-sm uppercase tracking-wide">AI Analysis</h4>
+                                    </div>
+                                    <div className="p-4 text-sm text-indigo-900/80 space-y-3">
+                                      {res.aiFeedback.grammar_feedback && (
+                                        <div className="flex items-start gap-2">
+                                          <span className="font-bold text-indigo-900 whitespace-nowrap">Feedback:</span>
+                                          <span className="leading-relaxed">{res.aiFeedback.grammar_feedback}</span>
+                                        </div>
+                                      )}
+                                      {res.aiFeedback.missing_points && res.aiFeedback.missing_points.length > 0 && (
+                                        <div>
+                                          <span className="font-bold text-indigo-900 block mb-1">Missing Points:</span>
+                                          <div className="flex flex-wrap gap-2">
+                                            {res.aiFeedback.missing_points.map((pt, k) => (
+                                              <span key={k} className="px-2.5 py-1 bg-white rounded-lg border border-indigo-100 text-indigo-700 text-xs font-semibold shadow-sm">{pt}</span>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
+                                      {!res.aiFeedback.grammar_feedback && !res.aiFeedback.missing_points && (
+                                        <p className="italic">No specific improvements found.</p>
+                                      )}
+                                      {res.aiFeedback.ideal_response && (
+                                        <div className="mt-4 pt-4 border-t border-indigo-100/50">
+                                          <span className="font-bold text-indigo-900 block mb-2 flex items-center gap-2"><FaStar className="text-yellow-500" /> Optimal Response</span>
+                                          <div className="bg-white p-3 rounded-xl border border-indigo-50 shadow-sm text-indigo-950 font-medium italic leading-relaxed">
+                                            "{res.aiFeedback.ideal_response}"
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 )}
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      )}
 
-                      {(typeof res.isCorrect !== 'undefined' && !res.isCorrect) && (
-                        <p className="text-sm text-gray-600 mt-1">
-                          Correct Answer: <span className="font-bold">{res.correctAnswer}</span>
-                        </p>
-                      )}
+                                {/* AI Error Fallback */}
+                                {res.aiFeedback && res.aiFeedback.error && (
+                                  <div className="mt-3 p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl flex items-center gap-2">
+                                    <FaTimesCircle /> AI Analysis Failed: {res.aiFeedback.details || "Unknown Error"}
+                                  </div>
+                                )}
+
+                                {/* Legacy non-AI Email */}
+                                {!res.aiFeedback && res.feedback && (
+                                  <div className="mt-3 text-sm text-orange-700 bg-orange-50 p-4 rounded-xl border border-orange-100">
+                                    <strong className="block mb-1 text-orange-900">Feedback</strong>
+                                    {res.feedback}
+                                  </div>
+                                )}
+
+                                {/* Correct Answer Fallback */}
+                                {(typeof res.isCorrect !== 'undefined' && !res.isCorrect) && (
+                                  <div className="mt-3 text-sm flex items-center gap-2 text-gray-600 bg-gray-100/50 px-3 py-2 rounded-lg w-max">
+                                    <FaCheckCircle className="text-green-500" /> Correct Answer: <span className="font-bold text-gray-800">{res.correctAnswer}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Full Email AI Advanced Card */}
+                        {sectionResult.aiAnalysis && sectionResult.section === 'Email Writing' && (
+                          <div className="mt-6 mb-2 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50 overflow-hidden shadow-lg">
+                            <div className="bg-violet-900 px-6 py-4 flex items-center justify-between text-white">
+                              <h4 className="font-black flex items-center gap-2 text-lg">
+                                <span className="text-2xl">🤖</span> AI Advanced Grader
+                              </h4>
+                              <span className="px-3 py-1 bg-violet-700 rounded-full text-xs font-bold tracking-wider uppercase border border-violet-500 shadow-inner">
+                                CEFR Level: {sectionResult.aiAnalysis.cefr_level || 'N/A'}
+                              </span>
+                            </div>
+
+                            <div className="p-6">
+                              {sectionResult.aiAnalysis.error ? (
+                                <div className="text-red-600 font-bold flex items-center gap-2 bg-red-50 p-4 rounded-xl">
+                                  <FaTimesCircle /> AI Grading Error: {sectionResult.aiAnalysis.details || sectionResult.aiAnalysis.error}
+                                </div>
+                              ) : (
+                                <div className="space-y-5 text-violet-950">
+                                  <div className="bg-white/60 p-4 rounded-xl border border-violet-100">
+                                    <strong className="block text-violet-900 mb-1 text-sm uppercase tracking-wide">Analysis</strong>
+                                    <p className="leading-relaxed">{sectionResult.aiAnalysis.feedback || "No feedback generated."}</p>
+                                  </div>
+
+                                  <div className="flex items-center gap-2 text-sm font-bold bg-white/60 w-max px-4 py-2 rounded-xl border border-violet-100">
+                                    <span className="text-violet-500 uppercase tracking-widest text-xs">Tone</span>
+                                    {sectionResult.aiAnalysis.tone_analysis || "Not analyzed"}
+                                  </div>
+
+                                  {sectionResult.aiAnalysis.corrections && sectionResult.aiAnalysis.corrections.length > 0 && (
+                                    <div>
+                                      <strong className="block text-violet-900 mb-2 text-sm uppercase tracking-wide">Corrections Made</strong>
+                                      <ul className="space-y-2">
+                                        {sectionResult.aiAnalysis.corrections.map((c, k) => (
+                                          <li key={k} className="flex items-start gap-2 bg-white/80 p-3 rounded-xl shadow-sm border border-violet-100 text-sm">
+                                            <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-600 flex flex-shrink-0 items-center justify-center font-bold text-xs mt-0.5">{k + 1}</span>
+                                            <span className="leading-relaxed">{c}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+
+                                  {sectionResult.aiAnalysis.ideal_response && (
+                                    <div className="mt-6 pt-6 border-t border-violet-200">
+                                      <strong className="block text-violet-900 mb-3 text-sm uppercase tracking-wide flex items-center gap-2">
+                                        <FaStar className="text-yellow-500 text-lg" /> Improved AI Draft
+                                      </strong>
+                                      <div className="italic text-violet-900 bg-white p-5 rounded-2xl shadow-sm border border-violet-100 whitespace-pre-wrap font-serif leading-relaxed text-lg">
+                                        {sectionResult.aiAnalysis.ideal_response}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <div className="text-center mt-8">
-              <Link
-                to="/dashboard"
-                className="inline-block bg-green-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Back to Dashboard
-              </Link>
+              {/* Action Buttons */}
+              <div className="text-center mt-12 bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-black transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 w-full sm:w-auto text-lg"
+                >
+                  Return to Dashboard
+                </Link>
+              </div>
             </div>
           </div>
         </main>

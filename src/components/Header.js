@@ -13,8 +13,9 @@ export default function Header({ page }) {
           {page === 'practiceHub' ? (
             <>
               <Link to="/dashboard" className="hover:text-green-200 font-medium">Dashboard</Link>
-              <Link to="/profile" className="hover:text-green-200 font-medium">My Profile</Link>
-              <Link to="/blog" className="hover:text-green-200 font-medium">Blog</Link>
+              <Link to="/practice" className={`text-base font-medium ${page === 'practiceHub' || page === 'speakingHub' ? 'text-emerald-500 font-semibold' : 'text-gray-500 hover:text-gray-900'}`}>
+                Practice
+              </Link>
               <Link to="/about" className="hover:text-green-200 font-medium">About Us</Link>
               <Link to="/contact" className="hover:text-green-200 font-medium">Contact Us</Link>
             </>

@@ -17,6 +17,9 @@ import BlogIndex from './pages/BlogIndex';
 import PracticeHub from './pages/PracticeHub';
 
 import PracticeTestPage from './pages/PracticeTestPage';
+import SpeakingHub from './pages/SpeakingHub';
+import ReadingHub from './pages/ReadingHub';
+import SpeakingTest from './pages/SpeakingTest';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import { Navigate } from 'react-router-dom';
@@ -83,6 +86,11 @@ function App() {
         <Route path="/practice" element={<PracticeHub />} />
         <Route path="/practice/:section" element={<PracticeTestPage />} />
         <Route path="/blog/:slug" element={<FullBlogPost />} />
+
+        {/* Speaking & Listening Module */}
+        <Route path="/reading" element={<ReadingHub />} />
+        <Route path="/speaking" element={<SpeakingHub />} />
+        <Route path="/speaking/test/:mode" element={<SpeakingTest />} />
 
         {/* Admin Routing */}
         <Route path="/admin" element={<AdminRedirect />} />

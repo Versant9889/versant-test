@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
-import PaymentModal from '../components/PaymentModal';
+import { readingTests, speakingTests } from '../data/mockTests';
+import { FaLock, FaUnlock } from 'react-icons/fa';
 
 import {
   DashboardNav,
@@ -17,8 +18,7 @@ import {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [userTestAccess, setUserTestAccess] = useState(null);
+  const [userTestAccess, setUserTestAccess] = useState(true); // Default to true now
   const [attemptedTests, setAttemptedTests] = useState(new Set());
 
   // User Profile Stats State
@@ -210,21 +210,7 @@ const Dashboard = () => {
   });
 
   const handleStartTest = (test) => {
-    if (!test.paid) {
-      setShowPaymentModal(true);
-      return;
-    }
-    if (test.attempted) {
-      if (!window.confirm('You have already attempted this test. Do you want to retake it?')) return;
-    }
     navigate('/test', { state: { testId: test.id } });
-  };
-
-  const handlePaymentSuccess = () => {
-    setShowPaymentModal(false);
-    setUserTestAccess(true);
-    setStudentData(prev => ({ ...prev, plan: 'Premium' }));
-    alert('Payment successful! You now have access to all premium tests.');
   };
 
   const handleLogout = async () => {
@@ -252,39 +238,143 @@ const Dashboard = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, <span className="text-emerald-600">{dashboardData.name.split(' ')[0]}</span>! 👋
+        <div className="mb-10 animate-fade-in-down">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
+            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">{dashboardData.name.split(' ')[0]}</span>! 👋
           </h1>
-          <p className="text-gray-600">Track your progress and continue your Versant test preparation journey.</p>
+          <p className="text-gray-600 text-lg">Your progress dashboard. Choose a module to start practicing.</p>
         </div>
 
-        {/* Quick Stats */}
+        {/* Quick Stats Grid */}
         <QuickStats studentData={dashboardData} />
 
-        {/* Plan Status */}
-        <PlanStatus studentData={dashboardData} />
+        {/* Reading & Writing Section */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+              <span role="img" aria-label="pen" className="text-2xl">✍️</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Reading & Writing</h2>
+              <p className="text-gray-500">Master grammar, vocabulary, and composition with 20 mock tests.</p>
+            </div>
+          </div>
 
-        {/* Skill Breakdown & Account Details */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-8">
-          <SkillBreakdown skillBreakdown={skillBreakdown} />
-          <AccountDetails studentData={dashboardData} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {readingTests.map((test) => {
+              // Logic: All tests are unlocked now since Stripe was removed
+              const isLocked = false;
+
+              return (
+                <div
+                  key={test.id}
+                  onClick={() => {
+                    if (!isLocked) navigate('/test', { state: { testId: test.id } });
+                    else alert("Upgrade to Premium to unlock all tests!");
+                  }}
+                  className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked
+                    ? 'border-gray-100 opacity-60 grayscale-[0.8] hover:opacity-100 hover:grayscale-0'
+                    : 'border-emerald-50 hover:border-emerald-500 hover:shadow-lg hover:-translate-y-1'
+                    }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-sm font-bold text-gray-900">{test.title}</span>
+                    {isLocked ? (
+                      <FaLock className="text-gray-400 text-xs" />
+                    ) : (
+                      <FaUnlock className="text-emerald-500 text-xs" />
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500 flex items-center gap-3">
+                    <span>⏱ {test.duration}</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${test.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                      test.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                      {test.difficulty}
+                    </span>
+                  </div>
+
+                  {!dashboardData.paidTests && test.id === 1 && (
+                    <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce">
+                      FREE
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Available Tests */}
-        <AvailableTests tests={userTestStatus} onStartTest={handleStartTest} />
+        {/* Speaking & Listening Section */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
+              <span role="img" aria-label="mic" className="text-2xl">🎙️</span>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Speaking & Listening</h2>
+              <p className="text-gray-500">Enhance pronunciation and fluency with 20 AI-graded assessments.</p>
+            </div>
+          </div>
 
-        {/* Test History */}
-        <TestHistory completedTests={testHistory} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {speakingTests.map((test) => {
+              const isLocked = false; // Always unlocked now
+
+              return (
+                <div
+                  key={test.id}
+                  onClick={() => {
+                    if (!isLocked) navigate('/speaking/test/full', { state: { testId: test.id } });
+                    else alert("Upgrade to Premium to unlock all tests!");
+                  }}
+                  className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked
+                    ? 'border-gray-100 opacity-60 grayscale-[0.8] hover:opacity-100 hover:grayscale-0'
+                    : 'border-blue-50 hover:border-blue-500 hover:shadow-lg hover:-translate-y-1'
+                    }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-sm font-bold text-gray-900">{test.title}</span>
+                    {isLocked ? (
+                      <FaLock className="text-gray-400 text-xs" />
+                    ) : (
+                      <FaUnlock className="text-blue-500 text-xs" />
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500 flex items-center gap-3">
+                    <span>⏱ {test.duration}</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${test.difficulty === 'Easy' ? 'bg-green-100 text-green-700' :
+                      test.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                      {test.difficulty}
+                    </span>
+                  </div>
+
+                  {!dashboardData.paidTests && test.id === 1 && (
+                    <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce">
+                      FREE
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Analytics & History Grid */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          <SkillBreakdown skillBreakdown={skillBreakdown} />
+          <div className="lg:col-span-1">
+            <AccountDetails studentData={dashboardData} />
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <TestHistory completedTests={testHistory} />
+        </div>
       </main>
-
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        amount={4999}
-        onSuccess={handlePaymentSuccess}
-        userId={auth.currentUser?.uid}
-      />
     </div>
   );
 };

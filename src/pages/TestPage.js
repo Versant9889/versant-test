@@ -669,7 +669,7 @@ export default function TestPage() {
 
 
   // CHECK: Validation logic moved here to ensure all hooks run first
-  if (!testId || testId < 1 || testId > 20) {
+  if (!testId) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="test-container-glass p-8 text-center bg-white rounded-xl shadow-xl">
