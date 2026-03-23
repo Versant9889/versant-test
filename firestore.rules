@@ -29,6 +29,15 @@ service cloud.firestore {
       }
     }
     
+    // NEW: Analytics Events Collection
+    match /analytics_events/{eventId} {
+      // Anyone (including anonymous guests) can ping an activity event
+      allow create: if true;
+      // Only the True Admin can read the live feed or flush the database
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+    
     // Default deny
     match /{document=**} {
       allow read, write: if false;

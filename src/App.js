@@ -22,6 +22,7 @@ import ReadingHub from './pages/ReadingHub';
 import SpeakingTest from './pages/SpeakingTest';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
+import PricingPage from './pages/PricingPage';
 import { Navigate } from 'react-router-dom';
 import { useActivityTracker } from './hooks/useActivityTracker';
 
@@ -81,6 +82,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/test" element={<TestPage />} />
         <Route path="/result" element={<ResultPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/terms" element={<TermsAndConditions />} />

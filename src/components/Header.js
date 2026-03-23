@@ -18,6 +18,9 @@ export default function Header({ page }) {
               </Link>
               <Link to="/about" className="hover:text-green-200 font-medium">About Us</Link>
               <Link to="/contact" className="hover:text-green-200 font-medium">Contact Us</Link>
+              <Link to="/pricing" className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-4 py-2 rounded-full uppercase tracking-wider text-xs transition-transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/30 ml-2 flex items-center gap-1">
+                <span>⭐</span> Upgrade to Pro
+              </Link>
             </>
           ) : (
             <>
@@ -25,6 +28,9 @@ export default function Header({ page }) {
               <Link to="/blog" className="hover:text-green-200 font-medium">Blog</Link>
               <Link to="/about" className="hover:text-green-200 font-medium">About Us</Link>
               <Link to="/contact" className="hover:text-green-200 font-medium">Contact Us</Link>
+              <Link to="/pricing" className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-4 py-2 rounded-full uppercase tracking-wider text-xs transition-transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/30 ml-2 flex items-center gap-1">
+                <span>⭐</span> Upgrade to Pro
+              </Link>
             </>
           )}
         </div>
