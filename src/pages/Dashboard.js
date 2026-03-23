@@ -137,7 +137,15 @@ const Dashboard = () => {
 
             if (data.type === 'full_test' || data.totalScore !== undefined) {
               count++;
-              const score = data.totalScore || 0;
+              let score = data.totalScore || 0;
+              
+              // Backwards compatibility: Normalize raw algorithmic scores (e.g. 317) down to the 20-80 GSE scale
+              if (score > 80 && score <= 630 && data.type?.includes('speaking')) {
+                  score = Math.round(20 + (score / 630) * 60);
+              } else if (score > 80) {
+                  score = 80; // Hard cap any anomalies
+              }
+
               totalScoreSum += score;
               if (score > maxScore) maxScore = score;
 

@@ -123,7 +123,7 @@ const ResultPage = () => {
           if (state.mode === 'speaking') {
             saveResult({
               testId: state.testId || 'unknown_speaking',
-              totalScore: totalCalculated,
+              totalScore: normalizedVersantScore,
               sections: groupedResults,
               type: 'speaking_full'
             }, state.testId || 'unknown_speaking');

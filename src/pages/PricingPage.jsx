@@ -54,18 +54,34 @@ export default function PricingPage() {
                 image: "https://versantpro.com/logo.png", // Replace with real logo
                 order_id: orderData.order_id, // Cryptographically secured order ID from Netlify
                 handler: async function (response) {
-                    // Payment succeeded callback
-                    console.log("Payment Success!", response.razorpay_payment_id);
+                    console.log("Payment Success! Initiating Server Verification...");
+                    setIsProcessing(true);
                     
                     try {
-                        // 2. Server-side verification goes here, but for MVP we unlock client-side:
-                        const userRef = doc(db, 'users', auth.currentUser.uid);
-                        await updateDoc(userRef, { hasPaid: true });
-                        alert("Payment Successful! Welcome to Versant Pro. All tests are now unlocked.");
-                        navigate('/dashboard');
+                        const verifyRes = await fetch('/.netlify/functions/verifyRazorpayPayment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                uid: auth.currentUser.uid
+                            })
+                        });
+
+                        const verifyData = await verifyRes.json();
+
+                        if (verifyRes.ok) {
+                            alert("Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
+                            navigate('/dashboard');
+                        } else {
+                            alert("Payment verification failed: " + verifyData.error);
+                            setIsProcessing(false);
+                        }
                     } catch (err) {
-                        alert("Payment successful but failed to unlock account. Contact support.");
-                        console.error(err);
+                        alert("Network error during verification. If money was deducted, contact support.");
+                        console.error("Verification error:", err);
+                        setIsProcessing(false);
                     }
                 },
                 prefill: {

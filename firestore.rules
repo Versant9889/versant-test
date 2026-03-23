@@ -19,8 +19,11 @@ service cloud.firestore {
       // Owner or Admin can get specific user Doc
       allow get: if isOwner(userId) || isAdmin();
       
-      // Admin could update user (e.g. ban), Owner can update self
-      allow write: if isOwner(userId) || isAdmin();
+      // Admin can create/update anyone. Owner can create self but cannot set hasPaid to true.
+      allow create: if isAdmin() || (isOwner(userId) && (!('hasPaid' in request.resource.data) || request.resource.data.hasPaid == false));
+      // Owner can update self, but CANNOT modify the hasPaid lock. Only Admin/Backend can modify hasPaid.
+      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['hasPaid']));
+      allow delete: if isAdmin();
 
       // Subcollection: Test Results
       match /testResults/{resultId} {
