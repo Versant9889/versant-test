@@ -25,6 +25,7 @@ import AdminLogin from './pages/AdminLogin';
 import PricingPage from './pages/PricingPage';
 import { Navigate } from 'react-router-dom';
 import { useActivityTracker } from './hooks/useActivityTracker';
+import { useSessionManager } from './hooks/useSessionManager';
 
 // Helper component to handle /admin redirection
 const AdminRedirect = () => {
@@ -41,11 +42,12 @@ const AdminRedirect = () => {
 const TRACKING_ID = "G-91JD206S3Z";
 ReactGA.initialize(TRACKING_ID);
 
-// Component to track page views and user activity
+// Component to track page views, user activity, and enforce session security
 function PageTracker() {
   const location = useLocation();
 
   useActivityTracker(); // <--- New Global Real-time Tracker
+  useSessionManager();  // <--- Anti-Piracy Server Lock
 
   useEffect(() => {
     // 1. Track Page View in GA

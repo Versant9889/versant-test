@@ -272,15 +272,14 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {readingTests.map((test) => {
-              // Logic: All tests are unlocked now since Stripe was removed
-              const isLocked = false;
+              const isLocked = !userTestAccess && test.id > 1;
 
               return (
                 <div
                   key={test.id}
                   onClick={() => {
                     if (!isLocked) navigate('/test', { state: { testId: test.id } });
-                    else alert("Upgrade to Premium to unlock all tests!");
+                    else navigate('/pricing');
                   }}
                   className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked
                     ? 'border-gray-100 opacity-60 grayscale-[0.8] hover:opacity-100 hover:grayscale-0'
@@ -305,7 +304,7 @@ const Dashboard = () => {
                     </span>
                   </div>
 
-                  {!dashboardData.paidTests && test.id === 1 && (
+                  {!userTestAccess && test.id === 1 && (
                     <div className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce">
                       FREE
                     </div>
@@ -330,14 +329,14 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {speakingTests.map((test) => {
-              const isLocked = false; // Always unlocked now
+              const isLocked = !userTestAccess && test.id > 1;
 
               return (
                 <div
                   key={test.id}
                   onClick={() => {
                     if (!isLocked) navigate('/speaking/test/full', { state: { testId: test.id } });
-                    else alert("Upgrade to Premium to unlock all tests!");
+                    else navigate('/pricing');
                   }}
                   className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked
                     ? 'border-gray-100 opacity-60 grayscale-[0.8] hover:opacity-100 hover:grayscale-0'
@@ -362,7 +361,7 @@ const Dashboard = () => {
                     </span>
                   </div>
 
-                  {!dashboardData.paidTests && test.id === 1 && (
+                  {!userTestAccess && test.id === 1 && (
                     <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md animate-bounce">
                       FREE
                     </div>

@@ -32,27 +32,30 @@ const SpeakingHub = () => {
     }));
 
     useEffect(() => {
-        const checkAccess = async () => {
-            const auth = getAuth();
-            const user = auth.currentUser;
+        const auth = getAuth();
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
                 const docRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(docRef);
-                if (docSnap.exists() && docSnap.data().paidTests) {
+                // Check either paidTests or hasPaid just to be safe
+                if (docSnap.exists() && (docSnap.data().paidTests || docSnap.data().hasPaid)) {
                     setIsPremium(true);
+                } else {
+                    setIsPremium(false);
                 }
+            } else {
+                setIsPremium(false);
             }
-        };
-        checkAccess();
+        });
+        
+        return () => unsubscribe();
     }, []);
 
     const handleStartTest = (testId) => {
-        // Temporarily unlock all tests for development/testing
-        // if (!isPremium && testId > 1) {
-        //     alert("Upgrade to Premium to access all 20 tests!");
-        //     return;
-        // }
-        // In future, we can pass testId to SpeakingTest to load different datasets
+        if (!isPremium && testId > 1) {
+            navigate('/pricing');
+            return;
+        }
         navigate('/speaking/test/full', { state: { testId } });
     };
 
@@ -90,8 +93,7 @@ const SpeakingHub = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {tests.map((test) => {
-                            // Temporarily unlock all tests
-                            const isLocked = false; // !isPremium && test.id > 1;
+                            const isLocked = !isPremium && test.id > 1;
 
                             return (
                                 <button

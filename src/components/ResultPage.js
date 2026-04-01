@@ -18,7 +18,23 @@ const ResultPage = () => {
   const [score, setScore] = useState(0);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Analytics Growth Features
+  const [isLocked, setIsLocked] = useState(false);
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadName, setLeadName] = useState('');
+  
   const dataSavedRef = React.useRef(false);
+
+  useEffect(() => {
+    // If user is not logged in when they reach the result page, engage the lock
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user && !sessionStorage.getItem('guest_unlocked')) {
+        setIsLocked(true);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Reusable Save Function
   const saveResult = React.useCallback(async (resultData, testId) => {
@@ -46,6 +62,34 @@ const ResultPage = () => {
       console.error("Error saving result:", error);
     }
   }, []);
+
+  const handleLeadSubmit = async (e) => {
+    e.preventDefault();
+    if (!leadEmail || !leadName) return;
+    try {
+       // Save to a generic 'leads' collection
+       await addDoc(collection(db, 'leads'), {
+           name: leadName,
+           email: leadEmail,
+           score: score,
+           createdAt: serverTimestamp(),
+           source: 'ResultPageTrap'
+       });
+       // Unlock the page for this session
+       sessionStorage.setItem('guest_unlocked', 'true');
+       setIsLocked(false);
+    } catch (err) {
+       console.error("Lead capture failed", err);
+       // Fallback unlock if database fails so they aren't stuck
+       setIsLocked(false);
+    }
+  };
+
+  const handleWhatsAppShare = () => {
+    const message = `I just scored an incredible ${score}/80 on the AI Versant Simulator! 🔥 Can you beat my score? Try it for free here: https://versantpro.com`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
 
   // AI Evaluation Effect
   useEffect(() => {
@@ -442,7 +486,7 @@ const ResultPage = () => {
       ) : (
         // --- Full Test Result Display ---
         <main className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
-          <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100">
+          <div className={`bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-100 transition-all ${isLocked ? 'blur-md pointer-events-none select-none' : ''}`}>
             {/* Header Section */}
             <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-900 p-10 sm:p-14 text-white text-center relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
@@ -474,8 +518,18 @@ const ResultPage = () => {
                     </span>
                     <span className="text-2xl text-gray-300 font-bold">/ 80</span>
                   </div>
-                  <div className="mt-4 inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
-                    <FaStar className="text-emerald-500" /> Global Scale of English
+                  <div className="flex flex-col gap-3 mt-4 relative z-10 w-full">
+                    <div className="inline-flex justify-center items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
+                      <FaStar className="text-emerald-500" /> Global Scale of English
+                    </div>
+                    {/* Growth Loop: WhatsApp Share Button */}
+                    <button 
+                      onClick={handleWhatsAppShare}
+                      className="inline-flex justify-center items-center gap-2 bg-green-500 hover:bg-green-600 text-white border border-green-600 px-4 py-2.5 rounded-full font-bold text-sm shadow-md transition-all active:scale-95"
+                    >
+                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                       Share My Score 
+                    </button>
                   </div>
                 </div>
 
@@ -714,6 +768,50 @@ const ResultPage = () => {
               </div>
             </div>
           </div>
+          
+          {/* Email Trap Modal Overlay */}
+          {isLocked && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
+              <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative border border-gray-100">
+                <div className="h-2 bg-emerald-500 w-full"></div>
+                <div className="p-8 text-center">
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <FaTrophy className="text-3xl" />
+                  </div>
+                  <h2 className="text-3xl font-black text-gray-900 mb-3">Your AI Score is Ready!</h2>
+                  <p className="text-gray-500 mb-8">Enter your email address below to instantly unlock your complete Versant performance report.</p>
+                  
+                  <form onSubmit={handleLeadSubmit} className="space-y-4">
+                    <div>
+                      <input 
+                        type="text" 
+                        required
+                        value={leadName}
+                        onChange={(e) => setLeadName(e.target.value)}
+                        placeholder="Your Full Name" 
+                        className="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-medium"
+                      />
+                    </div>
+                    <div>
+                      <input 
+                        type="email" 
+                        required
+                        value={leadEmail}
+                        onChange={(e) => setLeadEmail(e.target.value)}
+                        placeholder="Your Email Address" 
+                        className="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-medium"
+                      />
+                    </div>
+                    <button type="submit" className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      Unlock My Score Now
+                    </button>
+                  </form>
+                  <p className="mt-6 text-xs text-gray-400">We respect your privacy. No spam.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
         </main>
       )}
       <Footer />

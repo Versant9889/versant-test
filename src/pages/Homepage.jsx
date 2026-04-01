@@ -1,224 +1,196 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, googleProvider, db } from '../firebaseConfig';
-import Header from '../components/Header'; // Restored Header
+import Header from '../components/Header';
+import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe } from 'react-icons/fa';
 
 export default function VersantHomepage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    setError('');
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
-    } catch (err) {
-      setError('Invalid credentials. Please try again.');
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      const userRef = doc(db, 'users', user.uid);
-      const docSnap = await getDoc(userRef);
-
-      if (!docSnap.exists()) {
-        await setDoc(userRef, {
-          email: user.email,
-          name: user.displayName,
-          hasPaid: false,
-          createdAt: new Date(),
-          role: 'user'
-        });
-      }
-      navigate('/dashboard');
-    } catch (error) {
-      setError('Google Sign-In failed. Please try again.');
-    }
-  };
 
   return (
-    <div className="h-full w-full min-h-screen overflow-auto gradient-bg text-white font-sans">
+    <div className="h-full w-full min-h-screen overflow-auto bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200">
       <Helmet>
-        <title>Free Versant Practice Test 2026 | Accurate AI Speaking Simulator</title>
-        <meta name="description" content="Pass the Versant English Test with our free online mock tests. Get instant AI grading on pronunciation, sentence builds, and story retelling." />
+        <title>Versant Practice Test 2026 | Accurate AI Speaking Simulator</title>
+        <meta name="description" content="Pass the Versant English Test on your first try. Get instant AI grading on pronunciation, sentence builds, and story retelling with our 20 full-length mock exams." />
       </Helmet>
 
-      {/* Restored Header Component */}
       <Header />
 
       {/* Hero Section */}
-      <section className="w-full px-6 py-12 md:py-16 max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="flex-1 text-center lg:text-left slide-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-emerald-100 text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse"></span> 98% Pass Rate
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-              Master Your English, <br className="hidden lg:block" /> Ace the Versant Test
-            </h1>
-            <p className="text-lg md:text-xl text-emerald-100/90 mb-8 max-w-xl mx-auto lg:mx-0">
-              Get instant AI scoring, realistic mock tests, and detailed feedback to improve your pronunciation, fluency, and confidence.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button onClick={() => navigate('/signup')} className="btn-primary px-8 py-4 text-white font-semibold rounded-full text-lg shadow-2xl">
-                Start Free Practice
-              </button>
-              <button onClick={() => navigate('/about')} className="px-8 py-4 bg-white/10 text-white font-semibold rounded-full text-lg hover:bg-white/20 transition-all border border-white/20">
-                How it Works
-              </button>
-            </div>
+      <section className="relative w-full pt-20 pb-32 px-6 overflow-hidden bg-gradient-to-br from-emerald-900 via-green-800 to-teal-900 text-white">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+        <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+        <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+        
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center text-center slide-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-emerald-100 text-sm font-semibold mb-8 border border-white/20 shadow-lg">
+            <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> 
+            Updated for 2026 Pearson Standards
           </div>
-
-          {/* Login Form */}
-          <div className="flex-1 relative w-full max-w-md mx-auto">
-            <div className="relative floating">
-              <div className="absolute -inset-4 bg-white/10 rounded-3xl blur-2xl"></div>
-              <div className="glass-card rounded-3xl p-8 relative shadow-2xl">
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-emerald-900">Student Login</h2>
-                  <p className="text-emerald-600 text-sm">Continue your preparation</p>
-                </div>
-
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  {error && <div className="text-red-600 text-sm text-center bg-red-100 py-2 rounded-lg border border-red-200">{error}</div>}
-
-                  <div>
-                    <label className="block text-sm font-semibold text-emerald-800 mb-1.5 ml-1">Email Address</label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="student@example.com"
-                      className="w-full px-4 py-3 bg-white text-gray-900 border border-emerald-200 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-sm"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-emerald-800 mb-1.5 ml-1">Password</label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full px-4 py-3 bg-white text-gray-900 border border-emerald-200 rounded-xl placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-sm"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl mt-2 transition-all shadow-lg hover:shadow-emerald-500/30 transform active:scale-95"
-                  >
-                    Start Practicing
-                  </button>
-                </form>
-
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200"></div></div>
-                  <div className="relative flex justify-center text-xs uppercase"><span className="px-2 bg-white text-gray-500 rounded px-2">Or continue with</span></div>
-                </div>
-
-                <button
-                  onClick={handleGoogleLogin}
-                  className="w-full py-3 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2 shadow-sm"
-                >
-                  <img src="https://developers.google.com/identity/images/g-logo.png" alt="G" className="w-5 h-5 rounded-full bg-white p-0.5" />
-                  <span>Google</span>
-                </button>
-
-                <div className="mt-6 text-center text-sm text-gray-600">
-                  New here? <Link to="/signup" className="text-emerald-600 hover:text-emerald-700 font-semibold underline decoration-emerald-200 underline-offset-2">Create Free Account</Link>
-                </div>
-              </div>
+          
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight drop-shadow-md">
+            Pass the Versant Test <br className="hidden md:block"/> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-200">On Your First Try</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-emerald-50 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+            Stop guessing your score. Get instant AI grading on your fluency, pronunciation, and vocabulary with 20 hyper-realistic mock exams.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-md mx-auto sm:max-w-none">
+            <button 
+              onClick={() => navigate('/signup')} 
+              className="bg-emerald-500 hover:bg-emerald-400 text-white px-10 py-5 rounded-full font-bold text-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all transform hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(16,185,129,0.6)] flex items-center justify-center gap-3"
+            >
+              Take Free Mock Test <FaPlayCircle className="text-2xl" />
+            </button>
+            <button 
+              onClick={() => navigate('/pricing')} 
+              className="px-10 py-5 bg-white/10 backdrop-blur-sm text-white font-bold rounded-full text-xl hover:bg-white/20 transition-all border border-white/30"
+            >
+              View Pricing
+            </button>
+          </div>
+          
+          <div className="mt-12 flex items-center justify-center gap-4 text-emerald-200/80 text-sm font-medium">
+            <div className="flex -space-x-3">
+              <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=1" alt="User" />
+              <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=2" alt="User" />
+              <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=3" alt="User" />
+              <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=4" alt="User" />
+            </div>
+            <div className="text-left leading-tight">
+              <div className="flex text-yellow-400 mb-0.5"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></div>
+              <span>Trusted by 5,000+ students globally</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Impact Section */}
-      <section id="impact" className="w-full px-6 py-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-emerald-800/40 backdrop-blur-md border border-emerald-500/30 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-white shadow-inner border border-emerald-400/20">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">98%</div>
-              <div className="text-emerald-100 text-sm font-medium">Pass Rate</div>
-            </div>
-          </div>
-
-          <div className="bg-emerald-800/40 backdrop-blur-md border border-emerald-500/30 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-white shadow-inner border border-emerald-400/20">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">Instant</div>
-              <div className="text-emerald-100 text-sm font-medium">AI Feedback</div>
-            </div>
-          </div>
-
-          <div className="bg-emerald-800/40 backdrop-blur-md border border-emerald-500/30 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-white shadow-inner border border-emerald-400/20">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-white">100+</div>
-              <div className="text-emerald-100 text-sm font-medium">Mock Tests</div>
-            </div>
-          </div>
+      {/* Dashboard Sneak Peek (Visual Hook) */}
+      <section className="relative w-full max-w-6xl mx-auto -mt-16 px-6 z-20 slide-up delay-200">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200 p-2">
+           <div className="bg-slate-100 rounded-t-2xl py-3 px-4 flex items-center gap-2 border-b border-slate-200">
+             <div className="w-3 h-3 rounded-full bg-red-400"></div>
+             <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+             <div className="w-3 h-3 rounded-full bg-green-400"></div>
+             <div className="ml-4 text-xs font-mono text-slate-500 flex-1 text-center">dashboard.versantpro.com</div>
+           </div>
+           {/* Mockup Dashboard Image / HTML Representation */}
+           <div className="p-8 bg-slate-50 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+             <div className="md:col-span-2 space-y-6">
+                <div className="h-4 w-32 bg-slate-200 rounded-full"></div>
+                <div className="h-8 w-64 bg-slate-300 rounded-full"></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="h-32 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                    <div className="text-slate-400 text-sm mb-2">Overall Score</div>
+                    <div className="text-4xl font-bold text-emerald-600">68<span className="text-2xl text-slate-400">/80</span></div>
+                  </div>
+                  <div className="h-32 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-center">
+                    <div className="text-slate-400 text-sm mb-2">Fluency Level</div>
+                    <div className="text-2xl font-bold text-slate-800">Advanced (C1)</div>
+                  </div>
+                </div>
+                <div className="h-20 bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-emerald-800">Speaking Test 1 Complete</div>
+                    <div className="text-sm text-emerald-600">AI Audio analysis finished in 2.4s</div>
+                  </div>
+                  <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold">Review Mistakes</button>
+                </div>
+             </div>
+             <div className="hidden md:flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm h-full">
+                <div className="relative w-40 h-40">
+                  <svg viewBox="0 0 36 36" className="w-full h-full text-emerald-500 drop-shadow-md">
+                    <path className="text-slate-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
+                    <path className="text-emerald-500" strokeDasharray="80, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="3" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center flex-col">
+                    <span className="text-3xl font-black text-slate-800">80%</span>
+                    <span className="text-xs text-slate-500 uppercase tracking-wider">GSE Scale</span>
+                  </div>
+                </div>
+             </div>
+           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="w-full px-6 py-20 max-w-7xl mx-auto">
+      {/* Feature Grid */}
+      <section className="w-full px-6 py-24 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why Practice with VersantPro?</h2>
-          <p className="text-emerald-100/80 text-lg max-w-2xl mx-auto">
-            Our platform is designed specifically to help you score higher in the Versant English Test.
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">Everything you need to succeed</h2>
+          <p className="text-slate-600 text-lg md:text-xl max-w-2xl mx-auto">
+            Traditional coaching centers charge $500+. We built the exact same AI evaluation infrastructure for a fraction of the price.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div className="grid md:grid-cols-3 gap-8">
           {[
-            { title: "Real Exam Simulation", desc: "Experience the exact format and timing of the real Versant test.", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", color: "emerald" },
-            { title: "AI Pronunciation Scoring", desc: "Get instant feedback on your fluency, pronunciation, and intonation.", icon: "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z", color: "teal" },
-            { title: "Detailed Analytics", desc: "Track your progress and identify weak areas to focus on.", icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z", color: "green" },
-            { title: "Vocabulary Building", desc: "Enhance your vocabulary with targeted exercises.", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253", color: "emerald" },
-            { title: "Listening Practice", desc: "Sharpen your listening skills with varied accents and speeds.", icon: "M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z", color: "teal" },
-            { title: "Mobile Friendly", desc: "Practice anytime, anywhere on your phone or tablet.", icon: "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z", color: "green" },
-          ].map((feature, idx) => (
-            <div key={idx} className="feature-card rounded-2xl p-6 hover:bg-white/15 transition-all group cursor-default">
-              <div className={`w-14 h-14 bg-${feature.color}-400/20 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
-                <svg className={`w-7 h-7 text-${feature.color}-300`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={feature.icon} />
-                </svg>
+            { title: "20 Full Mock Exams", desc: "Never run out of practice material. We generated 1260+ unique questions mirroring the exact Pearson Versant difficulty.", icon: <FaGlobe className="w-8 h-8"/>, color: "text-blue-500", bg: "bg-blue-50" },
+            { title: "Offline Voice AI", desc: "Our proprietary algorithm analyzes your speech offline, ensuring 100% privacy and zero latency during your test.", icon: <FaMicrophoneAlt className="w-8 h-8"/>, color: "text-emerald-500", bg: "bg-emerald-50" },
+            { title: "Radar Analytics", desc: "Identify whether your grammar, fluency, pronunciation, or vocabulary is dragging your score down.", icon: <FaChartPie className="w-8 h-8"/>, color: "text-purple-500", bg: "bg-purple-50" },
+          ].map((feat, idx) => (
+            <div key={idx} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 hover:-translate-y-2 transition-transform duration-300">
+              <div className={`w-16 h-16 ${feat.bg} ${feat.color} rounded-2xl flex items-center justify-center mb-6`}>
+                {feat.icon}
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-              <p className="text-emerald-100/70">{feature.desc}</p>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">{feat.title}</h3>
+              <p className="text-slate-600 leading-relaxed">{feat.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
+      {/* Social Proof / Testimonials */}
+      <section className="w-full bg-slate-900 text-white py-24 px-6 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <h2 className="text-3xl md:text-5xl font-bold text-center mb-16">Don't just take our word for it</h2>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { name: "Rahul Sharma", score: "68 -> 76", review: "I failed my corporate Versant round twice. After practicing 10 mock tests here, I finally cleared it and got the job. The AI feedback on sentence tracking is insanely accurate." },
+              { name: "Jessica T.", score: "54 -> 65", review: "The audio visualizer helped me realize I was pausing too much during the Story Retelling section. The UI is exactly like the real exam." },
+              { name: "Ahmed K.", score: "72 -> 79", review: "Worth every penny. The radar charts pinpointed my vocabulary weakness. The instant grading saves days of waiting for a human tutor." }
+            ].map((test, idx) => (
+              <div key={idx} className="bg-slate-800/80 backdrop-blur border border-slate-700 p-8 rounded-3xl relative">
+                <div className="flex text-yellow-500 mb-6 text-xl"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></div>
+                <p className="text-slate-300 mb-8 italic text-lg leading-relaxed">"{test.review}"</p>
+                <div className="flex justify-between items-center border-t border-slate-700 pt-6">
+                  <div>
+                    <div className="font-bold text-white mb-1">{test.name}</div>
+                    <div className="text-emerald-400 text-sm font-mono bg-emerald-900/40 px-3 py-1 rounded-full inline-block">Score: {test.score}</div>
+                  </div>
+                  <FaCheckCircle className="text-emerald-500 text-3xl opacity-20" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="w-full px-6 py-24 max-w-4xl mx-auto text-center">
+        <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">Ready to secure your future?</h2>
+        <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">Sign up now and get your very first full-length Mock Test completely free. No credit card required.</p>
+        <button 
+          onClick={() => navigate('/signup')} 
+          className="bg-emerald-600 hover:bg-emerald-500 text-white px-12 py-6 rounded-full font-extrabold text-2xl shadow-2xl transition-all transform hover:scale-105"
+        >
+          Create Free Account
+        </button>
+        <div className="mt-6 text-slate-500 text-sm">Takes 30 seconds. Instant Access.</div>
+      </section>
+
       {/* Footer */}
-      <footer className="w-full px-6 py-12 border-t border-white/10">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-white/50 text-sm mb-4">© {new Date().getFullYear()} Versant Practice Test. All rights reserved.</p>
-          <div className="flex justify-center gap-6">
-            <Link to="/privacy" className="text-white/70 hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="text-white/70 hover:text-white transition-colors">Terms of Service</Link>
-            <Link to="/contact" className="text-white/70 hover:text-white transition-colors">Contact Us</Link>
+      <footer className="w-full px-6 py-12 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-slate-500 font-medium">© {new Date().getFullYear()} VersantPro Test Solutions.</div>
+          <div className="flex gap-8 font-medium">
+            <Link to="/about" className="text-slate-500 hover:text-emerald-600 transition-colors">About Us</Link>
+            <Link to="/contact" className="text-slate-500 hover:text-emerald-600 transition-colors">Support</Link>
+            <Link to="/privacy" className="text-slate-500 hover:text-emerald-600 transition-colors">Privacy</Link>
+            <Link to="/login" className="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">Login</Link>
           </div>
         </div>
       </footer>
