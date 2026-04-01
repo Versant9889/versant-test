@@ -1,29 +1,17 @@
 const crypto = require('crypto');
-const { initializeApp } = require('firebase/app');
-const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
-const { getFirestore, doc, updateDoc } = require('firebase/firestore');
+const admin = require('firebase-admin');
 
-// Initialize Firebase for the Server environment
-const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID,
-};
-
-// Prevent re-initialization if function is kept warm
-let app;
-try {
-    app = initializeApp(firebaseConfig);
-} catch (e) {
-    if (e.code === 'app/duplicate-app') {
-        app = require('firebase/app').getApp();
-    }
+// Ensure Firebase Admin is only initialized once
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        }),
+    });
 }
-const auth = getAuth(app);
-const db = getFirestore(app);
+const db = admin.firestore();
 
 exports.handler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
@@ -50,15 +38,15 @@ exports.handler = async (event, context) => {
             return { statusCode: 403, body: JSON.stringify({ error: "Invalid payment signature" }) };
         }
 
-        // 2. Authenticate the Server as the "Admin" to bypass client-level Firestore rules
-        const adminEmail = "admin@versantapp.com";
-        const adminPass = process.env.ADMIN_PASSWORD; // Must be added to Netlify Environment Variables
-        
-        await signInWithEmailAndPassword(auth, adminEmail, adminPass);
-
-        // 3. Unlock the Premium Content
-        const userRef = doc(db, 'users', uid);
-        await updateDoc(userRef, { hasPaid: true });
+        // 2. Unlock the Premium Content via Secure Admin SDK
+        const userRef = db.collection('users').doc(uid);
+        await userRef.update({
+            hasPaid: true,
+            paidTests: true,
+            paymentMethod: 'razorpay',
+            transactionId: razorpay_payment_id,
+            paidAt: admin.firestore.FieldValue.serverTimestamp()
+        });
 
         return {
             statusCode: 200,
