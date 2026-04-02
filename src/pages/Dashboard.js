@@ -335,7 +335,7 @@ const Dashboard = () => {
                 <div
                   key={test.id}
                   onClick={() => {
-                    if (!isLocked) navigate('/pearson-versant-mock-test/module/full', { state: { testId: test.id } });
+                    if (!isLocked) navigate('/versant-mock-test/module/full', { state: { testId: test.id } });
                     else navigate('/pricing');
                   }}
                   className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked

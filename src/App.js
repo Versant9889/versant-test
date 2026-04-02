@@ -96,8 +96,8 @@ function App() {
 
         {/* Speaking & Listening Module */}
         <Route path="/reading" element={<ReadingHub />} />
-        <Route path="/pearson-versant-mock-test" element={<SpeakingHub />} />
-        <Route path="/pearson-versant-mock-test/module/:mode" element={<SpeakingTest />} />
+        <Route path="/versant-mock-test" element={<SpeakingHub />} />
+        <Route path="/versant-mock-test/module/:mode" element={<SpeakingTest />} />
 
         {/* Admin Routing */}
         <Route path="/admin" element={<AdminRedirect />} />
