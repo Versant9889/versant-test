@@ -49,7 +49,7 @@ export default function RefundPolicy() {
               If you believe you qualify for an exceptional refund based on Section 3, please contact us immediately:
             </p>
             <p className="mt-4 bg-emerald-50 p-4 rounded-xl border border-emerald-100 text-emerald-900 font-medium">
-              Email: support@versantpro.com <br/>
+              Email: sds1369@gmail.com <br/>
               Support hours: Monday to Friday, 9:00 AM - 6:00 PM (IST)
             </p>
           </div>

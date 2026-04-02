@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe, FaArrowRight } from 'react-icons/fa';
 
 export default function VersantHomepage() {
@@ -195,18 +196,7 @@ export default function VersantHomepage() {
         <div className="mt-6 text-slate-500 text-sm">Takes 30 seconds. Instant Access.</div>
       </section>
 
-      {/* Footer */}
-      <footer className="w-full px-6 py-12 bg-white border-t border-slate-200">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-slate-500 font-medium">© {new Date().getFullYear()} VersantPro Test Solutions.</div>
-          <div className="flex gap-8 font-medium">
-            <Link to="/about" className="text-slate-500 hover:text-emerald-600 transition-colors">About Us</Link>
-            <Link to="/contact" className="text-slate-500 hover:text-emerald-600 transition-colors">Support</Link>
-            <Link to="/privacy" className="text-slate-500 hover:text-emerald-600 transition-colors">Privacy</Link>
-            <Link to="/login" className="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">Login</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

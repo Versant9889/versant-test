@@ -4,6 +4,7 @@ import masterData from '../data/masterTest.json';
 import Footer from '../components/Footer';
 import './TestPage.css';
 import { gradeEmail, gradePassage } from '../utils/scoringUtils';
+import { getAuth } from 'firebase/auth';
 
 export default function TestPage() {
   // Add a class to the body when the component mounts, and remove it when it unmounts
@@ -87,7 +88,8 @@ export default function TestPage() {
         e.preventDefault();
         const confirmLeave = window.confirm('Your test progress will be lost if you go back. Are you sure you want to leave?');
         if (confirmLeave) {
-          navigate('/dashboard'); // Navigate to dashboard if user confirms
+          const auth = getAuth();
+          navigate(auth.currentUser ? '/dashboard' : '/');
         } else {
           // Push the state back to prevent navigation
           window.history.pushState(null, '', window.location.href);
@@ -662,7 +664,8 @@ export default function TestPage() {
 
   const handleExitTest = () => {
     if (window.confirm('Are you sure you want to exit the test? Your progress will be lost and you cannot resume it.')) {
-      navigate('/dashboard');
+      const auth = getAuth();
+      navigate(auth.currentUser ? '/dashboard' : '/');
     }
   };
 
@@ -676,7 +679,10 @@ export default function TestPage() {
           <h2 className="test-title text-2xl font-bold text-red-600 mb-4">Invalid Test Selected</h2>
           <p className="test-subtitle text-gray-600 mb-6">Please go back to the dashboard and select a valid test.</p>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => {
+                const auth = getAuth();
+                navigate(auth.currentUser ? '/dashboard' : '/');
+            }}
             className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             Return to Dashboard
