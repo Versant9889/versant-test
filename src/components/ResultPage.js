@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
+import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, db, googleProvider } from '../firebaseConfig';
 import Footer from './Footer';
 import Header from './Header';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
@@ -20,16 +21,21 @@ const ResultPage = () => {
   const [loading, setLoading] = useState(true);
   
   // Analytics Growth Features
-  const [isLocked, setIsLocked] = useState(false);
-  const [leadEmail, setLeadEmail] = useState('');
-  const [leadName, setLeadName] = useState('');
+  const [isLocked, setIsLocked] = useState(true); // Default to locked immediately to prevent score leak
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [isLoginView, setIsLoginView] = useState(false);
+  const [authError, setAuthError] = useState('');
   
   const dataSavedRef = React.useRef(false);
 
   useEffect(() => {
-    // If user is not logged in when they reach the result page, engage the lock
+    // Strictly verify Firebase Auth state. 
+    // This allows logged in users to unblur, and forces guests to hit the wall.
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user && !sessionStorage.getItem('guest_unlocked')) {
+      if (user) {
+        setIsLocked(false);
+      } else {
         setIsLocked(true);
       }
     });
@@ -63,32 +69,97 @@ const ResultPage = () => {
     }
   }, []);
 
-  const handleLeadSubmit = async (e) => {
-    e.preventDefault();
-    if (!leadEmail || !leadName) return;
+  const handleGoogleSignIn = async () => {
     try {
-       // Save to a generic 'leads' collection
-       await addDoc(collection(db, 'leads'), {
-           name: leadName,
-           email: leadEmail,
-           score: score,
-           createdAt: serverTimestamp(),
-           source: 'ResultPageTrap'
-       });
-       // Unlock the page for this session
-       sessionStorage.setItem('guest_unlocked', 'true');
-       setIsLocked(false);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      const userRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userRef);
+      if (!docSnap.exists()) {
+        await setDoc(userRef, {
+          email: user.email,
+          name: user.displayName || 'Student',
+          provider: 'google',
+          testAccess: { 1: true }, // Ensure test 1 is free
+          createdAt: serverTimestamp()
+        });
+      }
+
+      sessionStorage.setItem('guest_unlocked', 'true');
+      setIsLocked(false);
+
+      // Instantly save result to their newly created persistent account
+      if (score > 0) {
+        saveResult({
+          testId: testId || '1',
+          totalScore: score,
+          sections: results,
+          type: state?.mode === 'speaking' ? 'speaking_full' : 'full_test'
+        }, testId || '1');
+      }
     } catch (err) {
-       console.error("Lead capture failed", err);
-       // Fallback unlock if database fails so they aren't stuck
-       setIsLocked(false);
+      console.error("Google Auth Capture failed", err);
+      // Fallback
+      setIsLocked(false);
     }
   };
 
-  const handleWhatsAppShare = () => {
-    const message = `I just scored an incredible ${score}/80 on the AI Versant Simulator! 🔥 Can you beat my score? Try it for free here: https://versantpro.com`;
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+  const handleEmailAuth = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      let user;
+      if (isLoginView) {
+        const result = await signInWithEmailAndPassword(auth, authEmail, authPassword);
+        user = result.user;
+      } else {
+        const result = await createUserWithEmailAndPassword(auth, authEmail, authPassword);
+        user = result.user;
+        const userRef = doc(db, 'users', user.uid);
+        await setDoc(userRef, {
+          email: user.email,
+          name: authEmail.split('@')[0], // simple fallback name
+          provider: 'email',
+          testAccess: { 1: true }, // Ensure test 1 is free
+          createdAt: serverTimestamp()
+        });
+      }
+
+      sessionStorage.setItem('guest_unlocked', 'true');
+      setIsLocked(false);
+
+      if (score > 0) {
+        saveResult({
+          testId: testId || '1',
+          totalScore: score,
+          sections: results,
+          type: state?.mode === 'speaking' ? 'speaking_full' : 'full_test'
+        }, testId || '1');
+      }
+    } catch (err) {
+      setAuthError(err.message.replace('Firebase: ', ''));
+    }
+  };
+
+  const handleNativeShare = async () => {
+    const shareData = {
+      title: 'My Versant AI Score',
+      text: `I just scored an incredible ${score}/80 on the AI Versant Simulator! 🔥 Can you beat my score? Try it for free here:`,
+      url: 'https://versantpro.com'
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    } else {
+      // Fallback
+      navigator.clipboard.writeText(`${shareData.text} \n${shareData.url}`);
+      alert("Score copied to clipboard! You can paste it anywhere to share.");
+    }
   };
 
   // AI Evaluation Effect
@@ -191,22 +262,13 @@ const ResultPage = () => {
           response: state.emailInput
         });
 
-        // 2. Evaluate Passages in BATCH (to save API calls and avoid rate limits)
-        const passageData = state.passageInputs.map((input, i) => ({
-          original: state.questions[36 + i]?.sentences || "",
-          response: input
-        }));
-
+        // 2. Evaluate Passages in BATCH (DISABLED TO SAVE API LIMITS)
+        // Since passage reconstruction is strongly checked offline (Keyword matching),
+        // we can safely bypass the AI here to reserve API quota 100% for Email Writing.
+        
         let passageResults = [];
-        // Add a small delay between email and passage calls to be safe
-        await new Promise(r => setTimeout(r, 2000));
-
-        try {
-          passageResults = await evaluateWithAI('passage_batch', passageData);
-        } catch (e) {
-          console.error("Batch Passage Error", e);
-          passageResults = [];
-        }
+        // PASSAGE AI EVALUATION HAS BEEN TURNED OFF BY USER REQUEST
+        // passageResults = await evaluateWithAI('passage_batch', passageData);
 
         console.log("AI Results:", emailResult, passageResults);
 
@@ -216,7 +278,7 @@ const ResultPage = () => {
 
           // Find and update Email Section
           const emailIdx = newResults.findIndex(r => r.section === 'Email Writing');
-          if (emailIdx !== -1) {
+          if (emailIdx !== -1 && emailResult && !emailResult.error) {
             newResults[emailIdx].aiAnalysis = emailResult;
             // Optionally override the generic score with AI score 
             // if emailResult.score is valid number
@@ -228,16 +290,15 @@ const ResultPage = () => {
 
           // Find and update Passage Section
           const passIdx = newResults.findIndex(r => r.section === 'Passage Reconstruction');
-          if (passIdx !== -1) {
+          if (passIdx !== -1 && passageResults && passageResults.length > 0 && !passageResults[0]?.error) {
             newResults[passIdx].aiAnalysis = passageResults;
             // Update individual question scores/feedback
-            // This is tricky because `questions` array inside result might correspond by index
             newResults[passIdx].questions = newResults[passIdx].questions.map((q, i) => ({
               ...q,
               aiFeedback: passageResults[i]
             }));
 
-            // Recalculate total if valid
+            // Recalculate total if valid (AI Score overrides local score)
             const newTotal = passageResults.reduce((acc, curr) => acc + (curr.score || 0), 0);
             newResults[passIdx].score = newTotal;
           }
@@ -522,14 +583,18 @@ const ResultPage = () => {
                     <div className="inline-flex justify-center items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
                       <FaStar className="text-emerald-500" /> Global Scale of English
                     </div>
-                    {/* Growth Loop: WhatsApp Share Button */}
-                    <button 
-                      onClick={handleWhatsAppShare}
-                      className="inline-flex justify-center items-center gap-2 bg-green-500 hover:bg-green-600 text-white border border-green-600 px-4 py-2.5 rounded-full font-bold text-sm shadow-md transition-all active:scale-95"
-                    >
-                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                       Share My Score 
-                    </button>
+                    {/* Growth Loop removed from here - moved to global actions below */}
+                    {/* Premium Upsell Loop */}
+                    <div className="w-full mt-5 bg-gradient-to-r from-amber-100 to-yellow-50 rounded-2xl p-4 border border-amber-200 shadow-sm relative overflow-hidden group">
+                       <h4 className="font-black text-amber-900 mb-1 flex items-center justify-center gap-2 relative z-10"><FaStar className="text-amber-500 animate-pulse"/> Upgrade to Pro</h4>
+                       <p className="text-amber-800/80 text-[11px] font-bold uppercase tracking-wider text-center mb-3 relative z-10">Unlock 19 more full-length mock tests</p>
+                       <Link to="/pricing" className="block w-full py-2 bg-amber-500 hover:bg-amber-400 text-white font-bold rounded-xl text-sm transition-all text-center shadow-md relative z-10">
+                         View Pass
+                       </Link>
+                       <div className="absolute top-0 right-0 -mr-6 -mt-6 opacity-30 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+                         <FaTrophy className="text-6xl text-amber-500" />
+                       </div>
+                    </div>
                   </div>
                 </div>
 
@@ -667,21 +732,6 @@ const ResultPage = () => {
                                   </div>
                                 )}
 
-                                {/* AI Error Fallback */}
-                                {res.aiFeedback && res.aiFeedback.error && (
-                                  <div className="mt-3 p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl flex items-center gap-2">
-                                    <FaTimesCircle /> AI Analysis Failed: {res.aiFeedback.details || "Unknown Error"}
-                                  </div>
-                                )}
-
-                                {/* Legacy non-AI Email */}
-                                {!res.aiFeedback && res.feedback && (
-                                  <div className="mt-3 text-sm text-orange-700 bg-orange-50 p-4 rounded-xl border border-orange-100">
-                                    <strong className="block mb-1 text-orange-900">Feedback</strong>
-                                    {res.feedback}
-                                  </div>
-                                )}
-
                                 {/* Correct Answer Fallback */}
                                 {(typeof res.isCorrect !== 'undefined' && !res.isCorrect) && (
                                   <div className="mt-3 text-sm flex items-center gap-2 text-gray-600 bg-gray-100/50 px-3 py-2 rounded-lg w-max">
@@ -694,7 +744,7 @@ const ResultPage = () => {
                         ))}
 
                         {/* Full Email AI Advanced Card */}
-                        {sectionResult.aiAnalysis && sectionResult.section === 'Email Writing' && (
+                        {sectionResult.aiAnalysis && !sectionResult.aiAnalysis.error && sectionResult.section === 'Email Writing' && (
                           <div className="mt-6 mb-2 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-fuchsia-50 overflow-hidden shadow-lg">
                             <div className="bg-violet-900 px-6 py-4 flex items-center justify-between text-white">
                               <h4 className="font-black flex items-center gap-2 text-lg">
@@ -706,11 +756,6 @@ const ResultPage = () => {
                             </div>
 
                             <div className="p-6">
-                              {sectionResult.aiAnalysis.error ? (
-                                <div className="text-red-600 font-bold flex items-center gap-2 bg-red-50 p-4 rounded-xl">
-                                  <FaTimesCircle /> AI Grading Error: {sectionResult.aiAnalysis.details || sectionResult.aiAnalysis.error}
-                                </div>
-                              ) : (
                                 <div className="space-y-5 text-violet-950">
                                   <div className="bg-white/60 p-4 rounded-xl border border-violet-100">
                                     <strong className="block text-violet-900 mb-1 text-sm uppercase tracking-wide">Analysis</strong>
@@ -747,7 +792,6 @@ const ResultPage = () => {
                                     </div>
                                   )}
                                 </div>
-                              )}
                             </div>
                           </div>
                         )}
@@ -758,55 +802,95 @@ const ResultPage = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="text-center mt-12 bg-gray-50 p-6 rounded-3xl border border-gray-100">
+              <div className="mt-12 bg-gray-50 p-6 rounded-3xl border border-gray-100 flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap">
                 <Link
                   to="/dashboard"
-                  className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-black transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 w-full sm:w-auto text-lg"
+                  className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-black transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 w-full sm:w-auto text-lg border border-gray-700"
                 >
                   Return to Dashboard
                 </Link>
+
+                {/* Global Viral Sharing Options */}
+                <button 
+                  onClick={handleNativeShare}
+                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg w-full sm:w-auto text-lg border border-blue-500"
+                >
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                   Share Score 
+                </button>
+
+                <a 
+                  href={`https://wa.me/?text=${encodeURIComponent(`I just scored ${score}/80 on the Versant Pro AI test! Take a free demo and check your fluency level: https://versantpro.com`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg w-full sm:w-auto text-lg border border-green-500 drop-shadow-sm"
+                >
+                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 21C10.593 21 9.243 20.655 8.04 20.04L3 21.691L4.698 16.786C4.015 15.539 3.633 14.103 3.633 12.593C3.633 7.848 7.502 3.979 12.247 3.979C17.002 3.979 20.871 7.848 20.871 12.593C20.871 17.338 17.002 21.207 12.031 21H12.031ZM12.031 5.485C8.324 5.485 5.309 8.5 5.309 12.207C5.309 13.682 5.795 15.014 6.589 16.096L6.963 16.634L5.94 19.648L9.08 18.665L9.61 18.966C10.584 19.516 11.666 19.789 12.031 19.79C15.738 19.79 18.753 16.775 18.752 13.068C18.752 9.361 15.737 6.346 12.031 6.346H12.031V5.485Z"/><path d="M16.488 14.492C16.326 14.425 15.426 13.987 15.26 13.923C15.093 13.858 14.966 13.824 14.839 14.02C14.713 14.216 14.368 14.629 14.27 14.743C14.17 14.856 14.07 14.87 13.905 14.787C13.739 14.704 13.013 14.468 12.161 13.714C11.498 13.128 11.042 12.383 10.916 12.166C10.79 11.95 10.902 11.834 10.985 11.752C11.059 11.678 11.144 11.579 11.226 11.48C11.31 11.381 11.336 11.312 11.402 11.183C11.468 11.054 11.436 10.941 11.386 10.843C11.336 10.744 10.887 9.643 10.704 9.186C10.528 8.742 10.347 8.799 10.222 8.788C10.108 8.777 9.982 8.775 9.856 8.775C9.73 8.775 9.516 8.824 9.333 9.02C9.149 9.214 8.65 9.673 8.65 10.605C8.65 11.537 9.35 12.434 9.458 12.576C9.566 12.723 10.824 14.787 12.871 15.656C13.358 15.862 13.739 15.986 14.038 16.082C14.526 16.237 14.972 16.214 15.328 16.155C15.727 16.087 16.536 15.654 16.702 15.176C16.868 14.698 16.868 14.288 16.802 14.19C16.736 14.092 16.609 14.056 16.488 13.99V14.492Z"/></svg>
+                   WhatsApp
+                </a>
               </div>
             </div>
           </div>
           
-          {/* Email Trap Modal Overlay */}
+          {/* Google & Email Auth Trap Modal Overlay */}
           {isLocked && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in">
-              <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden relative border border-gray-100">
-                <div className="h-2 bg-emerald-500 w-full"></div>
-                <div className="p-8 text-center">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <FaTrophy className="text-3xl" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+              <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden relative border border-gray-100 py-8 px-6 text-center my-6">
+                <div className="absolute top-0 left-0 h-2 bg-indigo-500 w-full"></div>
+                
+                <h2 className="text-2xl font-black text-gray-900 mb-2 tracking-tight">Save Your Progress</h2>
+                <p className="text-gray-500 mb-6 font-medium text-sm">Create a free account or log in to unlock your detailed AI performance report and save your score forever.</p>
+                
+                <button 
+                  onClick={handleGoogleSignIn}
+                  className="w-full flex justify-center items-center gap-3 bg-white border border-gray-300 rounded-xl px-4 py-3.5 text-gray-800 font-bold hover:bg-gray-50 hover:border-gray-400 hover:shadow-md transition-all active:scale-95"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.238-2.626-.611-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.222 0-9.649-3.342-11.124-7.854l-6.571 4.819C9.656 39.663 16.318 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.237-2.626-.611-3.917z"/></svg>
+                  Continue with Google
+                </button>
+
+                <div className="flex items-center my-5">
+                  <div className="flex-1 border-t border-gray-200"></div>
+                  <span className="px-3 text-gray-400 text-xs font-bold uppercase tracking-widest">OR</span>
+                  <div className="flex-1 border-t border-gray-200"></div>
+                </div>
+
+                <form onSubmit={handleEmailAuth} className="space-y-4 text-left">
+                  {authError && <div className="text-red-500 text-xs font-bold text-center bg-red-50 py-2 rounded-lg">{authError}</div>}
+                  <div>
+                    <input 
+                      type="email" 
+                      required
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      placeholder="Email Address" 
+                      className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium"
+                    />
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900 mb-3">Your AI Score is Ready!</h2>
-                  <p className="text-gray-500 mb-8">Enter your email address below to instantly unlock your complete Versant performance report.</p>
-                  
-                  <form onSubmit={handleLeadSubmit} className="space-y-4">
-                    <div>
-                      <input 
-                        type="text" 
-                        required
-                        value={leadName}
-                        onChange={(e) => setLeadName(e.target.value)}
-                        placeholder="Your Full Name" 
-                        className="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-medium"
-                      />
-                    </div>
-                    <div>
-                      <input 
-                        type="email" 
-                        required
-                        value={leadEmail}
-                        onChange={(e) => setLeadEmail(e.target.value)}
-                        placeholder="Your Email Address" 
-                        className="w-full px-5 py-4 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-medium"
-                      />
-                    </div>
-                    <button type="submit" className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
-                      Unlock My Score Now
-                    </button>
-                  </form>
-                  <p className="mt-6 text-xs text-gray-400">We respect your privacy. No spam.</p>
+                  <div>
+                     <input 
+                      type="password" 
+                      required
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      placeholder="Password" 
+                      className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium"
+                    />
+                  </div>
+                  <button type="submit" className="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl shadow-lg transition-all active:scale-95 text-sm">
+                    {isLoginView ? 'Log In & View Score' : 'Create Account & View Score'}
+                  </button>
+                </form>
+                
+                <p className="mt-5 text-sm outline-none">
+                  {isLoginView ? "Don't have an account? " : "Already have an account? "}
+                  <button onClick={() => {setIsLoginView(!isLoginView); setAuthError('');}} className="font-bold text-indigo-600 hover:text-indigo-800 underline focus:outline-none">
+                    {isLoginView ? "Sign up" : "Log in"}
+                  </button>
+                </p>
+
+                <div className="mt-6 text-gray-400 text-xs font-semibold flex items-center justify-center gap-1">
+                   <FaCheckCircle className="text-indigo-500"/> Guaranteed Spam-Free
                 </div>
               </div>
             </div>

@@ -72,10 +72,10 @@ function Signup() {
              </Link>
              
              <h2 className="text-4xl font-black mb-6 leading-tight">Your gateway to global opportunities.</h2>
-             <p className="text-emerald-100 text-lg mb-8 font-medium">Join thousands of professionals scoring 65+ on their Pearson Versant exams using our AI Simulator.</p>
+             <p className="text-emerald-100 text-lg mb-8 font-medium">Join thousands of professionals scoring 65+ on their English Fluency exams using our AI Simulator.</p>
              
              <ul className="space-y-4">
-                <li className="flex items-center gap-3 font-medium"><FaCheckCircle className="text-emerald-300 text-xl" /> Realistic Pearson AI Grading</li>
+                <li className="flex items-center gap-3 font-medium"><FaCheckCircle className="text-emerald-300 text-xl" /> Realistic Human-Level AI Grading</li>
                 <li className="flex items-center gap-3 font-medium"><FaCheckCircle className="text-emerald-300 text-xl" /> Detailed Fluency Analytics</li>
                 <li className="flex items-center gap-3 font-medium"><FaCheckCircle className="text-emerald-300 text-xl" /> Instantly Unlock Test 1 Free</li>
              </ul>

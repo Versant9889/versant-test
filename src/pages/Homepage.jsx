@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
-import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe } from 'react-icons/fa';
+import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe, FaArrowRight } from 'react-icons/fa';
 
 export default function VersantHomepage() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function VersantHomepage() {
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center text-center slide-up">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-emerald-100 text-sm font-semibold mb-8 border border-white/20 shadow-lg">
             <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> 
-            Updated for 2026 Pearson Standards
+            Updated for 2026 Industry Standards
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight drop-shadow-md">
@@ -37,19 +37,32 @@ export default function VersantHomepage() {
             Stop guessing your score. Get instant AI grading on your fluency, pronunciation, and vocabulary with 20 hyper-realistic mock exams.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-5 justify-center w-full max-w-md mx-auto sm:max-w-none">
-            <button 
-              onClick={() => navigate('/signup')} 
-              className="bg-emerald-500 hover:bg-emerald-400 text-white px-10 py-5 rounded-full font-bold text-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all transform hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(16,185,129,0.6)] flex items-center justify-center gap-3"
+          <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mt-4 relative z-20">
+            {/* Speaking & Listening Demo Card */}
+            <div 
+              onClick={() => navigate('/versant-mock-test/module/full', { state: { testId: 1 } })}
+              className="cursor-pointer group flex flex-col items-center p-8 bg-emerald-950/40 backdrop-blur-md rounded-[2rem] border border-emerald-500/30 hover:bg-emerald-900/60 hover:border-emerald-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(16,185,129,0.4)]"
             >
-              Take Free Mock Test <FaPlayCircle className="text-2xl" />
-            </button>
-            <button 
-              onClick={() => navigate('/pricing')} 
-              className="px-10 py-5 bg-white/10 backdrop-blur-sm text-white font-bold rounded-full text-xl hover:bg-white/20 transition-all border border-white/30"
+               <FaMicrophoneAlt className="text-5xl text-emerald-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
+               <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">Evaluate your skills</h3>
+               <p className="text-emerald-100/90 mb-8 font-medium text-lg">Take a Free Speaking Demo Test</p>
+               <span className="inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full text-slate-900 font-extrabold group-hover:from-emerald-400 group-hover:to-teal-300 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                 Start Demo <FaArrowRight className="text-xl" />
+               </span>
+            </div>
+
+            {/* Reading & Writing Demo Card */}
+            <div 
+              onClick={() => navigate('/test', { state: { testId: 1 } })}
+              className="cursor-pointer group flex flex-col items-center p-8 bg-teal-950/40 backdrop-blur-md rounded-[2rem] border border-teal-500/30 hover:bg-teal-900/60 hover:border-teal-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(20,184,166,0.3)]"
             >
-              View Pricing
-            </button>
+               <FaGlobe className="text-5xl text-teal-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]" />
+               <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">Evaluate your skills</h3>
+               <p className="text-teal-100/90 mb-8 font-medium text-lg">Reading & Writing Demo Test</p>
+               <span className="inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full text-slate-900 font-extrabold group-hover:from-teal-400 group-hover:to-emerald-300 transition-all shadow-[0_0_20px_rgba(20,184,166,0.3)]">
+                 Start Demo <FaArrowRight className="text-xl" />
+               </span>
+            </div>
           </div>
           
           <div className="mt-12 flex items-center justify-center gap-4 text-emerald-200/80 text-sm font-medium">
@@ -126,7 +139,7 @@ export default function VersantHomepage() {
         
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { title: "20 Full Mock Exams", desc: "Never run out of practice material. We generated 1260+ unique questions mirroring the exact Pearson Versant difficulty.", icon: <FaGlobe className="w-8 h-8"/>, color: "text-blue-500", bg: "bg-blue-50" },
+            { title: "20 Full Mock Exams", desc: "Never run out of practice material. We generated 1260+ unique questions mirroring the exact real exam difficulty.", icon: <FaGlobe className="w-8 h-8"/>, color: "text-blue-500", bg: "bg-blue-50" },
             { title: "Offline Voice AI", desc: "Our proprietary algorithm analyzes your speech offline, ensuring 100% privacy and zero latency during your test.", icon: <FaMicrophoneAlt className="w-8 h-8"/>, color: "text-emerald-500", bg: "bg-emerald-50" },
             { title: "Radar Analytics", desc: "Identify whether your grammar, fluency, pronunciation, or vocabulary is dragging your score down.", icon: <FaChartPie className="w-8 h-8"/>, color: "text-purple-500", bg: "bg-purple-50" },
           ].map((feat, idx) => (

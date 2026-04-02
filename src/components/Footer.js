@@ -9,6 +9,7 @@ export default function Footer() {
         <div className="mt-2">
           <Link to="/terms" className="hover:text-green-200 mx-2">Terms and Conditions</Link>
           <Link to="/privacy" className="hover:text-green-200 mx-2">Privacy Policy</Link>
+          <Link to="/refund" className="hover:text-green-200 mx-2">Cancellation & Refunds</Link>
         </div>
       </div>
     </footer>

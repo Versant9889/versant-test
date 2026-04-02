@@ -15,7 +15,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import FullBlogPost from './pages/FullBlogPost';
 import BlogIndex from './pages/BlogIndex';
 import PracticeHub from './pages/PracticeHub';
-
+import RefundPolicy from './pages/RefundPolicy';
 import PracticeTestPage from './pages/PracticeTestPage';
 import SpeakingHub from './pages/SpeakingHub';
 import ReadingHub from './pages/ReadingHub';
@@ -89,6 +89,7 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/refund" element={<RefundPolicy />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/practice" element={<PracticeHub />} />
         <Route path="/practice/:section" element={<PracticeTestPage />} />
