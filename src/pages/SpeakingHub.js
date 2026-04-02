@@ -10,12 +10,12 @@ import { db } from '../firebaseConfig';
 import '../App.css';
 
 const speakingSections = [
-    { name: 'Read Aloud', path: '/speaking/test/readAloud', icon: <FaBookOpen />, description: 'Read the displayed sentence aloud clearly.' },
-    { name: 'Repeats', path: '/speaking/test/repeats', icon: <FaMicrophone />, description: 'Listen to a sentence and repeat it exactly.' },
-    { name: 'Short Answer', path: '/speaking/test/shortAnswer', icon: <FaQuestion />, description: 'Listen to a question and answer with a single word or phrase.' },
-    { name: 'Sentence Builds', path: '/speaking/test/sentenceBuilds', icon: <FaPuzzlePiece />, description: 'Listen to jumbled phrases and rearrange them into a sentence.' },
-    { name: 'Story Retelling', path: '/speaking/test/storyRetelling', icon: <FaHeadphones />, description: 'Listen to a short story and retell it in your own words.' },
-    { name: 'Open Questions', path: '/speaking/test/openQuestions', icon: <FaCommentDots />, description: 'Speak for 40 seconds on a general topic.' },
+    { name: 'Read Aloud', path: '/pearson-versant-mock-test/module/readAloud', icon: <FaBookOpen />, description: 'Read the displayed sentence aloud clearly.' },
+    { name: 'Repeats', path: '/pearson-versant-mock-test/module/repeats', icon: <FaMicrophone />, description: 'Listen to a sentence and repeat it exactly.' },
+    { name: 'Short Answer', path: '/pearson-versant-mock-test/module/shortAnswer', icon: <FaQuestion />, description: 'Listen to a question and answer with a single word or phrase.' },
+    { name: 'Sentence Builds', path: '/pearson-versant-mock-test/module/sentenceBuilds', icon: <FaPuzzlePiece />, description: 'Listen to jumbled phrases and rearrange them into a sentence.' },
+    { name: 'Story Retelling', path: '/pearson-versant-mock-test/module/storyRetelling', icon: <FaHeadphones />, description: 'Listen to a short story and retell it in your own words.' },
+    { name: 'Open Questions', path: '/pearson-versant-mock-test/module/openQuestions', icon: <FaCommentDots />, description: 'Speak for 40 seconds on a general topic.' },
 ];
 
 const SpeakingHub = () => {
@@ -56,7 +56,7 @@ const SpeakingHub = () => {
             navigate('/pricing');
             return;
         }
-        navigate('/speaking/test/full', { state: { testId } });
+        navigate('/pearson-versant-mock-test/module/full', { state: { testId } });
     };
 
     return (

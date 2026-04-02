@@ -73,6 +73,17 @@ export default function PricingPage() {
                         const verifyData = await verifyRes.json();
 
                         if (verifyRes.ok) {
+                            // --- Google Ads Conversion Tracking ---
+                            if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                                window.gtag('event', 'conversion', {
+                                    'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL', // TODO: User must replace AW-CONVERSION_ID/CONVERSION_LABEL
+                                    'value': 1499.0,
+                                    'currency': 'INR',
+                                    'transaction_id': response.razorpay_payment_id
+                                });
+                                console.log("Google Ads Conversion Fired (Razorpay)");
+                            }
+
                             alert("Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                             navigate('/dashboard');
                         } else {
@@ -240,6 +251,17 @@ export default function PricingPage() {
                                             const verifyData = await verifyRes.json();
 
                                             if (verifyRes.ok) {
+                                                // --- Google Ads Conversion Tracking ---
+                                                if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                                                    window.gtag('event', 'conversion', {
+                                                        'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL', // TODO: User must replace AW-CONVERSION_ID/CONVERSION_LABEL
+                                                        'value': 14.99,
+                                                        'currency': 'USD',
+                                                        'transaction_id': data.orderID
+                                                    });
+                                                    console.log("Google Ads Conversion Fired (PayPal)");
+                                                }
+
                                                 alert("PayPal Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                                                 navigate('/dashboard');
                                             } else {
