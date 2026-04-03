@@ -82,7 +82,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/test" element={<TestPage />} />
+        <Route path="/versant-reading-and-writing-mock-test/start" element={<TestPage />} />
         <Route path="/result" element={<ResultPage />} />
         <Route path="/pricing" element={<PricingPage />} />
         <Route path="/about" element={<AboutUs />} />
@@ -91,14 +91,14 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/refund" element={<RefundPolicy />} />
         <Route path="/blog" element={<BlogIndex />} />
-        <Route path="/practice" element={<PracticeHub />} />
-        <Route path="/practice/:section" element={<PracticeTestPage />} />
+        <Route path="/versant-practice-exercises" element={<PracticeHub />} />
+        <Route path="/versant-practice-exercises/:section" element={<PracticeTestPage />} />
         <Route path="/blog/:slug" element={<FullBlogPost />} />
 
         {/* Speaking & Listening Module */}
-        <Route path="/reading" element={<ReadingHub />} />
-        <Route path="/versant-mock-test" element={<SpeakingHub />} />
-        <Route path="/versant-mock-test/module/:mode" element={<SpeakingTest />} />
+        <Route path="/versant-reading-and-writing-mock-test" element={<ReadingHub />} />
+        <Route path="/versant-speaking-and-listening-practice-test" element={<SpeakingHub />} />
+        <Route path="/versant-speaking-and-listening-practice-test/start/:mode" element={<SpeakingTest />} />
 
         {/* Admin Routing */}
         <Route path="/admin" element={<AdminRedirect />} />

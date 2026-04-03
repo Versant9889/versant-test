@@ -41,7 +41,7 @@ export default function VersantHomepage() {
           <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mt-4 relative z-20">
             {/* Speaking & Listening Demo Card */}
             <div 
-              onClick={() => navigate('/versant-mock-test/module/full', { state: { testId: 1 } })}
+              onClick={() => navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId: 1 } })}
               className="cursor-pointer group flex flex-col items-center p-8 bg-emerald-950/40 backdrop-blur-md rounded-[2rem] border border-emerald-500/30 hover:bg-emerald-900/60 hover:border-emerald-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(16,185,129,0.4)]"
             >
                <FaMicrophoneAlt className="text-5xl text-emerald-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
@@ -54,7 +54,7 @@ export default function VersantHomepage() {
 
             {/* Reading & Writing Demo Card */}
             <div 
-              onClick={() => navigate('/test', { state: { testId: 1 } })}
+              onClick={() => navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: 1 } })}
               className="cursor-pointer group flex flex-col items-center p-8 bg-teal-950/40 backdrop-blur-md rounded-[2rem] border border-teal-500/30 hover:bg-teal-900/60 hover:border-teal-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(20,184,166,0.3)]"
             >
                <FaGlobe className="text-5xl text-teal-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]" />

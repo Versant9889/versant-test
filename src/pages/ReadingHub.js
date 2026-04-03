@@ -46,7 +46,7 @@ const ReadingHub = () => {
         //     alert("Upgrade to Premium to access all 20 tests!");
         //     return;
         // }
-        navigate('/test', { state: { testId } });
+        navigate('/versant-reading-and-writing-mock-test/start', { state: { testId } });
     };
 
     return (

@@ -583,7 +583,7 @@ const SpeakingTest = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate('/versant-mock-test')}
+                        onClick={() => navigate('/versant-speaking-and-listening-practice-test')}
                         className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition-all"
                     >
                         Back to Speaking Hub

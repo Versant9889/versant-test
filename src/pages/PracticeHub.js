@@ -7,12 +7,12 @@ import { FaPen, FaPuzzlePiece, FaKeyboard, FaRandom, FaEnvelope, FaParagraph } f
 import '../App.css';
 
 const practiceSections = [
-  { name: 'Typing Test', path: '/practice/typing', icon: <FaKeyboard />, description: 'Test your typing speed and accuracy.' },
-  { name: 'Sentence Completion', path: '/practice/sentenceCompletion', icon: <FaPen />, description: 'Complete sentences with the correct words.' },
-  { name: 'Fill in the Blanks', path: '/practice/fillBlanks', icon: <FaPuzzlePiece />, description: 'Fill in the blanks to complete the sentences.' },
-  { name: 'Jumbled Words', path: '/practice/jumbledWords', icon: <FaRandom />, description: 'Unscramble the words to form a correct sentence.' },
-  { name: 'Email Writing', path: '/practice/emailWriting', icon: <FaEnvelope />, description: 'Practice writing professional emails.' },
-  { name: 'Passage Reconstruction', path: '/practice/passageReconstruction', icon: <FaParagraph />, description: 'Read a passage and then reconstruct it.' },
+  { name: 'Typing Test', path: '/versant-practice-exercises/typing', icon: <FaKeyboard />, description: 'Test your typing speed and accuracy.' },
+  { name: 'Sentence Completion', path: '/versant-practice-exercises/sentenceCompletion', icon: <FaPen />, description: 'Complete sentences with the correct words.' },
+  { name: 'Fill in the Blanks', path: '/versant-practice-exercises/fillBlanks', icon: <FaPuzzlePiece />, description: 'Fill in the blanks to complete the sentences.' },
+  { name: 'Jumbled Words', path: '/versant-practice-exercises/jumbledWords', icon: <FaRandom />, description: 'Unscramble the words to form a correct sentence.' },
+  { name: 'Email Writing', path: '/versant-practice-exercises/emailWriting', icon: <FaEnvelope />, description: 'Practice writing professional emails.' },
+  { name: 'Passage Reconstruction', path: '/versant-practice-exercises/passageReconstruction', icon: <FaParagraph />, description: 'Read a passage and then reconstruct it.' },
 ];
 
 const PracticeHub = () => {

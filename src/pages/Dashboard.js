@@ -219,7 +219,7 @@ const Dashboard = () => {
   });
 
   const handleStartTest = (test) => {
-    navigate('/test', { state: { testId: test.id } });
+    navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: test.id } });
   };
 
   const handleLogout = async () => {
@@ -278,7 +278,7 @@ const Dashboard = () => {
                 <div
                   key={test.id}
                   onClick={() => {
-                    if (!isLocked) navigate('/test', { state: { testId: test.id } });
+                    if (!isLocked) navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: test.id } });
                     else navigate('/pricing');
                   }}
                   className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked
@@ -335,7 +335,7 @@ const Dashboard = () => {
                 <div
                   key={test.id}
                   onClick={() => {
-                    if (!isLocked) navigate('/versant-mock-test/module/full', { state: { testId: test.id } });
+                    if (!isLocked) navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId: test.id } });
                     else navigate('/pricing');
                   }}
                   className={`relative group bg-white rounded-xl p-4 border-2 transition-all duration-200 cursor-pointer ${isLocked

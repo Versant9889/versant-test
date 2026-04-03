@@ -56,7 +56,7 @@ const SpeakingHub = () => {
             navigate('/pricing');
             return;
         }
-        navigate('/versant-mock-test/module/full', { state: { testId } });
+        navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId } });
     };
 
     return (
