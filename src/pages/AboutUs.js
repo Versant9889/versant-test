@@ -47,6 +47,20 @@ export default function AboutUs() {
                 <li><strong>Build Confidence:</strong> Familiarize yourself with the test format and reduce anxiety, so you can perform at your best when it truly counts.</li>
                 <li><strong>Accessible Anywhere:</strong> Practice anytime, anywhere, on any device. All you need is an internet connection to start your journey towards success.</li>
               </ul>
+
+              <h2 className="text-3xl font-extrabold text-gray-900 mt-16 border-t pt-8">Meet the Developer</h2>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row items-center sm:items-start gap-6 mt-6 hover:shadow-md transition-shadow">
+                <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-4xl shrink-0 border-4 border-white shadow-lg">
+                  👨‍💻
+                </div>
+                <div className="text-center sm:text-left">
+                  <h3 className="text-2xl font-black text-gray-900 mb-1">Shubham Maurya</h3>
+                  <p className="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 font-bold text-xs tracking-widest uppercase rounded-full mb-3 border border-emerald-100">Lead Developer & Founder</p>
+                  <p className="text-gray-600 leading-relaxed">
+                    Passionate about building scalable, AI-driven architectures. VersantPro was engineered to solve the massive gap between expensive offline corporate coaching and accessible, deeply-analytical online assessments.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
