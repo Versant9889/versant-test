@@ -14,7 +14,6 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import FullBlogPost from './pages/FullBlogPost';
 import BlogIndex from './pages/BlogIndex';
-import PracticeHub from './pages/PracticeHub';
 import RefundPolicy from './pages/RefundPolicy';
 import PracticeTestPage from './pages/PracticeTestPage';
 import SpeakingHub from './pages/SpeakingHub';
@@ -91,8 +90,6 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/refund" element={<RefundPolicy />} />
         <Route path="/blog" element={<BlogIndex />} />
-        <Route path="/versant-practice-exercises" element={<PracticeHub />} />
-        <Route path="/versant-practice-exercises/:section" element={<PracticeTestPage />} />
         <Route path="/blog/:slug" element={<FullBlogPost />} />
 
         {/* Speaking & Listening Module */}

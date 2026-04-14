@@ -8,9 +8,6 @@ export default function Header({ page }) {
   const DashboardLinks = () => (
     <>
       <Link to="/dashboard" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Dashboard</Link>
-      <Link to="/practice" onClick={() => setIsOpen(false)} className={`font-medium ${page === 'practiceHub' || page === 'speakingHub' ? 'text-emerald-500 font-semibold' : 'md:text-white text-green-800 hover:text-green-200'}`}>
-        Practice
-      </Link>
       <Link to="/about" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">About Us</Link>
       <Link to="/contact" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Contact Us</Link>
       <Link to="/pricing" onClick={() => setIsOpen(false)} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-4 py-2 rounded-full uppercase tracking-wider text-xs transition-transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/30 md:ml-2 flex items-center gap-1 justify-center w-max mt-2 md:mt-0">

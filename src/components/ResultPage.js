@@ -6,7 +6,7 @@ import { auth, db, googleProvider } from '../firebaseConfig';
 import Footer from './Footer';
 import Header from './Header';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
-import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar } from 'react-icons/fa';
+import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar, FaGlobe } from 'react-icons/fa';
 
 const ResultPage = () => {
   const { state } = useLocation();
@@ -568,32 +568,39 @@ const ResultPage = () => {
               {/* Top Analytics Row */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
                 {/* Score Card */}
-                <div className="lg:col-span-4 bg-white rounded-3xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col items-center justify-center group hover:-translate-y-1 transition-transform duration-300">
+                <div className={`lg:col-span-4 rounded-3xl p-8 border shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col items-center justify-center group hover:-translate-y-1 transition-transform duration-300 ${score < 65 ? 'bg-red-50/50 border-red-100' : 'bg-emerald-50/50 border-emerald-100'}`}>
                   <div className="absolute -top-10 -right-10 p-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                    <FaBullseye className="text-[12rem] text-indigo-900" />
+                    <FaBullseye className={score < 65 ? "text-[12rem] text-red-900" : "text-[12rem] text-emerald-900"} />
                   </div>
-                  <h3 className="text-gray-400 font-bold tracking-[0.2em] uppercase text-xs mb-6 relative z-10">Versant Score</h3>
-                  <div className="relative z-10 flex items-baseline gap-2 mb-2">
-                    <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 drop-shadow-sm">
+                  <h3 className={`${score < 65 ? 'text-red-400' : 'text-emerald-500'} font-bold tracking-[0.2em] uppercase text-xs mb-2 relative z-10`}>Your Versant Score</h3>
+                  <div className="relative z-10 flex items-baseline gap-2 mb-4">
+                    <span className={`text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br drop-shadow-sm ${score < 65 ? 'from-red-600 to-orange-600' : 'from-emerald-600 to-teal-600'}`}>
                       {score}
                     </span>
-                    <span className="text-2xl text-gray-300 font-bold">/ 80</span>
+                    <span className="text-2xl text-gray-400 font-bold">/ 80</span>
                   </div>
-                  <div className="flex flex-col gap-3 mt-4 relative z-10 w-full">
-                    <div className="inline-flex justify-center items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm">
-                      <FaStar className="text-emerald-500" /> Global Scale of English
+                  
+                  {/* The MNC Hiring Cutoff Visual */}
+                  <div className="w-full relative z-10 mt-2 mb-2 flex flex-col items-center text-center">
+                    <div className="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden mb-2 relative">
+                        <div className="absolute h-full bg-red-400 w-[80%] left-0"></div>
+                        <div className="absolute h-full bg-emerald-400 w-[20%] right-0"></div>
+                        <div className="absolute h-4 w-1 bg-gray-900 top-1/2 -translate-y-1/2 left-[81%] shadow-sm"></div>
+                        <div className="absolute h-full bg-black rounded-full transition-all duration-1000 ease-out" style={{ width: `${(score / 80) * 100}%`, backgroundColor: score < 65 ? '#dc2626' : '#059669' }}></div>
                     </div>
-                    {/* Growth Loop removed from here - moved to global actions below */}
-                    {/* Premium Upsell Loop */}
-                    <div className="w-full mt-5 bg-gradient-to-r from-amber-100 to-yellow-50 rounded-2xl p-4 border border-amber-200 shadow-sm relative overflow-hidden group">
-                       <h4 className="font-black text-amber-900 mb-1 flex items-center justify-center gap-2 relative z-10"><FaStar className="text-amber-500 animate-pulse"/> Upgrade to Pro</h4>
-                       <p className="text-amber-800/80 text-[11px] font-bold uppercase tracking-wider text-center mb-3 relative z-10">Unlock 19 more full-length mock tests</p>
-                       <Link to="/pricing" className="block w-full py-2 bg-amber-500 hover:bg-amber-400 text-white font-bold rounded-xl text-sm transition-all text-center shadow-md relative z-10">
-                         View Pass
-                       </Link>
-                       <div className="absolute top-0 right-0 -mr-6 -mt-6 opacity-30 group-hover:scale-110 transition-transform duration-500 pointer-events-none">
-                         <FaTrophy className="text-6xl text-amber-500" />
-                       </div>
+                    <span className="text-xs font-bold text-gray-500 tracking-wider">TARGET MNC CUTOFF: <span className="text-gray-900">65+</span></span>
+                  </div>
+
+                  {score < 65 && (
+                    <div className="w-full mt-5 bg-gradient-to-r from-red-600 to-rose-600 border-2 border-red-400 rounded-2xl p-4 text-center relative z-10 shadow-[0_0_30px_rgba(220,38,38,0.4)] transform hover:scale-[1.02] transition-transform animate-pulse">
+                        <span className="text-yellow-300 font-black text-lg block tracking-widest uppercase drop-shadow-md">⚠️ DANGER ZONE</span>
+                        <span className="text-white text-[12px] font-bold leading-relaxed block mt-2 tracking-wide uppercase">You are currently <u className="decoration-yellow-300 underline-offset-4 decoration-2">NOT READY</u> to pass top MNC interviews.</span>
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-3 mt-4 relative z-10 w-full">
+                    <div className="inline-flex justify-center items-center gap-2 bg-emerald-50 text-emerald-600 border border-emerald-100 px-4 py-2 rounded-full font-bold text-sm shadow-sm opacity-50">
+                      <FaGlobe className="text-emerald-500" /> Global Scale of English
                     </div>
                   </div>
                 </div>
@@ -801,33 +808,46 @@ const ResultPage = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-12 bg-gray-50 p-6 rounded-3xl border border-gray-100 flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap">
+              {/* Action Buttons & Conversion CTA */}
+              <div className="mt-16 bg-gradient-to-b from-gray-900 to-black p-8 sm:p-12 rounded-[2.5rem] border border-gray-800 flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-10 -mt-10 opacity-10">
+                    <FaTrophy className="text-[15rem] text-white" />
+                </div>
+                
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-4 z-10">Don't let these mistakes cost you your dream job.</h2>
+                <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 z-10 font-medium">
+                  Candidates who practice 5+ Mock Tests identify their deep flaws and improve their score by an average of <span className="text-emerald-400 font-black">14 points</span>.
+                </p>
+
                 <Link
-                  to="/dashboard"
-                  className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-black transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 w-full sm:w-auto text-lg border border-gray-700"
+                  to="/pricing"
+                  className="z-10 w-full sm:w-auto inline-flex items-center justify-center gap-3 flex-wrap bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-gray-900 font-extrabold py-5 px-12 rounded-2xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:-translate-y-1 text-xl sm:text-2xl"
                 >
-                  Return to Dashboard
+                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1250 Only</span>
                 </Link>
 
-                {/* Global Viral Sharing Options */}
-                <button 
-                  onClick={handleNativeShare}
-                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg w-full sm:w-auto text-lg border border-blue-500"
-                >
-                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                   Share Score 
-                </button>
-
-                <a 
-                  href={`https://wa.me/?text=${encodeURIComponent(`I just scored ${score}/80 on the Versant Pro AI test! Take a free demo and check your fluency level: https://versantpro.com`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-md hover:-translate-y-1 hover:shadow-lg w-full sm:w-auto text-lg border border-green-500 drop-shadow-sm"
-                >
-                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 21C10.593 21 9.243 20.655 8.04 20.04L3 21.691L4.698 16.786C4.015 15.539 3.633 14.103 3.633 12.593C3.633 7.848 7.502 3.979 12.247 3.979C17.002 3.979 20.871 7.848 20.871 12.593C20.871 17.338 17.002 21.207 12.031 21H12.031ZM12.031 5.485C8.324 5.485 5.309 8.5 5.309 12.207C5.309 13.682 5.795 15.014 6.589 16.096L6.963 16.634L5.94 19.648L9.08 18.665L9.61 18.966C10.584 19.516 11.666 19.789 12.031 19.79C15.738 19.79 18.753 16.775 18.752 13.068C18.752 9.361 15.737 6.346 12.031 6.346H12.031V5.485Z"/><path d="M16.488 14.492C16.326 14.425 15.426 13.987 15.26 13.923C15.093 13.858 14.966 13.824 14.839 14.02C14.713 14.216 14.368 14.629 14.27 14.743C14.17 14.856 14.07 14.87 13.905 14.787C13.739 14.704 13.013 14.468 12.161 13.714C11.498 13.128 11.042 12.383 10.916 12.166C10.79 11.95 10.902 11.834 10.985 11.752C11.059 11.678 11.144 11.579 11.226 11.48C11.31 11.381 11.336 11.312 11.402 11.183C11.468 11.054 11.436 10.941 11.386 10.843C11.336 10.744 10.887 9.643 10.704 9.186C10.528 8.742 10.347 8.799 10.222 8.788C10.108 8.777 9.982 8.775 9.856 8.775C9.73 8.775 9.516 8.824 9.333 9.02C9.149 9.214 8.65 9.673 8.65 10.605C8.65 11.537 9.35 12.434 9.458 12.576C9.566 12.723 10.824 14.787 12.871 15.656C13.358 15.862 13.739 15.986 14.038 16.082C14.526 16.237 14.972 16.214 15.328 16.155C15.727 16.087 16.536 15.654 16.702 15.176C16.868 14.698 16.868 14.288 16.802 14.19C16.736 14.092 16.609 14.056 16.488 13.99V14.492Z"/></svg>
-                   WhatsApp
-                </a>
+                <div className="flex flex-wrap items-center justify-center gap-3 lg:gap-4 mt-8 z-10 w-full">
+                    <Link
+                      to="/dashboard"
+                      className="inline-flex items-center justify-center bg-gray-800 text-gray-300 font-bold py-3 px-6 sm:px-8 rounded-xl hover:bg-gray-700 transition-all hover:-translate-y-1 text-sm border border-gray-700 w-full sm:w-auto"
+                    >
+                      Return to Dashboard
+                    </Link>
+                    <button 
+                      onClick={handleNativeShare}
+                      className="inline-flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-blue-400 font-bold py-3 px-6 sm:px-8 rounded-xl transition-all hover:-translate-y-1 text-sm border border-gray-700 w-full sm:w-auto"
+                    >
+                       Share Target Score 
+                    </button>
+                    <a 
+                      href={`https://wa.me/?text=${encodeURIComponent(`I just scored ${score}/80 on the Versant AI test! Take a free demo and check your fluency level: https://versantpro.com`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-emerald-400 font-bold py-3 px-6 sm:px-8 rounded-xl transition-all hover:-translate-y-1 text-sm border border-gray-700 w-full sm:w-auto"
+                    >
+                       WhatsApp
+                    </a>
+                </div>
               </div>
             </div>
           </div>

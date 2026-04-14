@@ -132,10 +132,10 @@ export default function PricingPage() {
                         Special Limited Offer
                     </div>
                     <h1 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
-                        Unlock Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-100">Ultimate Score</span>
+                        Fix Your Weaknesses. <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-100">Pass Your Interview.</span>
                     </h1>
-                    <p className="text-lg text-emerald-100/80">
-                        Stop guessing your score. Get instant AI feedback, deep pronunciation analysis, and 19 premium mock exams designed to get you hired.
+                    <p className="text-lg text-emerald-100/80 font-medium">
+                        Your AI has identified critical errors. Don't let them cost you your dream job. Unlock 19 premium tests with deep pronunciation analysis to guarantee you pass the MNC cutoff.
                     </p>
                 </div>
 
