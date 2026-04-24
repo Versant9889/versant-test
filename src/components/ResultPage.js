@@ -7,6 +7,7 @@ import Footer from './Footer';
 import Header from './Header';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar, FaGlobe } from 'react-icons/fa';
+import ReactGA from 'react-ga4';
 
 const ResultPage = () => {
   const { state } = useLocation();
@@ -30,6 +31,12 @@ const ResultPage = () => {
   const dataSavedRef = React.useRef(false);
 
   useEffect(() => {
+    // Track score viewed for Google Ads and GA4
+    if (window.gtag) {
+      window.gtag('event', 'score_viewed');
+    }
+    ReactGA.event({ category: "Funnel", action: "score_viewed" });
+
     // Strictly verify Firebase Auth state. 
     // This allows logged in users to unblur, and forces guests to hit the wall.
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -823,7 +830,7 @@ const ResultPage = () => {
                   to="/pricing"
                   className="z-10 w-full sm:w-auto inline-flex items-center justify-center gap-3 flex-wrap bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-gray-900 font-extrabold py-5 px-12 rounded-2xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:-translate-y-1 text-xl sm:text-2xl"
                 >
-                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1250 Only</span>
+                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1250 / $14.99</span>
                 </Link>
 
                 <div className="flex flex-wrap items-center justify-center gap-3 lg:gap-4 mt-8 z-10 w-full">

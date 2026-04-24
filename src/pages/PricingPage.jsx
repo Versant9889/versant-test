@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import { auth, db } from '../firebaseConfig';
 import { doc, updateDoc } from 'firebase/firestore';
+import ReactGA from 'react-ga4';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function PricingPage() {
     const navigate = useNavigate();
     const [isYearly, setIsYearly] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        if (window.gtag) {
+            window.gtag('event', 'pricing_page_visit');
+        }
+        ReactGA.event({ category: "Funnel", action: "pricing_click" });
+    }, []);
 
     // Initialize Razorpay dynamically
     const loadRazorpay = () => {
@@ -75,14 +83,14 @@ export default function PricingPage() {
                         if (verifyRes.ok) {
                             // --- Google Ads Conversion Tracking ---
                             if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                                window.gtag('event', 'conversion', {
-                                    'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL', // TODO: User must replace AW-CONVERSION_ID/CONVERSION_LABEL
-                                    'value': 1499.0,
+                                window.gtag('event', 'purchase', {
+                                    'value': 1250,
                                     'currency': 'INR',
                                     'transaction_id': response.razorpay_payment_id
                                 });
                                 console.log("Google Ads Conversion Fired (Razorpay)");
                             }
+                            ReactGA.event({ category: "Conversion", action: "purchase", value: 1250, label: "INR" });
 
                             alert("Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                             navigate('/dashboard');
@@ -253,14 +261,14 @@ export default function PricingPage() {
                                             if (verifyRes.ok) {
                                                 // --- Google Ads Conversion Tracking ---
                                                 if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                                                    window.gtag('event', 'conversion', {
-                                                        'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL', // TODO: User must replace AW-CONVERSION_ID/CONVERSION_LABEL
+                                                    window.gtag('event', 'purchase', {
                                                         'value': 14.99,
                                                         'currency': 'USD',
                                                         'transaction_id': data.orderID
                                                     });
                                                     console.log("Google Ads Conversion Fired (PayPal)");
                                                 }
+                                                ReactGA.event({ category: "Conversion", action: "purchase", value: 15, label: "USD" });
 
                                                 alert("PayPal Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                                                 navigate('/dashboard');
