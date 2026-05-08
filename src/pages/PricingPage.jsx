@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import { auth, db } from '../firebaseConfig';
 import { doc, updateDoc } from 'firebase/firestore';
-import ReactGA from 'react-ga4';
+import { trackFunnelEvent } from '../utils/AnalyticsService';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function PricingPage() {
@@ -12,11 +12,37 @@ export default function PricingPage() {
     const [isYearly, setIsYearly] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    useEffect(() => {
+        const targetDate = new Date('May 25, 2026 23:59:59').getTime();
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
+            }
+
+            setTimeLeft({
+                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((distance % (1000 * 60)) / 1000)
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     useEffect(() => {
         if (window.gtag) {
             window.gtag('event', 'pricing_page_visit');
         }
-        ReactGA.event({ category: "Funnel", action: "pricing_click" });
+        trackFunnelEvent('pricing_page_visit');
     }, []);
 
     // Initialize Razorpay dynamically
@@ -90,7 +116,7 @@ export default function PricingPage() {
                                 });
                                 console.log("Google Ads Conversion Fired (Razorpay)");
                             }
-                            ReactGA.event({ category: "Conversion", action: "purchase", value: 1250, label: "INR" });
+                            trackFunnelEvent('purchase', { value: 1250, currency: 'INR' });
 
                             alert("Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                             navigate('/dashboard');
@@ -190,8 +216,37 @@ export default function PricingPage() {
                             <span className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-200 to-white">$14.99</span>
                             <span className="text-emerald-100/60 text-lg uppercase tracking-wider">USD</span>
                         </div>
-                        <div className="bg-rose-500/20 text-rose-300 text-xs font-bold px-3 py-1 rounded-full inline-block mb-6 border border-rose-500/30">
-                            LIFETIME ACCESS (Usually $29.99)
+                        <div className="bg-rose-500/10 text-rose-300 text-xs font-bold px-3 py-1 rounded-full inline-block mb-4 border border-rose-500/20">
+                            LIFETIME ACCESS (Usually $29.99/mo)
+                        </div>
+
+                        {/* FOMO COUNTDOWN TIMER */}
+                        <div className="w-full bg-gradient-to-r from-red-900/40 to-rose-900/40 border border-red-500/30 rounded-xl p-4 mb-8 shadow-inner relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                            <h4 className="text-red-400 font-bold text-sm mb-3 flex items-center justify-between">
+                                <span>🔥 FLASH SALE ENDING...</span>
+                            </h4>
+                            <div className="flex items-center gap-2 lg:gap-4 text-center">
+                                <div className="bg-black/40 rounded-lg p-2 min-w-[50px] lg:min-w-[60px] border border-red-500/20">
+                                    <span className="block text-2xl lg:text-3xl font-black text-rose-100">{timeLeft.days}</span>
+                                    <span className="block text-[10px] text-rose-400 uppercase tracking-widest mt-1">Days</span>
+                                </div>
+                                <span className="text-xl text-rose-500/50 font-black animate-pulse">:</span>
+                                <div className="bg-black/40 rounded-lg p-2 min-w-[50px] lg:min-w-[60px] border border-red-500/20">
+                                    <span className="block text-2xl lg:text-3xl font-black text-rose-100">{String(timeLeft.hours).padStart(2, '0')}</span>
+                                    <span className="block text-[10px] text-rose-400 uppercase tracking-widest mt-1">Hrs</span>
+                                </div>
+                                <span className="text-xl text-rose-500/50 font-black animate-pulse">:</span>
+                                <div className="bg-black/40 rounded-lg p-2 min-w-[50px] lg:min-w-[60px] border border-red-500/20">
+                                    <span className="block text-2xl lg:text-3xl font-black text-rose-100">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                                    <span className="block text-[10px] text-rose-400 uppercase tracking-widest mt-1">Mins</span>
+                                </div>
+                                <span className="text-xl text-rose-500/50 font-black animate-pulse">:</span>
+                                <div className="bg-black/40 rounded-lg p-2 min-w-[50px] lg:min-w-[60px] border border-red-500/20">
+                                    <span className="block text-2xl lg:text-3xl font-black text-rose-100">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                                    <span className="block text-[10px] text-rose-400 uppercase tracking-widest mt-1">Secs</span>
+                                </div>
+                            </div>
                         </div>
 
                         <ul className="space-y-4 mb-8 flex-1 w-full">
@@ -268,7 +323,7 @@ export default function PricingPage() {
                                                     });
                                                     console.log("Google Ads Conversion Fired (PayPal)");
                                                 }
-                                                ReactGA.event({ category: "Conversion", action: "purchase", value: 15, label: "USD" });
+                                                trackFunnelEvent('purchase', { value: 14.99, currency: 'USD' });
 
                                                 alert("PayPal Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                                                 navigate('/dashboard');

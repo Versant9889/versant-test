@@ -3,8 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import speakingData from '../data/speakingTest.json';
 import { FaMicrophone, FaStop, FaPlay, FaCheck, FaVolumeUp, FaHeadphones, FaVolumeMute, FaCheckCircle } from 'react-icons/fa';
 import '../App.css';
-import ReactGA from 'react-ga4';
-
+import { trackFunnelEvent } from '../utils/AnalyticsService';
 // --- Helper Functions for Scoring ---
 const calculateSimilarity = (s1, s2) => {
     if (!s1 || !s2) return 0;
@@ -543,7 +542,7 @@ const SpeakingTest = () => {
                     setIsInstruction(true); // Trigger instruction for new section
                 } else {
                     if (window.gtag) window.gtag('event', 'test_completed');
-                    ReactGA.event({ category: "Funnel", action: "test_completed" });
+                    trackFunnelEvent('test_completed');
                     navigate('/result', {
                         state: {
                             mode: 'speaking',
@@ -555,7 +554,7 @@ const SpeakingTest = () => {
                 }
             } else {
                 if (window.gtag) window.gtag('event', 'test_completed');
-                ReactGA.event({ category: "Funnel", action: "test_completed" });
+                trackFunnelEvent('test_completed');
                 navigate('/result', {
                     state: {
                         mode: 'speaking',
@@ -664,7 +663,7 @@ const SpeakingTest = () => {
                             <button
                                 onClick={() => {
                                     if (window.gtag) window.gtag('event', 'test_start');
-                                    ReactGA.event({ category: "Funnel", action: "test_start" });
+                                    trackFunnelEvent('test_start');
                                     setShowPreTestInstruction(false);
                                 }}
                                 className="px-8 py-3.5 rounded-xl font-black text-white bg-indigo-600 hover:bg-indigo-700 shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] hover:shadow-[0_6px_20px_rgba(79,70,229,0.23)] hover:-translate-y-0.5 transition-all w-full sm:w-auto flex items-center justify-center gap-2 text-sm"

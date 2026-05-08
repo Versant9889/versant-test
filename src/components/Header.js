@@ -35,9 +35,13 @@ export default function Header({ page }) {
   );
 
   return (
-    <nav className="bg-green-700 text-white px-4 py-3 shadow-md md:px-6 md:py-4 relative z-50">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
+    <>
+      <div className="bg-gradient-to-r from-red-600 to-rose-500 text-white text-center py-2 px-4 shadow-md sticky top-0 z-[60] flex items-center justify-center gap-2 cursor-pointer font-bold text-sm tracking-wide" onClick={() => window.location.href='/pricing'}>
+        <span className="animate-pulse">🔴</span> FLASH SALE: Get Lifetime Access of Tests. Offer ends May 25th! <span className="underline decoration-white/50 hover:decoration-white ml-2">Claim Offer ➔</span>
+      </div>
+      <nav className="bg-green-700 text-white px-4 py-3 shadow-md md:px-6 md:py-4 relative z-50">
+        <div className="container mx-auto flex justify-between items-center">
+          {/* Logo */}
         <Link to={page === 'practiceHub' ? '/dashboard' : '/'} className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-green-500 rounded-full"></div>
           <span className="text-xl font-bold">Versant Test</span>
@@ -63,5 +67,6 @@ export default function Header({ page }) {
         </div>
       )}
     </nav>
+    </>
   );
 }

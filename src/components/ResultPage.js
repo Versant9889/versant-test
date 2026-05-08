@@ -6,8 +6,8 @@ import { auth, db, googleProvider } from '../firebaseConfig';
 import Footer from './Footer';
 import Header from './Header';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
-import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar, FaGlobe } from 'react-icons/fa';
-import ReactGA from 'react-ga4';
+import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar, FaGlobe, FaExclamationTriangle } from 'react-icons/fa';
+import { trackFunnelEvent } from '../utils/AnalyticsService';
 
 const ResultPage = () => {
   const { state } = useLocation();
@@ -35,7 +35,7 @@ const ResultPage = () => {
     if (window.gtag) {
       window.gtag('event', 'score_viewed');
     }
-    ReactGA.event({ category: "Funnel", action: "score_viewed" });
+    trackFunnelEvent('score_viewed');
 
     // Strictly verify Firebase Auth state. 
     // This allows logged in users to unblur, and forces guests to hit the wall.
@@ -821,9 +821,19 @@ const ResultPage = () => {
                     <FaTrophy className="text-[15rem] text-white" />
                 </div>
                 
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-4 z-10">Don't let these mistakes cost you your dream job.</h2>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 mb-8 text-left max-w-3xl relative">
+                    <div className="absolute top-0 right-0 -mr-2 -mt-2 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+                    <h3 className="text-xl font-bold text-red-400 flex items-center gap-2 mb-3">
+                        <FaExclamationTriangle className="text-2xl" /> Warning: Critical Score
+                    </h3>
+                    <p className="text-gray-300 text-base md:text-lg">
+                        Your current score of <span className="font-bold text-white">{score}</span> falls below the strict 65-point cutoff used by Amazon, Deloitte, and top MNCs. Candidates who fail this stage are <span className="font-bold text-red-400">immediately rejected without human review</span>.
+                    </p>
+                </div>
+                
+                <h2 className="text-2xl md:text-4xl font-black text-white mb-6 z-10">Don't let this cost you your dream job.</h2>
                 <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 z-10 font-medium">
-                  Candidates who practice 5+ Mock Tests identify their deep flaws and improve their score by an average of <span className="text-emerald-400 font-black">14 points</span>.
+                  Unlock 19 premium tests with deep pronunciation analytics to fix your weaknesses and guarantee you pass.
                 </p>
 
                 <Link

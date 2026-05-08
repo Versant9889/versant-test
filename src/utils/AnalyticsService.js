@@ -52,3 +52,25 @@ export const heartbeat = async () => {
         // console.error(e);
     }
 };
+
+// Call this to track custom funnel events internally (fixing blind spots)
+export const trackFunnelEvent = async (eventName, additionalData = {}) => {
+    try {
+        const user = auth.currentUser;
+        
+        const eventData = {
+            eventType: eventName,
+            timestamp: serverTimestamp(),
+            path: window.location.pathname,
+            isRegistered: !!user,
+            userId: user ? user.uid : `anon_${Math.random().toString(36).substr(2, 9)}`,
+            email: user ? user.email : 'Anonymous',
+            ...additionalData
+        };
+
+        // Push to the global event stream used by AdminDashboard
+        await addDoc(collection(db, 'analytics_events'), eventData);
+    } catch (e) {
+        console.error("Error tracking funnel event internally:", e);
+    }
+};
