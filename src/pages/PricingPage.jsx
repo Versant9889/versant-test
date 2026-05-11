@@ -11,7 +11,6 @@ export default function PricingPage() {
     const navigate = useNavigate();
     const [isYearly, setIsYearly] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
-
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
     useEffect(() => {
@@ -352,11 +351,24 @@ export default function PricingPage() {
                     </div>
                 </div>
 
-                {/* Trust Badges / Social Proof */}
-                <div className="mt-24 pt-16 border-t border-white/10">
+                {/* ✅ Enhanced Trust Badges */}
+                <div className="mt-16 pt-12 border-t border-white/10">
+                    <div className="flex flex-wrap justify-center items-center gap-6 mb-10">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-emerald-200">
+                            <span>🔒</span> <span className="font-semibold">256-bit Secured by Razorpay</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-emerald-200">
+                            <span>⭐</span> <span className="font-semibold">4.8/5 Student Rating</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-emerald-200">
+                            <span>♾️</span> <span className="font-semibold">Lifetime Access — No Renewals</span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-emerald-200">
+                            <span>🔁</span> <span className="font-semibold">7-Day Money Back Guarantee</span>
+                        </div>
+                    </div>
                     <p className="text-emerald-200/60 font-bold tracking-widest uppercase text-sm mb-8">Trusted by candidates hired at</p>
                     <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                        {/* Mock Logos - represented by text for now */}
                         <div className="text-2xl font-black font-serif">Amazon</div>
                         <div className="text-2xl font-black tracking-tighter">Deloitte.</div>
                         <div className="text-2xl font-bold tracking-wider">Convergys</div>
@@ -366,7 +378,7 @@ export default function PricingPage() {
                 </div>
 
             </div>
-            
+
             {/* Ambient Background Effects */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/20 blur-[120px] rounded-full mix-blend-screen"></div>

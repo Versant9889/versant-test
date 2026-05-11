@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
@@ -7,6 +7,18 @@ import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlo
 
 export default function VersantHomepage() {
   const navigate = useNavigate();
+  const [liveCount, setLiveCount] = useState(47);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveCount(prev => {
+        const delta = Math.floor(Math.random() * 3) - 1;
+        const next = prev + delta;
+        return Math.min(Math.max(next, 38), 62);
+      });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="h-full w-full min-h-screen overflow-auto bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200">
@@ -66,7 +78,7 @@ export default function VersantHomepage() {
             </div>
           </div>
           
-          <div className="mt-12 flex items-center justify-center gap-4 text-emerald-200/80 text-sm font-medium">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-emerald-200/80 text-sm font-medium">
             <div className="flex -space-x-3">
               <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=1" alt="User" />
               <img className="w-10 h-10 rounded-full border-2 border-emerald-900" src="https://i.pravatar.cc/100?img=2" alt="User" />
@@ -76,6 +88,12 @@ export default function VersantHomepage() {
             <div className="text-left leading-tight">
               <div className="flex text-yellow-400 mb-0.5"><FaStar/><FaStar/><FaStar/><FaStar/><FaStar/></div>
               <span>Trusted by 5,000+ students globally</span>
+            </div>
+            {/* 🔴 Live Counter */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-black/30 backdrop-blur-sm border border-white/10 rounded-full">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+              <span className="text-white font-bold text-sm">{liveCount} students</span>
+              <span className="text-emerald-300/70 text-xs">practicing right now</span>
             </div>
           </div>
         </div>

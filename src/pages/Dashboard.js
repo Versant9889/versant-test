@@ -255,6 +255,49 @@ const Dashboard = () => {
           <p className="text-gray-600 text-lg">Your progress dashboard. Choose a module to start practicing.</p>
         </div>
 
+        {/* 🔥 Premium Upsell Banner — shown only to free users */}
+        {!userTestAccess && (
+          <div className="relative mb-10 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-900 via-green-800 to-teal-900 p-6 shadow-2xl border border-emerald-500/30">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="text-left">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2.5 h-2.5 bg-red-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(248,113,113,0.8)]"></span>
+                  <span className="text-red-300 text-xs font-bold uppercase tracking-widest">⚠ You are on the Free Plan</span>
+                </div>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2 tracking-tight">
+                  Only 1 of 20 tests unlocked.
+                </h2>
+                <p className="text-emerald-200/80 text-sm max-w-xl">
+                  Top MNCs like Amazon & Deloitte require a score of 65+. Most students only reach that score after 4-6 full practice tests. You have access to just 1.
+                </p>
+                <div className="flex flex-wrap items-center gap-4 mt-4">
+                  <div className="flex items-center gap-1.5 text-emerald-300 text-sm font-semibold">
+                    <span>✓</span> 19 More Full Tests
+                  </div>
+                  <div className="flex items-center gap-1.5 text-emerald-300 text-sm font-semibold">
+                    <span>✓</span> Deep AI Score Analysis
+                  </div>
+                  <div className="flex items-center gap-1.5 text-emerald-300 text-sm font-semibold">
+                    <span>✓</span> Lifetime Access
+                  </div>
+                </div>
+              </div>
+              <div className="flex-shrink-0 text-center">
+                <div className="text-emerald-300/60 text-xs line-through mb-1">₹2,999</div>
+                <div className="text-4xl font-black text-white mb-1">₹1,499</div>
+                <div className="text-emerald-300 text-xs mb-4">One-time · No subscription</div>
+                <button
+                  onClick={() => navigate('/pricing')}
+                  className="px-8 py-3.5 bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-900 font-extrabold rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:shadow-[0_0_30px_rgba(52,211,153,0.6)] transition-all active:scale-95 text-sm"
+                >
+                  🚀 Unlock All 20 Tests
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Quick Stats Grid */}
         <QuickStats studentData={dashboardData} />
 
