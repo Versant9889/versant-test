@@ -106,9 +106,12 @@ const ResultPage = () => {
         }, testId || '1');
       }
     } catch (err) {
-      console.error("Google Auth Capture failed", err);
-      // Fallback
-      setIsLocked(false);
+      // User cancelled the popup or an error occurred. Keep wall locked.
+      console.error("Google Auth failed:", err.code, err.message);
+      // Do NOT unlock — user must successfully authenticate.
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        setAuthError('Google Sign-In failed. Please try email instead.');
+      }
     }
   };
 

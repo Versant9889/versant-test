@@ -12,6 +12,8 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [indexErrorUrl, setIndexErrorUrl] = useState(null);
     const [isFlushing, setIsFlushing] = useState(false);
+    const [premiumUserIds, setPremiumUserIds] = useState(new Set());
+    const [premiumUsersList, setPremiumUsersList] = useState([]);
     
     const [stats, setStats] = useState({
         totalUsers: 0,
@@ -42,16 +44,32 @@ const AdminDashboard = () => {
                 return;
             }
 
-            // 1. Users collection (for macro platform stats)
             const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
                 let total = snap.size;
                 let premium = 0;
                 let tests = 0;
+                let premiumSet = new Set();
+                let premiumList = [];
                 snap.docs.forEach(d => {
                     const data = d.data();
-                    if (data.paidTests) premium++;
+                    // Check all possible legacy and current premium flags
+                    if (data.paidTests || data.hasPaid || data.isPremium) {
+                        premium++;
+                        premiumSet.add(d.id);
+                        premiumList.push({ id: d.id, ...data });
+                    }
                     tests += data.testsCompleted || 0;
                 });
+                
+                // Sort premium list by most recent activity
+                premiumList.sort((a, b) => {
+                    const timeA = a.lastActive?.toDate() || 0;
+                    const timeB = b.lastActive?.toDate() || 0;
+                    return timeB - timeA;
+                });
+
+                setPremiumUserIds(premiumSet);
+                setPremiumUsersList(premiumList);
                 setStats(s => ({ ...s, totalUsers: total, premiumUsers: premium, totalTests: tests }));
             });
 
@@ -297,11 +315,71 @@ const AdminDashboard = () => {
                             <p className="text-xs text-slate-400 mt-1">Tracking all registered users and anonymous website guests.</p>
                         </div>
                         <div className="flex-1 overflow-auto">
-                            <UserTable users={activeSessions} loading={loading} />
+                            <UserTable users={activeSessions} premiumUserIds={premiumUserIds} loading={loading} />
                         </div>
                     </div>
-
                 </div>
+
+                {/* Premium Customers Database */}
+                <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-xl mb-8">
+                    <div className="p-6 border-b border-slate-800 bg-slate-800/30 flex justify-between items-center">
+                        <div>
+                            <h3 className="text-lg font-bold text-yellow-500 flex items-center gap-2">
+                                <span>💎</span> Verified Lifetime Premium Customers
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-1">A permanent record of all users who have successfully purchased the Versant Pro Pass.</p>
+                        </div>
+                        <div className="bg-yellow-500/20 text-yellow-500 font-bold px-4 py-1.5 rounded-lg border border-yellow-500/30">
+                            Total Paid: {premiumUsersList.length}
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-auto max-h-96">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-xs uppercase text-slate-500 font-semibold sticky top-0">
+                                <tr>
+                                    <th className="px-6 py-4">Customer</th>
+                                    <th className="px-6 py-4">Purchase Date</th>
+                                    <th className="px-6 py-4">Tests Taken</th>
+                                    <th className="px-6 py-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800/50">
+                                {premiumUsersList.map(user => (
+                                    <tr key={user.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm font-bold text-white">{user.email || <span className="text-slate-500 italic">Legacy Account (No Email)</span>}</div>
+                                            <div className="text-xs font-mono text-slate-500 mt-1">{user.id}</div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm text-slate-300">
+                                                {user.paidAt ? user.paidAt.toDate().toLocaleDateString() : <span className="text-slate-600">Unknown Date</span>}
+                                            </div>
+                                            <div className="text-xs font-mono text-slate-500">
+                                                {user.paymentMethod ? user.paymentMethod.toUpperCase() : 'UNKNOWN GATEWAY'}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-sm font-mono text-slate-300">{user.testsCompleted || 0}</span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                Active Lifetime
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {premiumUsersList.length === 0 && (
+                                    <tr>
+                                        <td colSpan="3" className="px-6 py-12 text-center text-slate-500 font-mono">
+                                            No premium customers yet. Awaiting sales...
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </main>
 
             {/* User Details Modal */}

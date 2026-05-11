@@ -49,7 +49,7 @@ export function AdminStatCard({ title, value, icon, color }) {
 }
 
 // User List Table
-export function UserTable({ users, loading }) {
+export function UserTable({ users, loading, premiumUserIds = new Set() }) {
     if (loading) {
         return <div className="text-center py-10 text-slate-400">Loading tracking grid...</div>;
     }
@@ -89,12 +89,21 @@ export function UserTable({ users, loading }) {
                                 </div>
                             </td>
                             <td className="px-6 py-4">
-                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase ${session.isRegistered
-                                    ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                                    : 'bg-slate-700/30 text-slate-400 border border-slate-600/30'
-                                    }`}>
-                                    {session.isRegistered ? 'Registered User' : 'Web Traffic'}
-                                </span>
+                                {session.isRegistered ? (
+                                    premiumUserIds.has(session.userId) ? (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-yellow-500/20 text-yellow-500 border border-yellow-500/30">
+                                            Premium User
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                            Free User
+                                        </span>
+                                    )
+                                ) : (
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-slate-700/30 text-slate-400 border border-slate-600/30">
+                                        Web Traffic
+                                    </span>
+                                )}
                             </td>
                             <td className="px-6 py-4 text-sm font-mono text-slate-300">
                                 {session.totalClicks} <span className="text-slate-500 text-xs font-sans">clicks</span>
