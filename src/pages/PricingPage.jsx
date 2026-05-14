@@ -62,6 +62,11 @@ export default function PricingPage() {
             return;
         }
 
+        // ✅ Capture uid NOW before any async popup that might lose auth context
+        const currentUid = auth.currentUser.uid;
+        const currentEmail = auth.currentUser.email || '';
+        const currentName = auth.currentUser.displayName || 'User';
+
         setIsProcessing(true);
         const res = await loadRazorpay();
 
@@ -80,13 +85,13 @@ export default function PricingPage() {
             const orderData = await orderResponse.json();
 
             const options = {
-                key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Loaded securely from .env
-                amount: orderData.amount, // Real amount from server
-                currency: orderData.currency, // INR
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+                amount: orderData.amount,
+                currency: orderData.currency,
                 name: "VersantPro Premium",
                 description: "Lifetime Access to 20 Mock Exams",
-                image: "https://versantpro.com/logo.png", // Replace with real logo
-                order_id: orderData.order_id, // Cryptographically secured order ID from Netlify
+                image: "https://versantpro.com/logo.png",
+                order_id: orderData.order_id,
                 handler: async function (response) {
                     console.log("Payment Success! Initiating Server Verification...");
                     setIsProcessing(true);
@@ -99,7 +104,7 @@ export default function PricingPage() {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                uid: auth.currentUser.uid
+                                uid: currentUid
                             })
                         });
 
@@ -130,9 +135,9 @@ export default function PricingPage() {
                     }
                 },
                 prefill: {
-                    name: auth.currentUser.displayName || "User",
-                    email: auth.currentUser.email || "",
-                    contact: "" // Optional
+                    name: currentName,
+                    email: currentEmail,
+                    contact: ""
                 },
                 theme: {
                     color: "#10b981" // Match Emerald Green UI
@@ -299,6 +304,13 @@ export default function PricingPage() {
                                         });
                                     }}
                                     onApprove={async (data, actions) => {
+                                        // Capture uid IMMEDIATELY while auth is still active
+                                        const currentUid = auth.currentUser?.uid;
+                                        if (!currentUid) {
+                                            alert('Session expired. Please log in again and retry.');
+                                            navigate('/login');
+                                            return;
+                                        }
                                         setIsProcessing(true);
                                         try {
                                             const verifyRes = await fetch('/.netlify/functions/verifyPayPalPayment', {
@@ -306,7 +318,7 @@ export default function PricingPage() {
                                                 headers: { 'Content-Type': 'application/json' },
                                                 body: JSON.stringify({
                                                     orderID: data.orderID,
-                                                    uid: auth.currentUser.uid
+                                                    uid: currentUid
                                                 })
                                             });
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import { collection, onSnapshot, query, orderBy, limit, deleteDoc, doc } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, updateDoc, setDoc } from 'firebase/firestore';
+import { serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import { AdminNav, AdminStatCard, UserTable, UserDetailsModal } from '../components/AdminComponents';
 
@@ -14,7 +15,13 @@ const AdminDashboard = () => {
     const [isFlushing, setIsFlushing] = useState(false);
     const [premiumUserIds, setPremiumUserIds] = useState(new Set());
     const [premiumUsersList, setPremiumUsersList] = useState([]);
-    
+
+    // Manual Access Grant State
+    const [grantEmail, setGrantEmail] = useState('');
+    const [grantPaymentId, setGrantPaymentId] = useState('');
+    const [grantLoading, setGrantLoading] = useState(false);
+    const [grantMessage, setGrantMessage] = useState(null); // { type: 'success'|'error', text: '' }
+
     const [stats, setStats] = useState({
         totalUsers: 0,
         premiumUsers: 0,
@@ -179,6 +186,63 @@ const AdminDashboard = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    // --- Manual Access Grant ---
+    const handleGrantAccess = async (e) => {
+        e.preventDefault();
+        if (!grantEmail.trim()) return;
+        setGrantLoading(true);
+        setGrantMessage(null);
+        try {
+            // 1. Find user by email in Firestore
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('email', '==', grantEmail.trim().toLowerCase()));
+            const snap = await getDocs(q);
+
+            if (snap.empty) {
+                // Also check analytics_events for userId
+                const eventsRef = collection(db, 'analytics_events');
+                const evQ = query(eventsRef, where('email', '==', grantEmail.trim().toLowerCase()), limit(1));
+                const evSnap = await getDocs(evQ);
+                if (evSnap.empty) {
+                    setGrantMessage({ type: 'error', text: `No user found with email: ${grantEmail}` });
+                    setGrantLoading(false);
+                    return;
+                }
+                const userId = evSnap.docs[0].data().userId;
+                // Create/update user doc with this uid
+                const userDocRef = doc(db, 'users', userId);
+                await setDoc(userDocRef, {
+                    email: grantEmail.trim().toLowerCase(),
+                    hasPaid: true,
+                    paidTests: true,
+                    paymentMethod: 'razorpay_manual',
+                    transactionId: grantPaymentId || 'manual_grant',
+                    paidAt: serverTimestamp(),
+                    grantedBy: 'admin'
+                }, { merge: true });
+                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail} (found via analytics). UID: ${userId}` });
+            } else {
+                // User doc found directly
+                const userDoc = snap.docs[0];
+                await updateDoc(userDoc.ref, {
+                    hasPaid: true,
+                    paidTests: true,
+                    paymentMethod: 'razorpay_manual',
+                    transactionId: grantPaymentId || 'manual_grant',
+                    paidAt: serverTimestamp(),
+                    grantedBy: 'admin'
+                });
+                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail}. UID: ${userDoc.id}` });
+            }
+            setGrantEmail('');
+            setGrantPaymentId('');
+        } catch (err) {
+            console.error('Grant error:', err);
+            setGrantMessage({ type: 'error', text: 'Error: ' + err.message });
+        }
+        setGrantLoading(false);
+    };
+
     // --- NEW: Clear Firebase Storage Logic ---
     const handleClearData = async () => {
         if (liveEvents.length === 0) return alert("Database is already empty.");
@@ -272,6 +336,46 @@ const AdminDashboard = () => {
                     <AdminStatCard title="Premium Members" value={stats.premiumUsers} color="emerald" icon={<span className="text-2xl">💎</span>} />
                     <AdminStatCard title="Total Tests Taken" value={stats.totalTests} color="amber" icon={<span className="text-2xl">📝</span>} />
                     <AdminStatCard title="Total Tracked Sessions" value={activeSessions.length} color="rose" icon={<span className="text-2xl">📡</span>} />
+                </div>
+
+                {/* 🔑 Manual Access Grant Tool */}
+                <div className="bg-slate-900 border border-yellow-500/30 rounded-xl p-6 mb-8 shadow-xl">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-9 h-9 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400 text-lg">🔑</div>
+                        <div>
+                            <h3 className="text-white font-bold text-base">Manual Premium Access Grant</h3>
+                            <p className="text-slate-400 text-xs">Use when payment was captured but verification failed. Enter customer email + Payment ID.</p>
+                        </div>
+                    </div>
+                    <form onSubmit={handleGrantAccess} className="flex flex-col sm:flex-row gap-3">
+                        <input
+                            type="email"
+                            required
+                            value={grantEmail}
+                            onChange={e => { setGrantEmail(e.target.value); setGrantMessage(null); }}
+                            placeholder="Customer Email (e.g. religiontheo062022@gmail.com)"
+                            className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                        />
+                        <input
+                            type="text"
+                            value={grantPaymentId}
+                            onChange={e => setGrantPaymentId(e.target.value)}
+                            placeholder="Payment ID (e.g. pay_Sia4Nv49...)"
+                            className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                        />
+                        <button
+                            type="submit"
+                            disabled={grantLoading}
+                            className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                        >
+                            {grantLoading ? '⏳ Granting...' : '🔓 Grant Access'}
+                        </button>
+                    </form>
+                    {grantMessage && (
+                        <div className={`mt-3 text-sm font-medium px-4 py-2.5 rounded-lg ${grantMessage.type === 'success' ? 'bg-emerald-900/40 border border-emerald-500/30 text-emerald-300' : 'bg-red-900/40 border border-red-500/30 text-red-300'}`}>
+                            {grantMessage.text}
+                        </div>
+                    )}
                 </div>
 
                 {/* Live Surveillance Architecture */}

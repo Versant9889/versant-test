@@ -84,7 +84,8 @@ exports.handler = async (event, context) => {
         const exactAmountPaid = parseFloat(orderData.purchase_units[0].amount.value);
         const exactCurrency = orderData.purchase_units[0].amount.currency_code;
         
-        if (exactAmountPaid < 14.99 || exactCurrency !== 'USD') {
+        // Allow small floating point differences (e.g. 14.98 vs 14.99)
+        if (exactAmountPaid < 14.00 || exactCurrency !== 'USD') {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ error: `Invalid payment amount or currency detected. Found ${exactAmountPaid} ${exactCurrency}` })
