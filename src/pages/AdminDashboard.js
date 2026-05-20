@@ -226,16 +226,20 @@ const AdminDashboard = () => {
                 setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail} (found via analytics). UID: ${userId}` });
             } else {
                 // User doc found directly
-                const userDoc = snap.docs[0];
-                await updateDoc(userDoc.ref, {
-                    hasPaid: true,
-                    paidTests: true,
-                    paymentMethod: 'razorpay_manual',
-                    transactionId: grantPaymentId || 'manual_grant',
-                    paidAt: serverTimestamp(),
-                    grantedBy: 'admin'
-                });
-                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail}. UID: ${userDoc.id}` });
+                const updatePromises = snap.docs.map(userDoc => 
+                    updateDoc(userDoc.ref, {
+                        hasPaid: true,
+                        paidTests: true,
+                        paymentMethod: 'razorpay_manual',
+                        transactionId: grantPaymentId || 'manual_grant',
+                        paidAt: serverTimestamp(),
+                        grantedBy: 'admin'
+                    })
+                );
+                await Promise.all(updatePromises);
+                
+                const uids = snap.docs.map(d => d.id).join(', ');
+                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail}. UIDs: ${uids}` });
             }
             setGrantEmail('');
             setGrantPaymentId('');
