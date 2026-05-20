@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
 
         // The secure options for creating the order
         const options = {
-            amount: 149900, // ₹1499 in paise (100 paise = 1 INR)
+            amount: 144900, // ₹1449 in paise (exactly ~$14.99 USD based on current exchange rate)
             currency: 'INR',
             receipt: 'receipt_' + Math.random().toString(36).substring(7),
             payment_capture: 1 // Auto-capture the payment

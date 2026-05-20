@@ -285,7 +285,7 @@ const Dashboard = () => {
               </div>
               <div className="flex-shrink-0 text-center">
                 <div className="text-emerald-300/60 text-xs line-through mb-1">₹2,999</div>
-                <div className="text-4xl font-black text-white mb-1">₹1,499</div>
+                <div className="text-4xl font-black text-white mb-1">₹1,449</div>
                 <div className="text-emerald-300 text-xs mb-4">One-time · No subscription</div>
                 <button
                   onClick={() => navigate('/pricing')}

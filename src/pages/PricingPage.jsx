@@ -114,13 +114,13 @@ export default function PricingPage() {
                             // --- Google Ads Conversion Tracking ---
                             if (typeof window !== "undefined" && typeof window.gtag === "function") {
                                 window.gtag('event', 'purchase', {
-                                    'value': 1250,
+                                    'value': 1449,
                                     'currency': 'INR',
                                     'transaction_id': response.razorpay_payment_id
                                 });
                                 console.log("Google Ads Conversion Fired (Razorpay)");
                             }
-                            trackFunnelEvent('purchase', { value: 1250, currency: 'INR' });
+                            trackFunnelEvent('purchase', { value: 1449, currency: 'INR' });
 
                             alert("Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                             navigate('/dashboard');
