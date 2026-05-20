@@ -48,7 +48,7 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const { orderID, uid } = JSON.parse(event.body);
+        const { orderID, uid, referredBy } = JSON.parse(event.body);
 
         if (!orderID || !uid) {
             return {
@@ -94,13 +94,20 @@ exports.handler = async (event, context) => {
 
         // 4. Verification Passed: Update User Document in Firestore via Admin Bypass
         const userRef = db.collection('users').doc(uid);
-        await userRef.update({
+        
+        const updateData = {
             hasPaid: true,
             paidTests: true,
             paymentMethod: 'paypal',
             transactionId: orderID,
             paidAt: admin.firestore.FieldValue.serverTimestamp()
-        });
+        };
+
+        if (referredBy) {
+            updateData.referredBy = referredBy;
+        }
+
+        await userRef.update(updateData);
 
         return {
             statusCode: 200,

@@ -49,6 +49,14 @@ function PageTracker() {
   useSessionManager();  // <--- Anti-Piracy Server Lock
 
   useEffect(() => {
+    // 0. Affiliate URL Tracking
+    const searchParams = new URLSearchParams(location.search);
+    const ref = searchParams.get('ref');
+    if (ref) {
+      localStorage.setItem('versant_affiliate_ref', ref);
+      console.log('Affiliate tracking code saved:', ref);
+    }
+
     // 1. Track Page View in GA
     ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
 

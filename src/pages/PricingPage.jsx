@@ -104,7 +104,8 @@ export default function PricingPage() {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                uid: currentUid
+                                uid: currentUid,
+                                referredBy: localStorage.getItem('versant_affiliate_ref') || null
                             })
                         });
 
@@ -318,7 +319,8 @@ export default function PricingPage() {
                                                 headers: { 'Content-Type': 'application/json' },
                                                 body: JSON.stringify({
                                                     orderID: data.orderID,
-                                                    uid: currentUid
+                                                    uid: currentUid,
+                                                    referredBy: localStorage.getItem('versant_affiliate_ref') || null
                                                 })
                                             });
 

@@ -22,6 +22,9 @@ const AdminDashboard = () => {
     const [grantLoading, setGrantLoading] = useState(false);
     const [grantMessage, setGrantMessage] = useState(null); // { type: 'success'|'error', text: '' }
 
+    // Affiliate Tracking State
+    const [affiliateFilter, setAffiliateFilter] = useState(null);
+    
     const [stats, setStats] = useState({
         totalUsers: 0,
         premiumUsers: 0,
@@ -263,6 +266,34 @@ const AdminDashboard = () => {
         setIsFlushing(false);
     };
 
+    // --- Affiliate Tracking Calculations ---
+    // Group premium users by 'referredBy'
+    const affiliateStats = {};
+    let totalAffiliateRevenue = 0;
+    
+    premiumUsersList.forEach(user => {
+        if (user.referredBy) {
+            const ref = user.referredBy;
+            if (!affiliateStats[ref]) {
+                affiliateStats[ref] = { count: 0, revenue: 0, payout: 0 };
+            }
+            affiliateStats[ref].count += 1;
+            // Assuming flat ₹1449 per sale. Adjust if dynamic pricing exists.
+            affiliateStats[ref].revenue += 1449;
+            affiliateStats[ref].payout += (1449 * 0.30); // 30% payout
+            totalAffiliateRevenue += 1449;
+        }
+    });
+
+    const affiliateList = Object.keys(affiliateStats).map(ref => ({
+        id: ref,
+        ...affiliateStats[ref]
+    })).sort((a, b) => b.revenue - a.revenue);
+
+    // Apply Filter to Premium Users Table
+    const displayedPremiumUsers = affiliateFilter 
+        ? premiumUsersList.filter(u => u.referredBy === affiliateFilter)
+        : premiumUsersList;
 
     if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading Mission Control...</div>;
 
@@ -424,17 +455,69 @@ const AdminDashboard = () => {
                     </div>
                 </div>
 
+                {/* 🤝 Affiliate & Partner Performance */}
+                <div className="bg-slate-900 border border-emerald-500/30 rounded-xl overflow-hidden flex flex-col shadow-xl mb-8">
+                    <div className="p-6 border-b border-slate-800 bg-slate-800/30 flex justify-between items-center">
+                        <div>
+                            <h3 className="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                                <span>🤝</span> Affiliate Performance
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-1">Track sales from unique referral links. Click a row to filter the customers table below.</p>
+                        </div>
+                        <div className="bg-emerald-500/20 text-emerald-400 font-bold px-4 py-1.5 rounded-lg border border-emerald-500/30">
+                            Total Affiliate Revenue: ₹{totalAffiliateRevenue.toLocaleString('en-IN')}
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-auto max-h-96">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-xs uppercase text-slate-500 font-semibold sticky top-0">
+                                <tr>
+                                    <th className="px-6 py-4">Tracking ID</th>
+                                    <th className="px-6 py-4">Referrals</th>
+                                    <th className="px-6 py-4">Gross Revenue</th>
+                                    <th className="px-6 py-4 text-rose-400">Payout Due (30%)</th>
+                                    <th className="px-6 py-4 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800/50 text-sm">
+                                {affiliateList.length === 0 && (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-slate-500">No affiliate sales yet.</td>
+                                    </tr>
+                                )}
+                                {affiliateList.map(aff => (
+                                    <tr key={aff.id} className="hover:bg-slate-800/30 transition-colors">
+                                        <td className="px-6 py-4 font-bold text-emerald-300">{aff.id}</td>
+                                        <td className="px-6 py-4 text-white">{aff.count} Sales</td>
+                                        <td className="px-6 py-4 text-emerald-400 font-medium">₹{aff.revenue.toLocaleString('en-IN')}</td>
+                                        <td className="px-6 py-4 text-rose-400 font-bold">₹{aff.payout.toLocaleString('en-IN')}</td>
+                                        <td className="px-6 py-4 text-center">
+                                            <button 
+                                                onClick={() => setAffiliateFilter(affiliateFilter === aff.id ? null : aff.id)}
+                                                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${affiliateFilter === aff.id ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-slate-700 hover:bg-slate-600 text-white'}`}
+                                            >
+                                                {affiliateFilter === aff.id ? 'Clear Filter' : 'Filter Sales'}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 {/* Premium Customers Database */}
                 <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col shadow-xl mb-8">
                     <div className="p-6 border-b border-slate-800 bg-slate-800/30 flex justify-between items-center">
                         <div>
                             <h3 className="text-lg font-bold text-yellow-500 flex items-center gap-2">
                                 <span>💎</span> Verified Lifetime Premium Customers
+                                {affiliateFilter && <span className="ml-3 px-2 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded text-xs">Filtered by: {affiliateFilter}</span>}
                             </h3>
                             <p className="text-xs text-slate-400 mt-1">A permanent record of all users who have successfully purchased the Versant Pro Pass.</p>
                         </div>
                         <div className="bg-yellow-500/20 text-yellow-500 font-bold px-4 py-1.5 rounded-lg border border-yellow-500/30">
-                            Total Paid: {premiumUsersList.length}
+                            Total Paid: {displayedPremiumUsers.length}
                         </div>
                     </div>
                     <div className="flex-1 overflow-auto max-h-96">
@@ -448,7 +531,12 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-800/50">
-                                {premiumUsersList.map(user => (
+                                {displayedPremiumUsers.length === 0 && (
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-8 text-center text-slate-500">No premium customers found.</td>
+                                    </tr>
+                                )}
+                                {displayedPremiumUsers.map(user => (
                                     <tr key={user.id} className="hover:bg-slate-800/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="text-sm font-bold text-white">{user.email || <span className="text-slate-500 italic">Legacy Account (No Email)</span>}</div>

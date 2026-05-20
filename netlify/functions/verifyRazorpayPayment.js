@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, uid } = JSON.parse(event.body);
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, uid, referredBy } = JSON.parse(event.body);
 
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !uid) {
             return { statusCode: 400, body: JSON.stringify({ error: "Missing required parameters" }) };
@@ -40,13 +40,20 @@ exports.handler = async (event, context) => {
 
         // 2. Unlock the Premium Content via Secure Admin SDK
         const userRef = db.collection('users').doc(uid);
-        await userRef.update({
+        
+        const updateData = {
             hasPaid: true,
             paidTests: true,
             paymentMethod: 'razorpay',
             transactionId: razorpay_payment_id,
             paidAt: admin.firestore.FieldValue.serverTimestamp()
-        });
+        };
+
+        if (referredBy) {
+            updateData.referredBy = referredBy;
+        }
+
+        await userRef.update(updateData);
 
         return {
             statusCode: 200,
