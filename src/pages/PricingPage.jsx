@@ -272,7 +272,7 @@ export default function PricingPage() {
                         </ul>
 
                         <button onClick={handleUpgrade} disabled={isProcessing} className="w-full py-4 rounded-xl font-extrabold text-lg shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(16,185,129,0.6)] bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-900 disabled:opacity-50 disabled:cursor-wait mb-4">
-                            {isProcessing ? "Connecting Gateway..." : "Pay ₹1250 (Indian Users)"}
+                            {isProcessing ? "Connecting Gateway..." : "Pay ₹1449 (Indian Users)"}
                         </button>
                         
                         <div className="w-full relative flex items-center mb-4">
