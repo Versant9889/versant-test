@@ -57,10 +57,21 @@ export default function Header({ page }) {
     </>
   );
 
+  const targetDateStr = (() => {
+    const baseDate = new Date('May 25, 2026 23:59:59').getTime();
+    const cycle = 10 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    let target = baseDate;
+    if (now > baseDate) {
+      target = baseDate + (Math.floor((now - baseDate) / cycle) + 1) * cycle;
+    }
+    return new Date(target).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  })();
+
   return (
     <>
       <div className="bg-gradient-to-r from-red-600 to-rose-500 text-white text-center py-2 px-4 shadow-md sticky top-0 z-[60] flex items-center justify-center gap-2 cursor-pointer font-bold text-sm tracking-wide" onClick={() => window.location.href='/pricing'}>
-        <span className="animate-pulse">🔴</span> FLASH SALE: Get Lifetime Access of Tests. Offer ends May 25th! <span className="underline decoration-white/50 hover:decoration-white ml-2">Claim Offer ➔</span>
+        <span className="animate-pulse">🔴</span> FLASH SALE EXTENDED: Get Lifetime Access of Tests. Offer ends {targetDateStr}! <span className="underline decoration-white/50 hover:decoration-white ml-2">Claim Offer ➔</span>
       </div>
       <nav className="bg-green-700 text-white px-4 py-3 shadow-md md:px-6 md:py-4 relative z-50">
         <div className="container mx-auto flex justify-between items-center">

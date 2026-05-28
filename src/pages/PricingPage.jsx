@@ -14,14 +14,23 @@ export default function PricingPage() {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
     useEffect(() => {
-        const targetDate = new Date('May 25, 2026 23:59:59').getTime();
-
+        const baseDate = new Date('May 25, 2026 23:59:59').getTime();
+        const cycleDuration = 10 * 24 * 60 * 60 * 1000; // 10 days
+        
         const interval = setInterval(() => {
             const now = new Date().getTime();
+            let targetDate = baseDate;
+            
+            // Auto-extend by 10 days if sale date has passed
+            if (now > baseDate) {
+                const cyclesPassed = Math.floor((now - baseDate) / cycleDuration);
+                targetDate = baseDate + (cyclesPassed + 1) * cycleDuration;
+            }
+            
             const distance = targetDate - now;
 
             if (distance < 0) {
-                clearInterval(interval);
+                // Safeguard (should rarely hit since we recalculate targetDate)
                 setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
                 return;
             }
