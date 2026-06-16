@@ -25,6 +25,7 @@ import PricingPage from './pages/PricingPage';
 import { Navigate } from 'react-router-dom';
 import { useActivityTracker } from './hooks/useActivityTracker';
 import { useSessionManager } from './hooks/useSessionManager';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Helper component to handle /admin redirection
 const AdminRedirect = () => {
@@ -51,7 +52,7 @@ function PageTracker() {
   useEffect(() => {
     // 0. Affiliate URL Tracking
     const searchParams = new URLSearchParams(location.search);
-    const ref = searchParams.get('ref');
+    const ref = searchParams.get('ref') || searchParams.get('affiliate');
     if (ref) {
       localStorage.setItem('versant_affiliate_ref', ref);
       console.log('Affiliate tracking code saved:', ref);
@@ -84,6 +85,7 @@ function App() {
   return (
     <Router>
       <PageTracker />
+      <WhatsAppButton />
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
