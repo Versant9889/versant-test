@@ -7,7 +7,7 @@ const WhatsAppButton = () => {
 
   // --- 1. Configuration ---
   // Using the international format (country code 91 for India) without '+' or leading zeros
-  const WHATSAPP_NUMBER = "918853680691"; 
+  const WHATSAPP_NUMBER = "918853779108"; 
   const DEFAULT_MESSAGE = "Hi, I am preparing for the Versant Test and would like some guidance.";
   const encodedMessage = encodeURIComponent(DEFAULT_MESSAGE);
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
