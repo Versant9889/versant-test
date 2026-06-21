@@ -64,11 +64,30 @@ const Dashboard = () => {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
         const data = userDoc.data();
+        
+        // Ensure email is synced to Firestore so admin panel can find the user
+        if (!data.email) {
+          try {
+            await updateDoc(userRef, { email: currentUser.email, uid: currentUser.uid });
+          } catch (e) {
+            console.error('Error syncing email:', e);
+          }
+        }
+
         setUserTestAccess(data.paidTests || false);
         setStudentData(prev => ({ ...prev, plan: data.paidTests ? 'Premium' : 'Free' }));
       } else {
-        // Create user document if it doesn't exist
-        await setDoc(userRef, { paidTests: false });
+        // Create user document if it doesn't exist, including email for admin search
+        try {
+          await setDoc(userRef, { 
+            paidTests: false,
+            hasPaid: false,
+            email: currentUser.email,
+            uid: currentUser.uid
+          });
+        } catch (e) {
+          console.error('Error creating user doc:', e);
+        }
         setUserTestAccess(false);
       }
 
