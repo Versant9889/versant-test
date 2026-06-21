@@ -15,6 +15,7 @@ const AdminDashboard = () => {
     const [isFlushing, setIsFlushing] = useState(false);
     const [premiumUserIds, setPremiumUserIds] = useState(new Set());
     const [premiumUsersList, setPremiumUsersList] = useState([]);
+    const [allUsersList, setAllUsersList] = useState([]);
 
     // Manual Access Grant State
     const [grantEmail, setGrantEmail] = useState('');
@@ -60,8 +61,10 @@ const AdminDashboard = () => {
                 let tests = 0;
                 let premiumSet = new Set();
                 let premiumList = [];
+                let allUsers = [];
                 snap.docs.forEach(d => {
                     const data = d.data();
+                    allUsers.push({ id: d.id, ...data });
                     // Check all possible legacy and current premium flags
                     if (data.paidTests || data.hasPaid || data.isPremium) {
                         premium++;
@@ -80,6 +83,7 @@ const AdminDashboard = () => {
 
                 setPremiumUserIds(premiumSet);
                 setPremiumUsersList(premiumList);
+                setAllUsersList(allUsers);
                 setStats(s => ({ ...s, totalUsers: total, premiumUsers: premium, totalTests: tests }));
             });
 
@@ -189,33 +193,62 @@ const AdminDashboard = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    // --- NEW: Export Affiliate Specific CSV ---
+    const handleExportAffiliate = (affId) => {
+        const users = allUsersList.filter(u => u.referredBy === affId);
+        if (users.length === 0) return alert("No data to export for this affiliate.");
+
+        const headers = "Customer Email,Status,Sales Value (INR),Tests Taken,Purchase Date\n";
+        const rows = users.map(u => {
+            const isPremium = u.paidTests || u.hasPaid || u.isPremium;
+            const status = isPremium ? "Premium Customer" : "Free Sign Up";
+            const salesValue = isPremium ? "1449" : "0";
+            const purchaseDate = isPremium && u.paidAt ? u.paidAt.toDate().toLocaleDateString() : "N/A";
+            const testsTaken = u.testsCompleted || 0;
+            return `"${u.email || u.id}","${status}","${salesValue}","${testsTaken}","${purchaseDate}"`;
+        }).join('\n');
+
+        // Add a summary section at the bottom of the CSV
+        const salesCount = users.filter(u => u.paidTests || u.hasPaid || u.isPremium).length;
+        const totalRev = salesCount * 1449;
+        const totalPayout = totalRev * 0.30;
+        const summary = `\n\n--- INFLUENCER SUMMARY ---\nTracking ID:,${affId}\nTotal Signups:,${users.length}\nTotal Sales:,${salesCount}\nGross Revenue:,Rs ${totalRev}\nPayout Due (30%):,Rs ${totalPayout}\n`;
+
+        const blob = new Blob([headers + rows + summary], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Affiliate_Report_${affId}_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    };
+
     // --- Manual Access Grant ---
     const handleGrantAccess = async (e) => {
         e.preventDefault();
-        if (!grantEmail.trim()) return;
+        const targetEmail = grantEmail.trim().toLowerCase();
+        if (!targetEmail) return;
         setGrantLoading(true);
         setGrantMessage(null);
         try {
-            // 1. Find user by email in Firestore
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, where('email', '==', grantEmail.trim().toLowerCase()));
-            const snap = await getDocs(q);
+            // 1. Find user by email case-insensitively using the locally cached allUsersList
+            const foundUsers = allUsersList.filter(u => u.email && u.email.toLowerCase() === targetEmail);
 
-            if (snap.empty) {
-                // Also check analytics_events for userId
-                const eventsRef = collection(db, 'analytics_events');
-                const evQ = query(eventsRef, where('email', '==', grantEmail.trim().toLowerCase()), limit(1));
-                const evSnap = await getDocs(evQ);
-                if (evSnap.empty) {
+            if (foundUsers.length === 0) {
+                // Also check analytics_events for userId case-insensitively using liveEvents
+                const foundEvent = liveEvents.find(ev => ev.email && ev.email.toLowerCase() === targetEmail);
+                if (!foundEvent) {
                     setGrantMessage({ type: 'error', text: `No user found with email: ${grantEmail}` });
                     setGrantLoading(false);
                     return;
                 }
-                const userId = evSnap.docs[0].data().userId;
+                const userId = foundEvent.userId;
                 // Create/update user doc with this uid
                 const userDocRef = doc(db, 'users', userId);
                 await setDoc(userDocRef, {
-                    email: grantEmail.trim().toLowerCase(),
+                    email: foundEvent.email || grantEmail.trim(),
                     hasPaid: true,
                     paidTests: true,
                     paymentMethod: 'razorpay_manual',
@@ -225,20 +258,21 @@ const AdminDashboard = () => {
                 }, { merge: true });
                 setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail} (found via analytics). UID: ${userId}` });
             } else {
-                // User doc found directly
-                const updatePromises = snap.docs.map(userDoc => 
-                    updateDoc(userDoc.ref, {
+                // User doc(s) found directly
+                const updatePromises = foundUsers.map(u => {
+                    const userDocRef = doc(db, 'users', u.id);
+                    return updateDoc(userDocRef, {
                         hasPaid: true,
                         paidTests: true,
                         paymentMethod: 'razorpay_manual',
                         transactionId: grantPaymentId || 'manual_grant',
                         paidAt: serverTimestamp(),
                         grantedBy: 'admin'
-                    })
-                );
+                    });
+                });
                 await Promise.all(updatePromises);
                 
-                const uids = snap.docs.map(d => d.id).join(', ');
+                const uids = foundUsers.map(u => u.id).join(', ');
                 setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail}. UIDs: ${uids}` });
             }
             setGrantEmail('');
@@ -271,21 +305,25 @@ const AdminDashboard = () => {
     };
 
     // --- Affiliate Tracking Calculations ---
-    // Group premium users by 'referredBy'
+    // Group all users by 'referredBy'
     const affiliateStats = {};
     let totalAffiliateRevenue = 0;
     
-    premiumUsersList.forEach(user => {
+    allUsersList.forEach(user => {
         if (user.referredBy) {
             const ref = user.referredBy;
             if (!affiliateStats[ref]) {
-                affiliateStats[ref] = { count: 0, revenue: 0, payout: 0 };
+                affiliateStats[ref] = { signups: 0, sales: 0, revenue: 0, payout: 0 };
             }
-            affiliateStats[ref].count += 1;
-            // Assuming flat ₹1449 per sale. Adjust if dynamic pricing exists.
-            affiliateStats[ref].revenue += 1449;
-            affiliateStats[ref].payout += (1449 * 0.30); // 30% payout
-            totalAffiliateRevenue += 1449;
+            affiliateStats[ref].signups += 1;
+            
+            if (user.paidTests || user.hasPaid || user.isPremium) {
+                affiliateStats[ref].sales += 1;
+                // Assuming flat ₹1449 per sale. Adjust if dynamic pricing exists.
+                affiliateStats[ref].revenue += 1449;
+                affiliateStats[ref].payout += (1449 * 0.30); // 30% payout
+                totalAffiliateRevenue += 1449;
+            }
         }
     });
 
@@ -477,7 +515,8 @@ const AdminDashboard = () => {
                             <thead className="bg-slate-950 text-xs uppercase text-slate-500 font-semibold sticky top-0">
                                 <tr>
                                     <th className="px-6 py-4">Tracking ID</th>
-                                    <th className="px-6 py-4">Referrals</th>
+                                    <th className="px-6 py-4">Total Signups</th>
+                                    <th className="px-6 py-4">Total Sales</th>
                                     <th className="px-6 py-4">Gross Revenue</th>
                                     <th className="px-6 py-4 text-rose-400">Payout Due (30%)</th>
                                     <th className="px-6 py-4 text-center">Action</th>
@@ -486,22 +525,32 @@ const AdminDashboard = () => {
                             <tbody className="divide-y divide-slate-800/50 text-sm">
                                 {affiliateList.length === 0 && (
                                     <tr>
-                                        <td colSpan="5" className="px-6 py-8 text-center text-slate-500">No affiliate sales yet.</td>
+                                        <td colSpan="6" className="px-6 py-8 text-center text-slate-500">No affiliate data yet.</td>
                                     </tr>
                                 )}
                                 {affiliateList.map(aff => (
                                     <tr key={aff.id} className="hover:bg-slate-800/30 transition-colors">
                                         <td className="px-6 py-4 font-bold text-emerald-300">{aff.id}</td>
-                                        <td className="px-6 py-4 text-white">{aff.count} Sales</td>
+                                        <td className="px-6 py-4 text-white">{aff.signups} Signups</td>
+                                        <td className="px-6 py-4 text-white">{aff.sales} Sales</td>
                                         <td className="px-6 py-4 text-emerald-400 font-medium">₹{aff.revenue.toLocaleString('en-IN')}</td>
                                         <td className="px-6 py-4 text-rose-400 font-bold">₹{aff.payout.toLocaleString('en-IN')}</td>
                                         <td className="px-6 py-4 text-center">
-                                            <button 
-                                                onClick={() => setAffiliateFilter(affiliateFilter === aff.id ? null : aff.id)}
-                                                className={`px-3 py-1 rounded text-xs font-bold transition-colors ${affiliateFilter === aff.id ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-slate-700 hover:bg-slate-600 text-white'}`}
-                                            >
-                                                {affiliateFilter === aff.id ? 'Clear Filter' : 'Filter Sales'}
-                                            </button>
+                                            <div className="flex justify-center items-center gap-2">
+                                                <button 
+                                                    onClick={() => setAffiliateFilter(affiliateFilter === aff.id ? null : aff.id)}
+                                                    className={`px-3 py-1 rounded text-[10px] uppercase tracking-wider font-bold transition-colors ${affiliateFilter === aff.id ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-slate-700 hover:bg-slate-600 text-white'}`}
+                                                >
+                                                    {affiliateFilter === aff.id ? 'Clear' : 'Filter'}
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleExportAffiliate(aff.id)}
+                                                    className="px-3 py-1 rounded text-[10px] uppercase tracking-wider font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors flex items-center gap-1 shadow-md shadow-emerald-900/50"
+                                                    title="Export Report CSV"
+                                                >
+                                                    📥 Export
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

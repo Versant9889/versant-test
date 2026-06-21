@@ -23,6 +23,7 @@ function Signup() {
         email: user.email,
         mobileNumber: mobileNumber,
         hasPaid: false,
+        referredBy: localStorage.getItem('versant_affiliate_ref') || null,
       });
       navigate('/dashboard');
     } catch (error) {
@@ -44,6 +45,7 @@ function Signup() {
           email: user.email,
           name: user.displayName,
           hasPaid: false,
+          referredBy: localStorage.getItem('versant_affiliate_ref') || null,
         });
       }
       navigate('/dashboard');
