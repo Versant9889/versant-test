@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, updateDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, query, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import { readingTests, speakingTests } from '../data/mockTests';
 import { FaLock, FaUnlock } from 'react-icons/fa';
@@ -46,6 +46,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
+    let unsubscribeUserDoc = null;
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (!currentUser) {
         navigate('/login');
@@ -61,36 +62,37 @@ const Dashboard = () => {
 
       // Check user's test access status
       const userRef = doc(db, 'users', currentUser.uid);
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        const data = userDoc.data();
-        
-        // Ensure email is synced to Firestore so admin panel can find the user
-        if (!data.email) {
-          try {
-            await updateDoc(userRef, { email: currentUser.email, uid: currentUser.uid });
-          } catch (e) {
-            console.error('Error syncing email:', e);
+      unsubscribeUserDoc = onSnapshot(userRef, async (userDoc) => {
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          
+          // Ensure email is synced to Firestore so admin panel can find the user
+          if (!data.email) {
+            try {
+              await updateDoc(userRef, { email: currentUser.email, uid: currentUser.uid });
+            } catch (e) {
+              console.error('Error syncing email:', e);
+            }
           }
-        }
 
-        const hasPremiumAccess = data.paidTests === true || data.hasPaid === true || data.isPremium === true;
-        setUserTestAccess(hasPremiumAccess);
-        setStudentData(prev => ({ ...prev, plan: hasPremiumAccess ? 'Premium' : 'Free' }));
-      } else {
-        // Create user document if it doesn't exist, including email for admin search
-        try {
-          await setDoc(userRef, { 
-            paidTests: false,
-            hasPaid: false,
-            email: currentUser.email,
-            uid: currentUser.uid
-          });
-        } catch (e) {
-          console.error('Error creating user doc:', e);
+          const hasPremiumAccess = data.paidTests === true || data.hasPaid === true || data.isPremium === true;
+          setUserTestAccess(hasPremiumAccess);
+          setStudentData(prev => ({ ...prev, plan: hasPremiumAccess ? 'Premium' : 'Free' }));
+        } else {
+          // Create user document if it doesn't exist, including email for admin search
+          try {
+            await setDoc(userRef, { 
+              paidTests: false,
+              hasPaid: false,
+              email: currentUser.email,
+              uid: currentUser.uid
+            });
+          } catch (e) {
+            console.error('Error creating user doc:', e);
+          }
+          setUserTestAccess(false);
         }
-        setUserTestAccess(false);
-      }
+      });
 
       // Mock Data for fallback
       const MOCK_DATA = {
@@ -222,7 +224,10 @@ const Dashboard = () => {
         }
       }
     });
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribeUserDoc) unsubscribeUserDoc();
+      unsubscribe();
+    };
   }, [navigate]);
 
   const userTestStatus = Array.from({ length: 20 }, (_, index) => {
