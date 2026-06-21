@@ -74,8 +74,9 @@ const Dashboard = () => {
           }
         }
 
-        setUserTestAccess(data.paidTests || false);
-        setStudentData(prev => ({ ...prev, plan: data.paidTests ? 'Premium' : 'Free' }));
+        const hasPremiumAccess = data.paidTests === true || data.hasPaid === true || data.isPremium === true;
+        setUserTestAccess(hasPremiumAccess);
+        setStudentData(prev => ({ ...prev, plan: hasPremiumAccess ? 'Premium' : 'Free' }));
       } else {
         // Create user document if it doesn't exist, including email for admin search
         try {
