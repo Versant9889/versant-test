@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import { readingTests, speakingTests } from '../data/mockTests';
 import { FaLock, FaUnlock } from 'react-icons/fa';
