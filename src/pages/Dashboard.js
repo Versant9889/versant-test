@@ -62,6 +62,7 @@ const Dashboard = () => {
 
       // Check user's test access status
       const userRef = doc(db, 'users', currentUser.uid);
+      if (unsubscribeUserDoc) unsubscribeUserDoc();
       unsubscribeUserDoc = onSnapshot(userRef, async (userDoc) => {
         if (userDoc.exists()) {
           const data = userDoc.data();

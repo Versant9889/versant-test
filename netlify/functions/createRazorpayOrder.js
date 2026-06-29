@@ -14,12 +14,32 @@ exports.handler = async (event, context) => {
             key_secret: process.env.RAZORPAY_KEY_SECRET
         });
 
+        // Extract user data from request body if available
+        let uid = null;
+        let email = null;
+        let referredBy = null;
+        if (event.body) {
+            try {
+                const body = JSON.parse(event.body);
+                uid = body.uid;
+                email = body.email;
+                referredBy = body.referredBy;
+            } catch (e) {
+                console.error("Failed to parse request body", e);
+            }
+        }
+
         // The secure options for creating the order
         const options = {
             amount: 144900, // ₹1449 in paise (exactly ~$14.99 USD based on current exchange rate)
             currency: 'INR',
             receipt: 'receipt_' + Math.random().toString(36).substring(7),
-            payment_capture: 1 // Auto-capture the payment
+            payment_capture: 1, // Auto-capture the payment
+            notes: {
+                uid: uid || 'unknown_uid',
+                email: email || 'unknown_email',
+                referredBy: referredBy || ''
+            }
         };
 
         // Create the order on Razorpay's servers

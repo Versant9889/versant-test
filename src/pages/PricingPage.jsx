@@ -87,7 +87,17 @@ export default function PricingPage() {
 
         // 1. Fetch Order ID from Secure Serverless API (Netlify)
         try {
-            const orderResponse = await fetch('/.netlify/functions/createRazorpayOrder', { method: 'POST' });
+            const orderResponse = await fetch('/.netlify/functions/createRazorpayOrder', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    uid: currentUid,
+                    email: currentEmail,
+                    referredBy: localStorage.getItem('versant_affiliate_ref') || null
+                })
+            });
             if (!orderResponse.ok) {
                 throw new Error("Failed to generate secure Razorpay order from the backend. " + orderResponse.statusText);
             }
