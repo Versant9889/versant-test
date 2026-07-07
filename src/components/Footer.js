@@ -10,6 +10,7 @@ export default function Footer() {
           <Link to="/terms" className="hover:text-green-200 mx-2">Terms and Conditions</Link>
           <Link to="/privacy" className="hover:text-green-200 mx-2">Privacy Policy</Link>
           <Link to="/refund" className="hover:text-green-200 mx-2">Cancellation & Refunds</Link>
+          <Link to="/ebook" className="font-extrabold text-amber-400 hover:text-amber-300 mx-2 drop-shadow-md">Versant Test Mastery Ebook 📘</Link>
         </div>
       </div>
     </footer>

@@ -22,6 +22,11 @@ const Dashboard = () => {
   const [userTestAccess, setUserTestAccess] = useState(true); // Default to true now
   const [attemptedTests, setAttemptedTests] = useState(new Set());
 
+  // Ebook Access State
+  const [hasEbookAccess, setHasEbookAccess] = useState(false);
+  const [ebookPurchasedAt, setEbookPurchasedAt] = useState(null);
+  const [isProcessingEbook, setIsProcessingEbook] = useState(false);
+
   // User Profile Stats State
   const [testHistory, setTestHistory] = useState([]);
   const [stats, setStats] = useState({
@@ -79,6 +84,17 @@ const Dashboard = () => {
           const hasPremiumAccess = data.paidTests === true || data.hasPaid === true || data.isPremium === true;
           setUserTestAccess(hasPremiumAccess);
           setStudentData(prev => ({ ...prev, plan: hasPremiumAccess ? 'Premium' : 'Free' }));
+
+          // Ebook Unlock Check (Bundled if premium, or bought individually)
+          const isEbookUnlocked = data.hasPurchasedEbook === true || hasPremiumAccess;
+          setHasEbookAccess(isEbookUnlocked);
+          if (data.ebookPurchasedAt) {
+            setEbookPurchasedAt(data.ebookPurchasedAt.toDate());
+          } else if (hasPremiumAccess && data.paidAt) {
+            setEbookPurchasedAt(data.paidAt.toDate());
+          } else {
+            setEbookPurchasedAt(null);
+          }
         } else {
           // Create user document if it doesn't exist, including email for admin search
           try {
@@ -86,12 +102,14 @@ const Dashboard = () => {
               paidTests: false,
               hasPaid: false,
               email: currentUser.email,
-              uid: currentUser.uid
+              uid: currentUser.uid,
+              hasPurchasedEbook: false
             });
           } catch (e) {
             console.error('Error creating user doc:', e);
           }
           setUserTestAccess(false);
+          setHasEbookAccess(false);
         }
       });
 
@@ -257,6 +275,120 @@ const Dashboard = () => {
     }
   };
 
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleBuyEbook = async () => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
+    setIsProcessingEbook(true);
+    const res = await loadRazorpay();
+    if (!res) {
+      alert('Razorpay failed to load. Please check your internet connection.');
+      setIsProcessingEbook(false);
+      return;
+    }
+
+    try {
+      const orderResponse = await fetch('/.netlify/functions/createRazorpayOrder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          productType: 'ebook',
+          referredBy: localStorage.getItem('versant_affiliate_ref') || null
+        })
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order on server.");
+      }
+
+      const orderData = await orderResponse.json();
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "VersantPro Premium Ebook",
+        description: "Ultimate Crack Guide to Versant Test",
+        image: "https://versantpro.com/logo.png",
+        order_id: orderData.order_id,
+        prefill: {
+          email: currentUser.email,
+          name: currentUser.displayName || ''
+        },
+        theme: {
+          color: "#0f766e"
+        },
+        handler: async function (response) {
+          setIsProcessingEbook(true);
+          try {
+            const verifyRes = await fetch('/.netlify/functions/verifyRazorpayPayment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                uid: currentUser.uid,
+                email: currentUser.email,
+                productType: 'ebook',
+                referredBy: localStorage.getItem('versant_affiliate_ref') || null
+              })
+            });
+
+            if (verifyRes.ok) {
+              alert("Payment Verified! Your ebook has been unlocked.");
+              setHasEbookAccess(true);
+            } else {
+              alert("Payment verification failed.");
+            }
+          } catch (err) {
+            console.error("Verification query error:", err);
+            alert("Network error. If money was deducted, contact support.");
+          } finally {
+            setIsProcessingEbook(false);
+          }
+        }
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to initialize checkout.");
+    } finally {
+      setIsProcessingEbook(false);
+    }
+  };
+
+  const handleDownloadEbook = async () => {
+    try {
+      const currentUser = auth.currentUser;
+      if (!currentUser) return;
+      const token = await currentUser.getIdToken(true);
+      window.location.href = `/.netlify/functions/downloadEbook?token=${token}`;
+    } catch (err) {
+      console.error("Download token generation failed:", err);
+      alert("Error starting ebook download.");
+    }
+  };
+
   // Combine real stats into studentData object for the view
   const dashboardData = {
     ...studentData,
@@ -326,6 +458,55 @@ const Dashboard = () => {
 
         {/* Quick Stats Grid */}
         <QuickStats studentData={dashboardData} />
+
+        {/* 📘 Premium Ebook Download / Purchase Card */}
+        <div className="mb-10 bg-white rounded-2xl border-2 border-emerald-50/50 p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 hover:border-teal-500/30 transition-all duration-300">
+          <div className="flex items-center gap-4 text-left">
+            <div className="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-3xl shadow-inner flex-shrink-0 select-none">
+              📘
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-xl font-bold text-gray-900">Versant Test Mastery</h3>
+                {hasEbookAccess ? (
+                  <span className="px-2.5 py-0.5 bg-emerald-100 border border-emerald-200 text-emerald-800 text-[10px] font-bold uppercase rounded-full tracking-wider">
+                    Purchased
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 bg-teal-50 border border-teal-200 text-teal-700 text-[10px] font-bold uppercase rounded-full tracking-wider">
+                    ₹199
+                  </span>
+                )}
+              </div>
+              <p className="text-gray-500 text-sm mt-1.5 max-w-xl leading-relaxed">
+                Versant Test Mastery- A Complete Guide with 20 practice Sets. Contains speaking templates, acoustic mic guidelines, and sample responses.
+              </p>
+              {hasEbookAccess && ebookPurchasedAt && (
+                <p className="text-gray-400 text-xs mt-1.5 font-medium">
+                  Unlocked on {ebookPurchasedAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex-shrink-0 w-full md:w-auto">
+            {hasEbookAccess ? (
+              <button
+                onClick={handleDownloadEbook}
+                className="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold rounded-xl shadow-md active:scale-95 transition flex items-center justify-center gap-2 whitespace-nowrap"
+              >
+                📥 Download Ebook
+              </button>
+            ) : (
+              <button
+                onClick={handleBuyEbook}
+                disabled={isProcessingEbook}
+                className="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-teal-500 to-emerald-400 hover:from-teal-400 hover:to-emerald-300 text-slate-900 font-extrabold rounded-xl shadow-md active:scale-95 transition flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-50"
+              >
+                {isProcessingEbook ? "Launching checkout..." : "Buy Ebook (₹199)"}
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Reading & Writing Section */}
         <div className="mb-12">

@@ -57,39 +57,77 @@ exports.handler = async (event, context) => {
             const uid = notes.uid;
             const email = notes.email || paymentEntity.email;
             const referredBy = notes.referredBy;
+            const productType = notes.productType || 'premium_pass';
             const transactionId = paymentEntity.id;
+            const orderId = paymentEntity.order_id;
 
-            if (!uid || uid === 'unknown_uid') {
-                console.error("Missing UID in payment notes. Cannot update Firestore for transaction:", transactionId);
-                return { statusCode: 200, body: 'Missing UID' };
+            console.log(`Processing successful webhook payment: ${transactionId} for product: ${productType}`);
+
+            const isEbook = productType === 'ebook';
+            let targetUid = uid && uid !== 'guest' && uid !== 'unknown_uid' ? uid : null;
+            let customerEmail = email && email !== 'unknown_email' ? email.toLowerCase().trim() : null;
+
+            // Match by email if guest
+            if (!targetUid && customerEmail) {
+                const usersSnap = await db.collection('users').where('email', '==', customerEmail).limit(1).get();
+                if (!usersSnap.empty) {
+                    targetUid = usersSnap.docs[0].id;
+                }
             }
 
-            console.log(`Processing successful payment for UID: ${uid}`);
+            if (isEbook) {
+                // Ebook Webhook Process
+                if (targetUid) {
+                    const userRef = db.collection('users').doc(targetUid);
+                    await userRef.set({
+                        hasPurchasedEbook: true,
+                        ebookPurchasedAt: admin.firestore.FieldValue.serverTimestamp(),
+                        ebookTransactionId: transactionId
+                    }, { merge: true });
+                }
 
-            // 3. Securely Update Firestore
-            const userRef = db.collection('users').doc(uid);
+                // Record transaction in ebook_purchases
+                const purchaseRef = db.collection('ebook_purchases').doc(transactionId);
+                await purchaseRef.set({
+                    uid: targetUid || 'guest',
+                    email: customerEmail || 'guest_checkout',
+                    transactionId: transactionId,
+                    orderId: orderId || 'webhook_captured',
+                    status: 'success',
+                    productType: 'ebook',
+                    paidAt: admin.firestore.FieldValue.serverTimestamp(),
+                    downloadCount: 0
+                });
+            } else {
+                // Premium Test Pass Webhook Process (bundles Ebook)
+                if (targetUid) {
+                    const userRef = db.collection('users').doc(targetUid);
+                    const updateData = {
+                        hasPaid: true,
+                        paidTests: true,
+                        paymentMethod: 'razorpay',
+                        transactionId: transactionId,
+                        paidAt: admin.firestore.FieldValue.serverTimestamp(),
+                        hasPurchasedEbook: true,
+                        ebookPurchasedAt: admin.firestore.FieldValue.serverTimestamp(),
+                        ebookTransactionId: transactionId
+                    };
+
+                    if (customerEmail) {
+                        updateData.email = customerEmail;
+                    }
+
+                    if (referredBy) {
+                        updateData.referredBy = referredBy;
+                    }
+
+                    await userRef.set(updateData, { merge: true });
+                } else {
+                    console.warn(`Premium Pass webhook received but no target UID matching email ${customerEmail}`);
+                }
+            }
             
-            // We use { merge: true } via set() just in case the document somehow doesn't exist yet
-            // This is safer than update() which fails if doc is missing
-            const updateData = {
-                hasPaid: true,
-                paidTests: true,
-                paymentMethod: 'razorpay',
-                transactionId: transactionId,
-                paidAt: admin.firestore.FieldValue.serverTimestamp()
-            };
-
-            if (email && email !== 'unknown_email') {
-                updateData.email = email;
-            }
-
-            if (referredBy) {
-                updateData.referredBy = referredBy;
-            }
-
-            await userRef.set(updateData, { merge: true });
-            
-            console.log(`Successfully granted premium access to UID: ${uid}`);
+            console.log(`Successfully processed webhook for transaction: ${transactionId}`);
         }
 
         return { statusCode: 200, body: 'OK' };

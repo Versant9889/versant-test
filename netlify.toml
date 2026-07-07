@@ -13,3 +13,6 @@
 
 [build.processing]
   skip_processing = false
+
+[functions]
+  included_files = ["netlify/functions/*.pdf"]

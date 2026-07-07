@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaPlayCircle, FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe, FaArrowRight } from 'react-icons/fa';
+import { auth } from '../firebaseConfig';
+import { FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe, FaArrowRight } from 'react-icons/fa';
 
 export default function VersantHomepage() {
   const navigate = useNavigate();
   const [liveCount, setLiveCount] = useState(47);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,6 +29,121 @@ export default function VersantHomepage() {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
+
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleBuyNowClick = () => {
+    if (user) {
+      initiateCheckout(user.email, user.uid);
+    } else {
+      initiateCheckout('', 'guest');
+    }
+  };
+
+  const initiateCheckout = async (checkoutEmail, checkoutUid) => {
+    setIsProcessing(true);
+    const razorpayLoaded = await loadRazorpay();
+
+    if (!razorpayLoaded) {
+      alert('Razorpay failed to load. Please check your internet connection.');
+      setIsProcessing(false);
+      return;
+    }
+
+    try {
+      const orderResponse = await fetch('/.netlify/functions/createRazorpayOrder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: checkoutUid,
+          email: checkoutEmail,
+          productType: 'ebook',
+          referredBy: localStorage.getItem('versant_affiliate_ref') || null
+        })
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create checkout order.");
+      }
+
+      const orderData = await orderResponse.json();
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Versant Test Mastery Ebook",
+        description: "Complete preparation guide with 20 practice sets",
+        image: "https://versantpro.com/logo.png",
+        order_id: orderData.order_id,
+        prefill: {
+          email: (checkoutEmail && checkoutEmail !== 'unknown_email') ? checkoutEmail : ''
+        },
+        theme: {
+          color: "#0f766e"
+        },
+        handler: async function (response) {
+          setIsProcessing(true);
+          try {
+            const verifyRes = await fetch('/.netlify/functions/verifyRazorpayPayment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                uid: checkoutUid,
+                email: checkoutEmail,
+                productType: 'ebook',
+                referredBy: localStorage.getItem('versant_affiliate_ref') || null
+              })
+            });
+
+            if (verifyRes.ok) {
+              if (typeof window !== "undefined" && typeof window.gtag === "function") {
+                window.gtag('event', 'purchase_ebook', {
+                  'value': 199,
+                  'currency': 'INR',
+                  'transaction_id': response.razorpay_payment_id
+                });
+              }
+              // Redirect user directly to Thank You page
+              navigate(`/thank-you?payment_id=${response.razorpay_payment_id}`);
+            } else {
+              const errorData = await verifyRes.json();
+              alert("Verification error: " + errorData.error);
+            }
+          } catch (verifyError) {
+            console.error(verifyError);
+            alert("Verification failed. If payment was successful, contact support.");
+          } finally {
+            setIsProcessing(false);
+          }
+        }
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
+    } catch (err) {
+      console.error(err);
+      alert("Could not start payment.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="h-full w-full min-h-screen overflow-auto bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200">
@@ -36,6 +161,14 @@ export default function VersantHomepage() {
         <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
         
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center text-center slide-up">
+          {/* Mobile-only Promo Banner */}
+          <div 
+            onClick={() => navigate('/ebook')}
+            className="md:hidden w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 text-center py-3.5 px-4 font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl border border-yellow-300/40 mb-6 flex items-center justify-center gap-2 animate-bounce cursor-pointer"
+          >
+            📘 Versant Test Mastery Ebook @ ₹199 ➔
+          </div>
+
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-emerald-100 text-sm font-semibold mb-8 border border-white/20 shadow-lg">
             <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> 
             Updated for 2026 Industry Standards
@@ -99,8 +232,55 @@ export default function VersantHomepage() {
         </div>
       </section>
 
+      {/* 📘 Ebook CTA Banner */}
+      <section className="relative w-full px-6 max-w-6xl mx-auto z-30 -mt-24 mb-16 slide-up">
+        <div className="bg-gradient-to-r from-teal-900 via-teal-800 to-emerald-900 rounded-[2.5rem] p-8 md:p-12 border border-teal-500/30 shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 text-left max-w-3xl">
+            <img 
+              onClick={() => navigate('/ebook')}
+              src="/images/versant_ebook_cover.jpg" 
+              alt="Versant Test Mastery Ebook Cover" 
+              className="w-32 h-auto rounded-xl shadow-lg border border-teal-500/20 flex-shrink-0 select-none cursor-pointer hover:scale-105 transition-transform"
+            />
+            <div className="space-y-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-500/20 border border-teal-500/30 rounded-full text-teal-300 text-xs font-bold uppercase tracking-wider">
+                📘 Prep Ebook
+              </span>
+              <h2 className="text-2xl md:text-4xl font-black text-white tracking-tight leading-tight">
+                Versant Test Mastery- A Complete Guide with 20 practice Sets
+              </h2>
+              <p className="text-emerald-100/80 text-sm md:text-base font-light leading-relaxed">
+                Struggling with pronunciation or retelling stories? Get the exact templates, secret voice adjustments, and sample model responses that help candidates clear MNC cutoffs in 4 days.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-emerald-300 pt-2">
+                <span>✓ Complete Prep Guide</span>
+                <span>✓ 20 Practice Sets</span>
+                <span>✓ Sample Answers</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="relative z-10 flex-shrink-0 text-center w-full lg:w-auto">
+            <div className="text-emerald-400/60 text-sm line-through mb-1">₹499</div>
+            <div className="text-5xl font-black text-white mb-2">₹199</div>
+            <div className="text-emerald-300 text-xs mb-6 uppercase tracking-wider font-bold">One-time payment</div>
+            
+            <button
+              onClick={handleBuyNowClick}
+              disabled={isProcessing}
+              className="w-full lg:w-auto px-8 py-4.5 bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-900 font-extrabold rounded-2xl shadow-xl shadow-teal-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              {isProcessing ? "Connecting..." : "Buy Ebook Now"} <FaArrowRight />
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Dashboard Sneak Peek (Visual Hook) */}
-      <section className="relative w-full max-w-6xl mx-auto -mt-16 px-6 z-20 slide-up delay-200">
+      <section className="relative w-full max-w-6xl mx-auto px-6 z-20 mb-20 slide-up delay-200">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200 p-2">
            <div className="bg-slate-100 rounded-t-2xl py-3 px-4 flex items-center gap-2 border-b border-slate-200">
              <div className="w-3 h-3 rounded-full bg-red-400"></div>

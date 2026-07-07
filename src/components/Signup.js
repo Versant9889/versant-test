@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
 import { app, db, googleProvider } from '../firebaseConfig';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaGoogle, FaEnvelope, FaLock, FaPhone, FaCheckCircle } from 'react-icons/fa';
@@ -18,12 +18,44 @@ function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      const lowerEmail = user.email.toLowerCase().trim();
+
+      // Check if they have guest ebook purchases
+      let hasPurchasedEbook = false;
+      let ebookPurchasedAt = null;
+      let ebookTransactionId = '';
+
+      try {
+        const ebookQuery = query(
+          collection(db, 'ebook_purchases'),
+          where('email', '==', lowerEmail),
+          where('status', '==', 'success')
+        );
+        const querySnapshot = await getDocs(ebookQuery);
+        if (!querySnapshot.empty) {
+          hasPurchasedEbook = true;
+          const docData = querySnapshot.docs[0].data();
+          ebookPurchasedAt = docData.paidAt || null;
+          ebookTransactionId = querySnapshot.docs[0].id;
+
+          // Link uid to the purchase document
+          await updateDoc(doc(db, 'ebook_purchases', ebookTransactionId), {
+            uid: user.uid
+          });
+        }
+      } catch (err) {
+        console.error("Error looking up guest ebook purchases during signup:", err);
+      }
+
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
-        email: user.email,
+        email: lowerEmail,
         mobileNumber: mobileNumber,
         hasPaid: false,
         referredBy: localStorage.getItem('versant_affiliate_ref') || null,
+        hasPurchasedEbook: hasPurchasedEbook,
+        ...(ebookPurchasedAt ? { ebookPurchasedAt } : {}),
+        ...(ebookTransactionId ? { ebookTransactionId } : {})
       });
       navigate('/dashboard');
     } catch (error) {
@@ -40,12 +72,42 @@ function Signup() {
       const userRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
+        const lowerEmail = user.email.toLowerCase().trim();
+        let hasPurchasedEbook = false;
+        let ebookPurchasedAt = null;
+        let ebookTransactionId = '';
+
+        try {
+          const ebookQuery = query(
+            collection(db, 'ebook_purchases'),
+            where('email', '==', lowerEmail),
+            where('status', '==', 'success')
+          );
+          const querySnapshot = await getDocs(ebookQuery);
+          if (!querySnapshot.empty) {
+            hasPurchasedEbook = true;
+            const docData = querySnapshot.docs[0].data();
+            ebookPurchasedAt = docData.paidAt || null;
+            ebookTransactionId = querySnapshot.docs[0].id;
+
+            // Link uid to purchase document
+            await updateDoc(doc(db, 'ebook_purchases', ebookTransactionId), {
+              uid: user.uid
+            });
+          }
+        } catch (err) {
+          console.error("Error looking up guest purchases during Google signup:", err);
+        }
+
         await setDoc(userRef, {
           uid: user.uid,
-          email: user.email,
+          email: lowerEmail,
           name: user.displayName,
           hasPaid: false,
           referredBy: localStorage.getItem('versant_affiliate_ref') || null,
+          hasPurchasedEbook: hasPurchasedEbook,
+          ...(ebookPurchasedAt ? { ebookPurchasedAt } : {}),
+          ...(ebookTransactionId ? { ebookTransactionId } : {})
         });
       }
       navigate('/dashboard');

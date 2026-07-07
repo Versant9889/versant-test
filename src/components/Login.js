@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
 import { auth, googleProvider, db } from '../firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
 import { FaGoogle, FaEnvelope, FaLock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 
 function Login() {
@@ -49,11 +49,41 @@ function Login() {
       const userRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
+        const lowerEmail = user.email.toLowerCase().trim();
+        let hasPurchasedEbook = false;
+        let ebookPurchasedAt = null;
+        let ebookTransactionId = '';
+
+        try {
+          const ebookQuery = query(
+            collection(db, 'ebook_purchases'),
+            where('email', '==', lowerEmail),
+            where('status', '==', 'success')
+          );
+          const querySnapshot = await getDocs(ebookQuery);
+          if (!querySnapshot.empty) {
+            hasPurchasedEbook = true;
+            const docData = querySnapshot.docs[0].data();
+            ebookPurchasedAt = docData.paidAt || null;
+            ebookTransactionId = querySnapshot.docs[0].id;
+
+            // Link uid to purchase document
+            await updateDoc(doc(db, 'ebook_purchases', ebookTransactionId), {
+              uid: user.uid
+            });
+          }
+        } catch (err) {
+          console.error("Error checking guest purchases during Google login:", err);
+        }
+
         await setDoc(userRef, {
           uid: user.uid,
-          email: user.email,
+          email: lowerEmail,
           name: user.displayName,
           hasPaid: false,
+          hasPurchasedEbook: hasPurchasedEbook,
+          ...(ebookPurchasedAt ? { ebookPurchasedAt } : {}),
+          ...(ebookTransactionId ? { ebookTransactionId } : {})
         });
       }
 

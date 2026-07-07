@@ -18,26 +18,37 @@ exports.handler = async (event, context) => {
         let uid = null;
         let email = null;
         let referredBy = null;
+        let productType = 'premium_pass'; // default
         if (event.body) {
             try {
                 const body = JSON.parse(event.body);
                 uid = body.uid;
                 email = body.email;
                 referredBy = body.referredBy;
+                if (body.productType) {
+                    productType = body.productType;
+                }
             } catch (e) {
                 console.error("Failed to parse request body", e);
             }
         }
 
+        // Determine price based on product
+        let amount = 144900; // default ₹1449
+        if (productType === 'ebook') {
+            amount = 19900; // ₹199 in paise
+        }
+
         // The secure options for creating the order
         const options = {
-            amount: 144900, // ₹1449 in paise (exactly ~$14.99 USD based on current exchange rate)
+            amount: amount,
             currency: 'INR',
             receipt: 'receipt_' + Math.random().toString(36).substring(7),
             payment_capture: 1, // Auto-capture the payment
             notes: {
-                uid: uid || 'unknown_uid',
+                uid: uid || 'guest',
                 email: email || 'unknown_email',
+                productType: productType,
                 referredBy: referredBy || ''
             }
         };

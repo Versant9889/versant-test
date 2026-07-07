@@ -22,6 +22,8 @@ import SpeakingTest from './pages/SpeakingTest';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminLogin from './pages/AdminLogin';
 import PricingPage from './pages/PricingPage';
+import EbookLanding from './pages/EbookLanding';
+import ThankYou from './pages/ThankYou';
 import { Navigate } from 'react-router-dom';
 import { useActivityTracker } from './hooks/useActivityTracker';
 import { useSessionManager } from './hooks/useSessionManager';
@@ -106,6 +108,10 @@ function App() {
         <Route path="/versant-reading-and-writing-mock-test" element={<ReadingHub />} />
         <Route path="/versant-speaking-and-listening-practice-test" element={<SpeakingHub />} />
         <Route path="/versant-speaking-and-listening-practice-test/start/:mode" element={<SpeakingTest />} />
+
+        {/* Ebook Routes */}
+        <Route path="/ebook" element={<EbookLanding />} />
+        <Route path="/thank-you" element={<ThankYou />} />
 
         {/* Admin Routing */}
         <Route path="/admin" element={<AdminRedirect />} />

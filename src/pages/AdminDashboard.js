@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import { collection, onSnapshot, query, orderBy, limit, deleteDoc, doc, where, getDocs, updateDoc, setDoc } from 'firebase/firestore';
 import { serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
+import { ref, uploadBytesResumable } from 'firebase/storage';
+import { auth, db, storage } from '../firebaseConfig';
 import { AdminNav, AdminStatCard, UserTable, UserDetailsModal } from '../components/AdminComponents';
 
 const AdminDashboard = () => {
@@ -16,6 +17,13 @@ const AdminDashboard = () => {
     const [premiumUserIds, setPremiumUserIds] = useState(new Set());
     const [premiumUsersList, setPremiumUsersList] = useState([]);
     const [allUsersList, setAllUsersList] = useState([]);
+
+    // Ebook purchases and upload states
+    const [ebookPurchases, setEbookPurchases] = useState([]);
+    const [uploadFile, setUploadFile] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadLoading, setUploadLoading] = useState(false);
+    const [uploadMessage, setUploadMessage] = useState(null);
 
     // Manual Access Grant State
     const [grantEmail, setGrantEmail] = useState('');
@@ -53,6 +61,14 @@ const AdminDashboard = () => {
                 if (!user) navigate('/admin/login');
                 setLoading(false);
                 return;
+            }
+
+            // Get secure token for backend authentication
+            let token = '';
+            try {
+                token = await user.getIdToken();
+            } catch (err) {
+                console.error("Error retrieving ID Token:", err);
             }
 
             const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
@@ -144,11 +160,67 @@ const AdminDashboard = () => {
                 setLoading(false);
             });
 
-            return () => { unsubUsers(); unsubEvents(); };
+            // Fetch ebook purchases securely via Backend API
+            const fetchSalesData = async () => {
+                if (!token) return;
+                try {
+                    const response = await fetch('/.netlify/functions/getEbookSales', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Format the timestamp transfer fields back to toDate() methods
+                        const formatted = data.map(item => ({
+                            ...item,
+                            paidAt: item.paidAt ? {
+                                toDate: () => new Date(item.paidAt.seconds * 1000)
+                            } : null
+                        }));
+                        setEbookPurchases(formatted);
+                    }
+                } catch (e) {
+                    console.error("Failed to load ebook sales via API:", e);
+                }
+            };
+            
+            fetchSalesData();
+            const pollInterval = setInterval(fetchSalesData, 6000);
+
+            return () => { unsubUsers(); unsubEvents(); clearInterval(pollInterval); };
         });
 
         return () => unsubscribeAuth();
     }, [navigate]);
+
+    const handleUploadEbook = (e) => {
+        e.preventDefault();
+        if (!uploadFile) return;
+        setUploadLoading(true);
+        setUploadProgress(0);
+        setUploadMessage(null);
+
+        const ebookRef = ref(storage, 'ebooks/versant_ebook.pdf');
+        const uploadTask = uploadBytesResumable(ebookRef, uploadFile);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                setUploadProgress(progress);
+            }, 
+            (error) => {
+                console.error("Storage upload failed:", error);
+                setUploadMessage({ type: 'error', text: `Upload failed: ${error.message}` });
+                setUploadLoading(false);
+            }, 
+            () => {
+                setUploadMessage({ type: 'success', text: `✅ Ebook version updated successfully in storage!` });
+                setUploadFile(null);
+                setUploadLoading(false);
+            }
+        );
+    };
 
     const handleLogout = async () => {
         await signOut(auth);
@@ -411,44 +483,81 @@ const AdminDashboard = () => {
                     <AdminStatCard title="Total Tracked Sessions" value={activeSessions.length} color="rose" icon={<span className="text-2xl">📡</span>} />
                 </div>
 
-                {/* 🔑 Manual Access Grant Tool */}
-                <div className="bg-slate-900 border border-yellow-500/30 rounded-xl p-6 mb-8 shadow-xl">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-9 h-9 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400 text-lg">🔑</div>
-                        <div>
-                            <h3 className="text-white font-bold text-base">Manual Premium Access Grant</h3>
-                            <p className="text-slate-400 text-xs">Use when payment was captured but verification failed. Enter customer email + Payment ID.</p>
+                {/* 🔑 Manual Access Grant & 📘 Ebook Version Upload Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    {/* Manual Access Grant Tool */}
+                    <div className="bg-slate-900 border border-yellow-500/30 rounded-xl p-6 shadow-xl">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-9 h-9 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400 text-lg">🔑</div>
+                            <div>
+                                <h3 className="text-white font-bold text-base">Manual Premium Access Grant</h3>
+                                <p className="text-slate-400 text-xs">Use when payment was captured but verification failed. Enter customer email + Payment ID.</p>
+                            </div>
                         </div>
+                        <form onSubmit={handleGrantAccess} className="flex flex-col sm:flex-row gap-3">
+                            <input
+                                type="email"
+                                required
+                                value={grantEmail}
+                                onChange={e => { setGrantEmail(e.target.value); setGrantMessage(null); }}
+                                placeholder="Customer Email (e.g. religiontheo062022@gmail.com)"
+                                className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                            />
+                            <input
+                                type="text"
+                                value={grantPaymentId}
+                                onChange={e => setGrantPaymentId(e.target.value)}
+                                placeholder="Payment ID (e.g. pay_Sia4Nv49...)"
+                                className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                            />
+                            <button
+                                type="submit"
+                                disabled={grantLoading}
+                                className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                            >
+                                {grantLoading ? '⏳ Granting...' : '🔓 Grant Access'}
+                            </button>
+                        </form>
+                        {grantMessage && (
+                            <div className={`mt-3 text-sm font-medium px-4 py-2.5 rounded-lg ${grantMessage.type === 'success' ? 'bg-emerald-900/40 border border-emerald-500/30 text-emerald-300' : 'bg-red-900/40 border border-red-500/30 text-red-300'}`}>
+                                {grantMessage.text}
+                            </div>
+                        )}
                     </div>
-                    <form onSubmit={handleGrantAccess} className="flex flex-col sm:flex-row gap-3">
-                        <input
-                            type="email"
-                            required
-                            value={grantEmail}
-                            onChange={e => { setGrantEmail(e.target.value); setGrantMessage(null); }}
-                            placeholder="Customer Email (e.g. religiontheo062022@gmail.com)"
-                            className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
-                        />
-                        <input
-                            type="text"
-                            value={grantPaymentId}
-                            onChange={e => setGrantPaymentId(e.target.value)}
-                            placeholder="Payment ID (e.g. pay_Sia4Nv49...)"
-                            className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
-                        />
-                        <button
-                            type="submit"
-                            disabled={grantLoading}
-                            className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                        >
-                            {grantLoading ? '⏳ Granting...' : '🔓 Grant Access'}
-                        </button>
-                    </form>
-                    {grantMessage && (
-                        <div className={`mt-3 text-sm font-medium px-4 py-2.5 rounded-lg ${grantMessage.type === 'success' ? 'bg-emerald-900/40 border border-emerald-500/30 text-emerald-300' : 'bg-red-900/40 border border-red-500/30 text-red-300'}`}>
-                            {grantMessage.text}
+
+                    {/* Ebook Version Management */}
+                    <div className="bg-slate-900 border border-teal-500/30 rounded-xl p-6 shadow-xl">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-9 h-9 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-400 text-lg">📘</div>
+                            <div>
+                                <h3 className="text-white font-bold text-base">Ebook Version Management</h3>
+                                <p className="text-slate-400 text-xs">Upload new PDF to update the version served to customers instantly.</p>
+                            </div>
                         </div>
-                    )}
+                        <form onSubmit={handleUploadEbook} className="space-y-4">
+                            <div className="flex flex-col sm:flex-row gap-3 items-center">
+                                <input
+                                    type="file"
+                                    accept=".pdf"
+                                    required
+                                    onChange={(e) => setUploadFile(e.target.files[0])}
+                                    className="w-full bg-slate-800 border border-slate-700 text-slate-300 text-sm px-4 py-2 rounded-lg focus:outline-none focus:border-teal-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-teal-600 file:text-white hover:file:bg-teal-500"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={uploadLoading || !uploadFile}
+                                    className="w-full sm:w-auto px-6 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm rounded-lg transition disabled:opacity-50 whitespace-nowrap"
+                                >
+                                    {uploadLoading ? `⏳ ${uploadProgress}%` : '📤 Upload PDF'}
+                                </button>
+                            </div>
+                            {uploadMessage && (
+                                <div className={`text-sm font-medium px-4 py-2.5 rounded-lg ${uploadMessage.type === 'success' ? 'bg-emerald-900/40 border border-emerald-500/30 text-emerald-300' : 'bg-red-900/40 border border-red-500/30 text-red-300'}`}>
+                                    {uploadMessage.text}
+                                </div>
+                            )}
+                        </form>
+                    </div>
                 </div>
 
                 {/* Live Surveillance Architecture */}
@@ -551,6 +660,63 @@ const AdminDashboard = () => {
                                                     📥 Export
                                                 </button>
                                             </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* 📘 Premium Ebook Purchases Database */}
+                <div className="bg-slate-900 border border-slate-850 rounded-xl overflow-hidden flex flex-col shadow-xl mb-8">
+                    <div className="p-6 border-b border-slate-800 bg-slate-850/20 flex justify-between items-center">
+                        <div>
+                            <h3 className="text-lg font-bold text-teal-400 flex items-center gap-2">
+                                <span>📘</span> Verified Ebook Purchases
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-1">A log of all direct Ebook sales, including guests and registered users.</p>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="bg-teal-500/10 text-teal-400 border border-teal-500/20 font-bold px-4 py-1.5 rounded-lg text-sm">
+                                Sales: {ebookPurchases.length}
+                            </div>
+                            <div className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold px-4 py-1.5 rounded-lg text-sm">
+                                Revenue: ₹{(ebookPurchases.length * 199).toLocaleString('en-IN')}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-1 overflow-auto max-h-96">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-xs uppercase text-slate-500 font-semibold sticky top-0">
+                                <tr>
+                                    <th className="px-6 py-4">Customer</th>
+                                    <th className="px-6 py-4">Transaction Details</th>
+                                    <th className="px-6 py-4 font-center">Download Count</th>
+                                    <th className="px-6 py-4">Purchase Date</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-850 text-sm">
+                                {ebookPurchases.length === 0 && (
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-8 text-center text-slate-500">No ebook purchases yet.</td>
+                                    </tr>
+                                )}
+                                {ebookPurchases.map(purchase => (
+                                    <tr key={purchase.id} className="hover:bg-slate-800/30 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm font-bold text-white">{purchase.email || <span className="text-slate-500 italic">Guest Checkout</span>}</div>
+                                            <div className="text-xs text-slate-500 font-mono mt-1">UID: {purchase.uid}</div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="text-sm text-slate-300 font-mono">{purchase.transactionId}</div>
+                                            <div className="text-xs text-slate-500 font-mono mt-0.5">Order ID: {purchase.orderId}</div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center font-mono text-teal-400 font-bold">
+                                            {purchase.downloadCount || 0} times
+                                        </td>
+                                        <td className="px-6 py-4 text-slate-300 text-sm">
+                                            {purchase.paidAt ? purchase.paidAt.toDate().toLocaleString() : 'N/A'}
                                         </td>
                                     </tr>
                                 ))}

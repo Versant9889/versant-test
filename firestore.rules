@@ -21,8 +21,8 @@ service cloud.firestore {
       
       // Admin can create/update anyone. Owner can create self but cannot set hasPaid to true.
       allow create: if isAdmin() || (isOwner(userId) && (!('hasPaid' in request.resource.data) || request.resource.data.hasPaid == false));
-      // Owner can update self, but CANNOT modify the hasPaid lock. Only Admin/Backend can modify hasPaid.
-      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['hasPaid']));
+      // Owner can update self, but CANNOT modify the hasPaid lock. Only Admin/Backend can modify hasPaid / hasPurchasedEbook.
+      allow update: if isAdmin() || (isOwner(userId) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['hasPaid', 'hasPurchasedEbook']));
       allow delete: if isAdmin();
 
       // Subcollection: Test Results
@@ -30,6 +30,13 @@ service cloud.firestore {
         allow read: if isOwner(userId) || isAdmin();
         allow write: if isOwner(userId);
       }
+    }
+    
+    // NEW: Ebook Purchases Collection
+    match /ebook_purchases/{paymentId} {
+      // Anyone can get their own specific purchase by ID to verify checkout redirect, but not list all.
+      allow get: if true;
+      allow list, write: if isAdmin();
     }
     
     // NEW: Analytics Events Collection

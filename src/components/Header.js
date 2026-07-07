@@ -25,6 +25,7 @@ export default function Header({ page }) {
   const LoggedInLinks = () => (
     <>
       <Link to="/dashboard" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Dashboard</Link>
+      <Link to="/ebook" onClick={() => setIsOpen(false)} className="font-black bg-gradient-to-r from-[#d4af37] via-[#f9e8a2] to-[#aa7c11] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(212,175,55,0.4)] hover:brightness-125 transition-all duration-200">Ebook 📘</Link>
       <Link to="/blog" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Blog</Link>
       <Link to="/about" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">About Us</Link>
       <Link to="/contact" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Contact Us</Link>
@@ -43,6 +44,7 @@ export default function Header({ page }) {
   const GuestLinks = () => (
     <>
       <Link to="/" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Home</Link>
+      <Link to="/ebook" onClick={() => setIsOpen(false)} className="font-black bg-gradient-to-r from-[#d4af37] via-[#f9e8a2] to-[#aa7c11] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(212,175,55,0.4)] hover:brightness-125 transition-all duration-200">Ebook 📘</Link>
       <Link to="/blog" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Blog</Link>
       <Link to="/about" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">About Us</Link>
       <Link to="/contact" onClick={() => setIsOpen(false)} className="hover:text-green-200 font-medium md:text-white text-green-800">Contact Us</Link>
