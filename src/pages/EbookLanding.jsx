@@ -117,8 +117,14 @@ export default function EbookLanding() {
                             // Redirect user directly to Thank You page
                             navigate(`/thank-you?payment_id=${response.razorpay_payment_id}`);
                         } else {
-                            const errorData = await verifyRes.json();
-                            alert("Verification error: " + errorData.error);
+                            let errMsg = "Unknown server error.";
+                            try {
+                                const errorData = await verifyRes.json();
+                                errMsg = errorData.error || errMsg;
+                            } catch (e) {
+                                errMsg = `Server returned status code ${verifyRes.status}`;
+                            }
+                            alert("Verification error: " + errMsg);
                         }
                     } catch (verifyError) {
                         console.error("Signature verification query failed:", verifyError);

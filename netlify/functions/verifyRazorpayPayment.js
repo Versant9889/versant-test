@@ -122,6 +122,7 @@ exports.handler = async (event, context) => {
         console.error("Payment Verification Failed:", error);
         return {
             statusCode: 500,
+            headers: { 'Access-Control-Allow-Origin': '*' },
             body: JSON.stringify({ error: "Server error during verification" })
         };
     }
