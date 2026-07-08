@@ -4,6 +4,10 @@ import speakingData from '../data/speakingTest.json';
 import { FaMicrophone, FaStop, FaPlay, FaCheck, FaVolumeUp, FaHeadphones, FaVolumeMute, FaCheckCircle } from 'react-icons/fa';
 import '../App.css';
 import { trackFunnelEvent } from '../utils/AnalyticsService';
+import { getAuth } from 'firebase/auth';
+import { db } from '../firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
+import EbookRecommendSlide from '../components/EbookRecommendSlide';
 // --- Helper Functions for Scoring ---
 const calculateSimilarity = (s1, s2) => {
     if (!s1 || !s2) return 0;
@@ -55,10 +59,60 @@ const SpeakingTest = () => {
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
 
+    const [showEbookRecommend, setShowEbookRecommend] = useState(false);
+    const [checkingEligibility, setCheckingEligibility] = useState(true);
+
     const recognitionRef = useRef(null);
     const transcriptRef = useRef('');
     const timersRef = useRef([]); // Track active timers
     const testResponsesRef = useRef([]); // Track all responses for the result page
+
+    // --- eBook Recommendation Eligibility Check ---
+    useEffect(() => {
+        const checkEligibility = async () => {
+            // 1. Check local storage purchase flag
+            if (localStorage.getItem('ebook_purchased') === 'true') {
+                setCheckingEligibility(false);
+                return;
+            }
+
+            // 2. Check dismissed today
+            const todayStr = new Date().toDateString();
+            if (localStorage.getItem('ebook_recommend_dismissed_date') === todayStr) {
+                setCheckingEligibility(false);
+                return;
+            }
+
+            // 3. Check Firestore for registered user
+            const auth = getAuth();
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        if (userData.hasPurchasedEbook || userData.hasPaid || userData.paidTests) {
+                            localStorage.setItem('ebook_purchased', 'true');
+                            setCheckingEligibility(false);
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error checking user purchase status:", err);
+                }
+            }
+
+            // Show recommendation slide if eligible
+            setShowEbookRecommend(true);
+            setCheckingEligibility(false);
+        };
+
+        const auth = getAuth();
+        const unsubscribe = auth.onAuthStateChanged(() => {
+            checkEligibility();
+        });
+        return () => unsubscribe();
+    }, []);
 
     // --- Navigation Warning ---
     useEffect(() => {
@@ -570,6 +624,23 @@ const SpeakingTest = () => {
     };
 
     // --- Render ---
+
+    if (checkingEligibility) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            </div>
+        );
+    }
+
+    if (showEbookRecommend) {
+        return (
+            <EbookRecommendSlide 
+                testType="speaking" 
+                onContinue={() => setShowEbookRecommend(false)} 
+            />
+        );
+    }
 
     if (showResult) {
         return (

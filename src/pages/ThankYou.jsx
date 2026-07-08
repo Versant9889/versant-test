@@ -90,6 +90,17 @@ export default function ThankYou() {
         window.location.href = `/.netlify/functions/downloadEbook?payment_id=${paymentId}&email=${encodeURIComponent(verifiedEmail)}`;
     };
 
+    const handleStartMockTest = () => {
+        const redirectToTest = searchParams.get('redirect_to_test');
+        if (redirectToTest === 'speaking') {
+            navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId: 1 } });
+        } else if (redirectToTest === 'reading') {
+            navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: 1 } });
+        } else {
+            navigate('/versant-speaking-and-listening-practice-test');
+        }
+    };
+
     // Guest Account Password Registration
     const handleRegisterPassword = async (e) => {
         e.preventDefault();
@@ -164,12 +175,28 @@ export default function ThankYou() {
                             <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">🎉 Payment Successful</h1>
                             <p className="text-slate-300 text-base mb-8">Thank you for your purchase. Your ebook is now ready.</p>
 
-                            <button
-                                onClick={handleDownload}
-                                className="w-full py-4.5 bg-gradient-to-r from-teal-500 to-emerald-400 hover:from-teal-400 hover:to-emerald-300 text-slate-900 font-extrabold rounded-2xl shadow-xl shadow-teal-500/20 hover:shadow-teal-400/40 hover:scale-[1.01] transition-all flex items-center justify-center gap-3 text-lg mb-10"
-                            >
-                                <FaDownload /> Download Ebook
-                            </button>
+                            <div className="w-full space-y-4 mb-8">
+                                <button
+                                    onClick={handleDownload}
+                                    className="w-full py-4.5 bg-gradient-to-r from-teal-500 to-emerald-450 hover:from-teal-400 hover:to-emerald-350 text-slate-900 font-extrabold rounded-2xl shadow-xl shadow-teal-500/20 hover:shadow-teal-400/40 hover:scale-[1.01] transition-all flex items-center justify-center gap-3 text-lg"
+                                >
+                                    <FaDownload /> Download eBook
+                                </button>
+
+                                <button
+                                    onClick={handleStartMockTest}
+                                    className="w-full py-4 bg-slate-800 border border-slate-700 hover:bg-slate-750 text-white font-extrabold rounded-2xl shadow-md transition-all flex items-center justify-center gap-3 text-base"
+                                >
+                                    Start Free Mock Test <FaArrowRight />
+                                </button>
+
+                                <button
+                                    onClick={() => navigate(isGuest ? '/signup' : '/dashboard')}
+                                    className="w-full py-4 bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:text-white text-slate-300 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-base"
+                                >
+                                    Explore Unlimited Practice
+                                </button>
+                            </div>
 
                             {/* Guest Password Registration */}
                             {isGuest && (
@@ -205,35 +232,6 @@ export default function ThankYou() {
                                     )}
                                 </div>
                             )}
-
-                            {/* CTAs */}
-                            <div className="w-full border-t border-slate-700/50 mt-10 pt-8 space-y-6 text-left">
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/30 p-4 rounded-xl border border-slate-700/30">
-                                    <div>
-                                        <h4 className="text-white font-bold text-sm">Ready to improve your score?</h4>
-                                        <p className="text-slate-400 text-xs mt-0.5">Start your free Versant mock test simulator.</p>
-                                    </div>
-                                    <button
-                                        onClick={() => navigate(isGuest ? '/signup' : '/dashboard')}
-                                        className="py-2.5 px-5 bg-slate-800 border border-slate-700 text-white hover:bg-slate-700 font-bold text-xs rounded-xl flex items-center gap-2 whitespace-nowrap transition"
-                                    >
-                                        Start Free Test <FaArrowRight />
-                                    </button>
-                                </div>
-
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-teal-950/20 p-4 rounded-xl border border-teal-500/10">
-                                    <div>
-                                        <h4 className="text-white font-bold text-sm">Want unlimited practice?</h4>
-                                        <p className="text-slate-400 text-xs mt-0.5">Upgrade to Premium and unlock all 20 tests.</p>
-                                    </div>
-                                    <button
-                                        onClick={() => navigate('/pricing')}
-                                        className="py-2.5 px-5 bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-900 hover:opacity-90 font-black text-xs rounded-xl flex items-center gap-2 whitespace-nowrap transition shadow-[0_0_15px_rgba(20,184,166,0.2)]"
-                                    >
-                                        Upgrade to Premium <FaArrowRight />
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     )}
                 </div>

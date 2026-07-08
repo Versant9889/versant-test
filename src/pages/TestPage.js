@@ -5,6 +5,9 @@ import Footer from '../components/Footer';
 import './TestPage.css';
 import { gradeEmail, gradePassage } from '../utils/scoringUtils';
 import { getAuth } from 'firebase/auth';
+import { db } from '../firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
+import EbookRecommendSlide from '../components/EbookRecommendSlide';
 
 export default function TestPage() {
   // Add a class to the body when the component mounts, and remove it when it unmounts
@@ -23,6 +26,56 @@ export default function TestPage() {
   const [testCompleted, setTestCompleted] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [showInstructions, setShowInstructions] = useState(true); // Toggle instructions
+
+  const [showEbookRecommend, setShowEbookRecommend] = useState(false);
+  const [checkingEligibility, setCheckingEligibility] = useState(true);
+
+  // --- eBook Recommendation Eligibility Check ---
+  useEffect(() => {
+    const checkEligibility = async () => {
+      // 1. Check local storage purchase flag
+      if (localStorage.getItem('ebook_purchased') === 'true') {
+        setCheckingEligibility(false);
+        return;
+      }
+
+      // 2. Check dismissed today
+      const todayStr = new Date().toDateString();
+      if (localStorage.getItem('ebook_recommend_dismissed_date') === todayStr) {
+        setCheckingEligibility(false);
+        return;
+      }
+
+      // 3. Check Firestore for registered user
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.hasPurchasedEbook || userData.hasPaid || userData.paidTests) {
+              localStorage.setItem('ebook_purchased', 'true');
+              setCheckingEligibility(false);
+              return;
+            }
+          }
+        } catch (err) {
+          console.error("Error checking user purchase status:", err);
+        }
+      }
+
+      // Show recommendation slide if eligible
+      setShowEbookRecommend(true);
+      setCheckingEligibility(false);
+    };
+
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged(() => {
+      checkEligibility();
+    });
+    return () => unsubscribe();
+  }, []);
 
 
   // Typing test state
@@ -689,6 +742,23 @@ export default function TestPage() {
           </button>
         </div>
       </div>
+    );
+  }
+
+  if (checkingEligibility) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+      </div>
+    );
+  }
+
+  if (showEbookRecommend) {
+    return (
+      <EbookRecommendSlide 
+        testType="reading" 
+        onContinue={() => setShowEbookRecommend(false)} 
+      />
     );
   }
 

@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { FaBook, FaCheckCircle, FaArrowRight } from 'react-icons/fa';
+
+export default function EbookRecommendSlide({ onContinue, testType }) {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  // Load Razorpay SDK
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleBuyNow = async () => {
+    setIsProcessing(true);
+    const razorpayLoaded = await loadRazorpay();
+
+    if (!razorpayLoaded) {
+      alert('Razorpay failed to load. Please check your internet connection.');
+      setIsProcessing(false);
+      return;
+    }
+
+    try {
+      const checkoutEmail = user ? user.email : '';
+      const checkoutUid = user ? user.uid : 'guest';
+
+      const orderResponse = await fetch('/.netlify/functions/createRazorpayOrder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: checkoutUid,
+          email: checkoutEmail,
+          productType: 'ebook',
+          referredBy: localStorage.getItem('versant_affiliate_ref') || null
+        })
+      });
+
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create checkout order on server.");
+      }
+
+      const orderData = await orderResponse.json();
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Versant Test Mastery Ebook",
+        description: "Complete preparation guide with 20 practice sets",
+        image: "https://versantpro.com/logo.png",
+        order_id: orderData.order_id,
+        prefill: {
+          email: checkoutEmail,
+          name: user ? (user.displayName || '') : ''
+        },
+        theme: {
+          color: "#0f766e" // Teal theme
+        },
+        handler: async function (response) {
+          setIsProcessing(true);
+          console.log("Payment Success! Verifying...");
+          try {
+            const verifyRes = await fetch('/.netlify/functions/verifyRazorpayPayment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                uid: checkoutUid,
+                email: checkoutEmail,
+                productType: 'ebook',
+                referredBy: localStorage.getItem('versant_affiliate_ref') || null
+              })
+            });
+
+            if (verifyRes.ok) {
+              // Set local purchase flag so recommendation is skipped
+              localStorage.setItem('ebook_purchased', 'true');
+              
+              // Redirect to thank you page with test return param
+              window.location.href = `/thank-you?payment_id=${response.razorpay_payment_id}&redirect_to_test=${testType}`;
+            } else {
+              let errMsg = "Unknown server error.";
+              try {
+                const errorData = await verifyRes.json();
+                errMsg = errorData.error || errMsg;
+              } catch (e) {
+                errMsg = `Server returned status code ${verifyRes.status}`;
+              }
+              alert("Verification error: " + errMsg);
+            }
+          } catch (verifyError) {
+            console.error("Signature verification query failed:", verifyError);
+            alert("Verification check failed. If amount was deducted, please check your email or contact support.");
+          } finally {
+            setIsProcessing(false);
+          }
+        }
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
+    } catch (err) {
+      console.error("Payment initialization failed:", err);
+      alert("Could not initialize transaction. Please try again later.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleContinue = () => {
+    // Dismiss recommendation card for today (24h skip)
+    const todayStr = new Date().toDateString();
+    localStorage.setItem('ebook_recommend_dismissed_date', todayStr);
+    onContinue();
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 bg-gradient-to-tr from-emerald-50/30 via-gray-50 to-teal-50/30 flex flex-col items-center justify-center p-4 sm:p-6 font-sans text-gray-800 relative overflow-hidden select-none">
+      {/* Background glow elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-emerald-100/40 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-teal-100/30 blur-[120px] rounded-full pointer-events-none"></div>
+      
+      <div className="bg-white border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border-t-4 border-t-emerald-500 rounded-[2.5rem] p-8 sm:p-12 w-full max-w-2xl text-center relative z-10 animate-fade-in flex flex-col items-center transition-all duration-500">
+        
+        {/* Header */}
+        <span className="px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-black uppercase tracking-widest mb-6">
+          💡 Smart Recommendation
+        </span>
+        
+        <h2 className="text-3xl sm:text-5xl font-black text-gray-950 mb-3 tracking-tight flex items-center justify-center gap-3">
+          <FaBook className="text-emerald-500 text-2xl sm:text-4xl" /> Versant Test Mastery
+        </h2>
+        <p className="text-gray-600 text-sm sm:text-base mb-8 max-w-md font-light leading-relaxed">
+          Boost your score instantly! Crack the automated AI voice evaluation algorithms with our high-scoring response templates.
+        </p>
+
+        {/* Pricing */}
+        <div className="flex items-center gap-3 mb-8 bg-emerald-50/50 border border-emerald-100 px-7 py-3.5 rounded-2xl shadow-sm">
+          <span className="text-gray-400 line-through text-base">₹499</span>
+          <span className="text-3xl font-black text-emerald-600">₹199</span>
+          <span className="text-emerald-750/80 text-xs font-bold uppercase tracking-wide">Only</span>
+        </div>
+
+        {/* Features list */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-10 text-left border-t border-b border-gray-200 py-8">
+          {[
+            "20 Full Practice Sets",
+            "Repeat Sentence Strategies",
+            "Story Retelling Techniques",
+            "Listening & Speaking Tips",
+            "Lifetime Access"
+          ].map((feat, idx) => (
+            <div key={idx} className="flex items-center gap-3 text-gray-700 font-semibold text-sm sm:text-base">
+              <FaCheckCircle className="text-emerald-500 flex-shrink-0" />
+              <span>{feat}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full max-w-lg">
+          <button
+            onClick={handleBuyNow}
+            disabled={isProcessing}
+            className="px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 transition-all w-full sm:w-1/2 flex items-center justify-center gap-2 text-base shadow-[0_4px_25px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_35px_rgba(16,185,129,0.35)] transform hover:-translate-y-0.5 disabled:opacity-50"
+          >
+            {isProcessing ? "Processing..." : "Buy Now"} <FaArrowRight />
+          </button>
+          <button
+            onClick={handleContinue}
+            className="px-8 py-4 rounded-2xl font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors w-full sm:w-1/2 text-base text-center"
+          >
+            Continue Free Test
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
