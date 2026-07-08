@@ -138,9 +138,9 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
       <div className="bg-gradient-to-br from-emerald-600 via-emerald-650 to-teal-700 border border-emerald-500/20 shadow-2xl rounded-[2.5rem] p-8 sm:p-12 w-full max-w-2xl text-center relative z-10 animate-fade-in flex flex-col items-center transition-all duration-500">
         
         {/* Header */}
-        <span className="px-4 py-1.5 bg-white/20 border border-white/30 rounded-full text-white text-xs font-black uppercase tracking-widest mb-6 flex items-center justify-center gap-1.5">
+        <span className="px-4 py-1.5 bg-white/20 border border-white/30 rounded-full text-white text-xs font-black uppercase tracking-widest mb-6 flex items-center justify-center gap-1">
           <span>💡 Smart</span>
-          <span className="font-black italic bg-gradient-to-r from-[#d4af37] via-[#f9e8a2] to-[#aa7c11] bg-clip-text text-transparent text-sm sm:text-base tracking-normal">eBook</span>
+          <span className="font-black italic text-black text-xl sm:text-2xl mx-1 tracking-normal uppercase">eBook</span>
           <span>Recommendation</span>
         </span>
         
