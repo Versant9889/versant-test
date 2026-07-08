@@ -130,34 +130,34 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 bg-gradient-to-tr from-emerald-50/30 via-gray-50 to-teal-50/30 flex flex-col items-center justify-center p-4 sm:p-6 font-sans text-gray-800 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-gray-50 bg-gradient-to-tr from-emerald-50/20 via-gray-50 to-teal-50/20 flex flex-col items-center justify-center p-4 sm:p-6 font-sans text-gray-800 relative overflow-hidden select-none">
       {/* Background glow elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-emerald-100/40 blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-teal-100/30 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-emerald-100/30 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-teal-100/20 blur-[120px] rounded-full pointer-events-none"></div>
       
-      <div className="bg-white border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border-t-4 border-t-emerald-500 rounded-[2.5rem] p-8 sm:p-12 w-full max-w-2xl text-center relative z-10 animate-fade-in flex flex-col items-center transition-all duration-500">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-650 to-teal-700 border border-emerald-500/20 shadow-2xl rounded-[2.5rem] p-8 sm:p-12 w-full max-w-2xl text-center relative z-10 animate-fade-in flex flex-col items-center transition-all duration-500">
         
         {/* Header */}
-        <span className="px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-black uppercase tracking-widest mb-6">
+        <span className="px-4 py-1.5 bg-white/20 border border-white/30 rounded-full text-white text-xs font-black uppercase tracking-widest mb-6">
           💡 Smart Recommendation
         </span>
         
-        <h2 className="text-3xl sm:text-5xl font-black text-gray-950 mb-3 tracking-tight flex items-center justify-center gap-3">
-          <FaBook className="text-emerald-500 text-2xl sm:text-4xl" /> Versant Test Mastery
+        <h2 className="text-3xl sm:text-5xl font-black text-white mb-3 tracking-tight flex items-center justify-center gap-3">
+          <FaBook className="text-white text-2xl sm:text-4xl" /> Versant Test Mastery
         </h2>
-        <p className="text-gray-600 text-sm sm:text-base mb-8 max-w-md font-light leading-relaxed">
+        <p className="text-emerald-50/90 text-sm sm:text-base mb-8 max-w-md font-light leading-relaxed">
           Boost your score instantly! Crack the automated AI voice evaluation algorithms with our high-scoring response templates.
         </p>
 
         {/* Pricing */}
-        <div className="flex items-center gap-3 mb-8 bg-emerald-50/50 border border-emerald-100 px-7 py-3.5 rounded-2xl shadow-sm">
-          <span className="text-gray-400 line-through text-base">₹499</span>
-          <span className="text-3xl font-black text-emerald-600">₹199</span>
-          <span className="text-emerald-750/80 text-xs font-bold uppercase tracking-wide">Only</span>
+        <div className="flex items-center gap-3 mb-8 bg-white/10 border border-white/20 px-7 py-3.5 rounded-2xl shadow-inner">
+          <span className="text-emerald-200/80 line-through text-base">₹499</span>
+          <span className="text-3xl font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)]">₹199</span>
+          <span className="text-emerald-100/90 text-xs font-bold uppercase tracking-wide">Only</span>
         </div>
 
         {/* Features list */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-10 text-left border-t border-b border-gray-200 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-10 text-left border-t border-b border-white/20 py-8">
           {[
             "20 Full Practice Sets",
             "Repeat Sentence Strategies",
@@ -165,8 +165,8 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
             "Listening & Speaking Tips",
             "Lifetime Access"
           ].map((feat, idx) => (
-            <div key={idx} className="flex items-center gap-3 text-gray-700 font-semibold text-sm sm:text-base">
-              <FaCheckCircle className="text-emerald-500 flex-shrink-0" />
+            <div key={idx} className="flex items-center gap-3 text-white font-semibold text-sm sm:text-base">
+              <FaCheckCircle className="text-emerald-200 flex-shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)]" />
               <span>{feat}</span>
             </div>
           ))}
@@ -177,13 +177,13 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
           <button
             onClick={handleBuyNow}
             disabled={isProcessing}
-            className="px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 transition-all w-full sm:w-1/2 flex items-center justify-center gap-2 text-base shadow-[0_4px_25px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_35px_rgba(16,185,129,0.35)] transform hover:-translate-y-0.5 disabled:opacity-50"
+            className="px-8 py-4 rounded-2xl font-black text-emerald-800 bg-white hover:bg-emerald-50 transition-all w-full sm:w-1/2 flex items-center justify-center gap-2 text-base shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_35px_rgba(0,0,0,0.25)] transform hover:-translate-y-0.5 disabled:opacity-50"
           >
             {isProcessing ? "Processing..." : "Buy Now"} <FaArrowRight />
           </button>
           <button
             onClick={handleContinue}
-            className="px-8 py-4 rounded-2xl font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors w-full sm:w-1/2 text-base text-center"
+            className="px-8 py-4 rounded-2xl font-bold text-white bg-transparent border border-white/40 hover:bg-white/10 transition-colors w-full sm:w-1/2 text-base text-center"
           >
             Continue Free Test
           </button>
