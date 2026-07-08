@@ -139,7 +139,7 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
         
         {/* Header */}
         <span className="px-4 py-1.5 bg-white/20 border border-white/30 rounded-full text-white text-xs font-black uppercase tracking-widest mb-6">
-          💡 Smart Recommendation
+          💡 Smart <span className="font-extrabold italic underline decoration-emerald-200">eBook</span> Recommendation
         </span>
         
         <h2 className="text-3xl sm:text-5xl font-black text-white mb-3 tracking-tight flex items-center justify-center gap-3">
