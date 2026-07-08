@@ -85,18 +85,17 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // --- FILE RETRIEVAL & SIGNED URL GENERATION ---
-        const bucketName = process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || process.env.FIREBASE_STORAGE_BUCKET || `${admin.apps[0].options.projectId}.appspot.com`;
-        const bucket = admin.storage().bucket(bucketName);
-        const file = bucket.file('ebooks/versant_ebook.pdf');
+        // --- FILE RETRIEVAL FROM LOCAL DIRECTORY & BINARY RESPONDING ---
+        const fs = require('fs');
+        const path = require('path');
+        const pdfPath = path.join(__dirname, 'versant_ebook.pdf');
 
-        const [exists] = await file.exists();
-        if (!exists) {
-            console.error(`Ebook file not found in storage bucket: ${bucketName}`);
+        if (!fs.existsSync(pdfPath)) {
+            console.error(`Ebook file not found at: ${pdfPath}`);
             return { 
                 statusCode: 404, 
                 headers: { 'Access-Control-Allow-Origin': '*' },
-                body: JSON.stringify({ error: "Ebook file not found on storage server. Please ensure the PDF is uploaded inside the 'ebooks' folder as 'versant_ebook.pdf'." }) 
+                body: JSON.stringify({ error: "Ebook file not found on server. Please contact support." }) 
             };
         }
 
@@ -113,20 +112,18 @@ exports.handler = async (event, context) => {
             }).catch(e => console.error("Error incrementing transaction download count:", e));
         }
 
-        // Generate temporary Signed URL (valid for 2 minutes)
-        const [signedUrl] = await file.getSignedUrl({
-            action: 'read',
-            expires: Date.now() + 120000 // 2 minutes
-        });
+        const fileBuffer = fs.readFileSync(pdfPath);
 
-        // Redirect user to secure Firebase download link
         return {
-            statusCode: 302,
+            statusCode: 200,
             headers: {
-                Location: signedUrl,
-                'Cache-Control': 'no-cache',
-                'Access-Control-Allow-Origin': '*'
-            }
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename="versant_test_mastery_guide.pdf"',
+                'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'no-cache'
+            },
+            body: fileBuffer.toString('base64'),
+            isBase64Encoded: true
         };
 
     } catch (err) {
