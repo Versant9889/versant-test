@@ -6,6 +6,7 @@ import { auth, db } from '../firebaseConfig';
 import { doc, updateDoc } from 'firebase/firestore';
 import { trackFunnelEvent } from '../utils/AnalyticsService';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 export default function PricingPage() {
     const navigate = useNavigate();
@@ -47,6 +48,7 @@ export default function PricingPage() {
     }, []);
 
     useEffect(() => {
+        trackGA4Event('premium_plan_view');
         if (window.gtag) {
             window.gtag('event', 'pricing_page_visit');
         }
@@ -65,6 +67,7 @@ export default function PricingPage() {
     };
 
     const handleUpgrade = async () => {
+        trackGA4Event('premium_subscription_click', { product_name: 'VersantPro Premium Pass', payment_amount: 1449, currency: 'INR' });
         if (!auth.currentUser) {
             alert('Please sign in or create an account first to upgrade to Pro.');
             navigate('/signup');
@@ -131,6 +134,13 @@ export default function PricingPage() {
                         const verifyData = await verifyRes.json();
 
                         if (verifyRes.ok) {
+                            trackGA4Event('razorpay_payment_success', {
+                                transaction_id: response.razorpay_payment_id,
+                                payment_amount: 1449,
+                                currency: 'INR',
+                                product_name: 'VersantPro Premium Pass',
+                                payment_method: 'razorpay'
+                            });
                             // --- Google Ads Conversion Tracking ---
                             if (typeof window !== "undefined" && typeof window.gtag === "function") {
                                 window.gtag('event', 'purchase', {
@@ -161,9 +171,15 @@ export default function PricingPage() {
                 },
                 theme: {
                     color: "#10b981" // Match Emerald Green UI
+                },
+                modal: {
+                    ondismiss: function() {
+                        trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 1449, currency: 'INR', reason: 'User dismissed checkout modal' });
+                    }
                 }
             };
 
+            trackGA4Event('razorpay_checkout_open', { product_name: 'VersantPro Premium Pass', payment_amount: 1449, currency: 'INR' });
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
         } catch (err) {
@@ -311,6 +327,8 @@ export default function PricingPage() {
                                 <PayPalButtons 
                                     style={{ layout: "vertical", color: "gold", shape: "rect", label: "paypal" }}
                                     createOrder={(data, actions) => {
+                                        trackGA4Event('premium_subscription_click', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD' });
+                                        trackGA4Event('razorpay_checkout_open', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', payment_method: 'paypal' });
                                         if (!auth.currentUser) {
                                             alert('Please sign in first to upgrade to Pro.');
                                             navigate('/signup');
@@ -346,6 +364,13 @@ export default function PricingPage() {
                                             const verifyData = await verifyRes.json();
 
                                             if (verifyRes.ok) {
+                                                trackGA4Event('razorpay_payment_success', {
+                                                    transaction_id: data.orderID,
+                                                    payment_amount: 14.99,
+                                                    currency: 'USD',
+                                                    product_name: 'VersantPro Premium Pass',
+                                                    payment_method: 'paypal'
+                                                });
                                                 // --- Google Ads Conversion Tracking ---
                                                 if (typeof window !== "undefined" && typeof window.gtag === "function") {
                                                     window.gtag('event', 'purchase', {
@@ -360,16 +385,19 @@ export default function PricingPage() {
                                                 alert("PayPal Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
                                                 navigate('/dashboard');
                                             } else {
+                                                trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: verifyData.error || 'Verification Failed' });
                                                 alert("Payment verification failed: " + verifyData.error);
                                                 setIsProcessing(false);
                                             }
                                         } catch (err) {
+                                            trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: err.message || 'Verification Error' });
                                             console.error("PayPal Verification error:", err);
                                             alert("Network error during verification. If money was deducted, contact support.");
                                             setIsProcessing(false);
                                         }
                                     }}
                                     onError={(err) => {
+                                        trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: err?.message || 'PayPal Popup Closed/Error' });
                                         console.error("PayPal Error:", err);
                                         alert("There was an error loading the PayPal popup.");
                                     }}

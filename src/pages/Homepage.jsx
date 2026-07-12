@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { auth } from '../firebaseConfig';
 import { FaCheckCircle, FaStar, FaChartPie, FaMicrophoneAlt, FaGlobe, FaArrowRight } from 'react-icons/fa';
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 export default function VersantHomepage() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function VersantHomepage() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    trackGA4Event('homepage_view');
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
     });
@@ -45,6 +47,7 @@ export default function VersantHomepage() {
   };
 
   const handleBuyNowClick = () => {
+    trackGA4Event('ebook_buy_click', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
     if (user) {
       initiateCheckout(user.email, user.uid);
     } else {
@@ -94,6 +97,11 @@ export default function VersantHomepage() {
         theme: {
           color: "#0f766e"
         },
+        modal: {
+          ondismiss: function() {
+            trackGA4Event('razorpay_payment_failed', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR', reason: 'User dismissed checkout modal' });
+          }
+        },
         handler: async function (response) {
           setIsProcessing(true);
           try {
@@ -112,6 +120,13 @@ export default function VersantHomepage() {
             });
 
             if (verifyRes.ok) {
+              trackGA4Event('razorpay_payment_success', {
+                transaction_id: response.razorpay_payment_id,
+                payment_amount: 199,
+                currency: 'INR',
+                product_name: 'Versant Test Mastery Ebook',
+                payment_method: 'razorpay'
+              });
               if (typeof window !== "undefined" && typeof window.gtag === "function") {
                 window.gtag('event', 'purchase_ebook', {
                   'value': 199,
@@ -134,6 +149,7 @@ export default function VersantHomepage() {
         }
       };
 
+      trackGA4Event('razorpay_checkout_open', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
 
@@ -186,7 +202,10 @@ export default function VersantHomepage() {
           <div className="grid md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mt-4 relative z-20">
             {/* Speaking & Listening Demo Card */}
             <div 
-              onClick={() => navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId: 1 } })}
+              onClick={() => {
+                trackGA4Event('free_test_start_click', { test_type: 'speaking', test_id: 1 });
+                navigate('/versant-speaking-and-listening-practice-test/start/full', { state: { testId: 1 } });
+              }}
               className="cursor-pointer group flex flex-col items-center p-8 bg-emerald-950/40 backdrop-blur-md rounded-[2rem] border border-emerald-500/30 hover:bg-emerald-900/60 hover:border-emerald-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(16,185,129,0.4)]"
             >
                <FaMicrophoneAlt className="text-5xl text-emerald-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
@@ -199,7 +218,10 @@ export default function VersantHomepage() {
 
             {/* Reading & Writing Demo Card */}
             <div 
-              onClick={() => navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: 1 } })}
+              onClick={() => {
+                trackGA4Event('free_test_start_click', { test_type: 'reading', test_id: 1 });
+                navigate('/versant-reading-and-writing-mock-test/start', { state: { testId: 1 } });
+              }}
               className="cursor-pointer group flex flex-col items-center p-8 bg-teal-950/40 backdrop-blur-md rounded-[2rem] border border-teal-500/30 hover:bg-teal-900/60 hover:border-teal-400 transition-all duration-500 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(20,184,166,0.3)]"
             >
                <FaGlobe className="text-5xl text-teal-400 mb-5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]" />

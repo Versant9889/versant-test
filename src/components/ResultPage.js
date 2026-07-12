@@ -8,6 +8,7 @@ import Header from './Header';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullseye, FaChevronDown, FaCheckCircle, FaTimesCircle, FaStar, FaGlobe, FaExclamationTriangle } from 'react-icons/fa';
 import { trackFunnelEvent } from '../utils/AnalyticsService';
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 const ResultPage = () => {
   const { state } = useLocation();
@@ -48,6 +49,12 @@ const ResultPage = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      trackGA4Event('result_page_view', { score: score || 0, test_id: testId || 1 });
+    }
+  }, [loading, score, testId]);
 
   // Reusable Save Function
   const saveResult = React.useCallback(async (resultData, testId) => {

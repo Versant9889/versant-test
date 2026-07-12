@@ -5,6 +5,7 @@ import { auth } from '../firebaseConfig';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaCheckCircle, FaStar, FaArrowRight } from 'react-icons/fa';
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 export default function EbookLanding() {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function EbookLanding() {
     const [activePreviewTab, setActivePreviewTab] = useState(0);
 
     useEffect(() => {
+        trackGA4Event('ebook_page_view');
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
             setUser(currentUser);
         });
@@ -36,6 +38,7 @@ export default function EbookLanding() {
 
     // Purchase Trigger
     const handleBuyNowClick = () => {
+        trackGA4Event('ebook_buy_click', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
         if (user) {
             // Already logged in - checkout immediately
             initiateCheckout(user.email, user.uid);
@@ -88,6 +91,11 @@ export default function EbookLanding() {
                 theme: {
                     color: "#0f766e" // Teal theme
                 },
+                modal: {
+                    ondismiss: function() {
+                        trackGA4Event('razorpay_payment_failed', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR', reason: 'User dismissed checkout modal' });
+                    }
+                },
                 handler: async function (response) {
                     setIsProcessing(true);
                     console.log("Payment Success! Verifying...");
@@ -107,6 +115,13 @@ export default function EbookLanding() {
                         });
 
                         if (verifyRes.ok) {
+                            trackGA4Event('razorpay_payment_success', {
+                                transaction_id: response.razorpay_payment_id,
+                                payment_amount: 199,
+                                currency: 'INR',
+                                product_name: 'Versant Test Mastery Ebook',
+                                payment_method: 'razorpay'
+                            });
                             // Track purchase in analytics if tracking is set up
                             if (typeof window !== "undefined" && typeof window.gtag === "function") {
                                 window.gtag('event', 'purchase_ebook', {
@@ -136,6 +151,7 @@ export default function EbookLanding() {
                 }
             };
 
+            trackGA4Event('razorpay_checkout_open', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
 
@@ -256,7 +272,10 @@ export default function EbookLanding() {
                             ].map((tab) => (
                                 <button
                                     key={tab.id}
-                                    onClick={() => setActivePreviewTab(tab.id)}
+                                    onClick={() => {
+                                        setActivePreviewTab(tab.id);
+                                        trackGA4Event('ebook_preview_click', { page_number: tab.id === 0 ? 12 : tab.id === 1 ? 27 : 45, tab_label: tab.label });
+                                    }}
                                     className={`px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 ${
                                         activePreviewTab === tab.id
                                             ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'

@@ -28,6 +28,7 @@ import { Navigate } from 'react-router-dom';
 import { useActivityTracker } from './hooks/useActivityTracker';
 import { useSessionManager } from './hooks/useSessionManager';
 import WhatsAppButton from './components/WhatsAppButton';
+import { initUTMTracking, fetchGeoLocation } from './utils/GA4Analytics';
 
 // Helper component to handle /admin redirection
 const AdminRedirect = () => {
@@ -50,6 +51,12 @@ function PageTracker() {
 
   useActivityTracker(); // <--- New Global Real-time Tracker
   useSessionManager();  // <--- Anti-Piracy Server Lock
+
+  // Initialize UTM Tracking & Geolocation Fetch
+  useEffect(() => {
+    initUTMTracking();
+    fetchGeoLocation();
+  }, []);
 
   // Real-time Unique/Repeated Visitor Tracking
   useEffect(() => {

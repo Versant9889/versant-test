@@ -4,12 +4,17 @@ import masterData from '../data/masterTest.json';
 import Footer from '../components/Footer';
 import './TestPage.css';
 import { gradeEmail, gradePassage } from '../utils/scoringUtils';
+import { trackGA4Event } from '../utils/GA4Analytics';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
 import EbookRecommendSlide from '../components/EbookRecommendSlide';
 
 export default function TestPage() {
+  useEffect(() => {
+    trackGA4Event('instruction_page_view', { test_type: 'reading', test_id: testId || 1 });
+  }, [testId]);
+
   // Add a class to the body when the component mounts, and remove it when it unmounts
   useEffect(() => {
     document.body.classList.add('test-page-active');
@@ -342,6 +347,7 @@ export default function TestPage() {
 
   // Start the test
   const startTest = () => {
+    trackGA4Event('test_started', { test_type: 'reading', test_id: testId || 1 });
     setTestStarted(true);
     setCurrentTest('typing');
     setShowInstructions(true); // Show typing instructions first
@@ -532,6 +538,7 @@ export default function TestPage() {
     });
     console.log("Passage Grading:", passageResults);
 
+    trackGA4Event('test_completed', { test_type: 'reading', test_id: testId || 1 });
     setTestCompleted(true); // Mark test as completed before navigating
 
     // Simulate AI processing delay

@@ -4,6 +4,7 @@ import speakingData from '../data/speakingTest.json';
 import { FaMicrophone, FaStop, FaPlay, FaCheck, FaVolumeUp, FaHeadphones, FaVolumeMute, FaCheckCircle } from 'react-icons/fa';
 import '../App.css';
 import { trackFunnelEvent } from '../utils/AnalyticsService';
+import { trackGA4Event } from '../utils/GA4Analytics';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
@@ -143,6 +144,10 @@ const SpeakingTest = () => {
     ];
 
     // --- Initialization ---
+    useEffect(() => {
+        trackGA4Event('instruction_page_view', { test_type: 'speaking', test_id: testId || 1 });
+    }, [testId]);
+
     useEffect(() => {
         let targetSection = mode;
         if (mode === 'full') {
@@ -595,6 +600,7 @@ const SpeakingTest = () => {
                     setCurrentQuestionIndex(0);
                     setIsInstruction(true); // Trigger instruction for new section
                 } else {
+                    trackGA4Event('test_completed', { test_type: 'speaking', test_id: testId || 1 });
                     if (window.gtag) window.gtag('event', 'test_completed');
                     trackFunnelEvent('test_completed');
                     navigate('/result', {
@@ -607,6 +613,7 @@ const SpeakingTest = () => {
                     });
                 }
             } else {
+                trackGA4Event('test_completed', { test_type: 'speaking', test_id: testId || 1 });
                 if (window.gtag) window.gtag('event', 'test_completed');
                 trackFunnelEvent('test_completed');
                 navigate('/result', {
@@ -733,6 +740,7 @@ const SpeakingTest = () => {
                             </button>
                             <button
                                 onClick={() => {
+                                    trackGA4Event('test_started', { test_type: 'speaking', test_id: testId || 1 });
                                     if (window.gtag) window.gtag('event', 'test_start');
                                     trackFunnelEvent('test_start');
                                     setShowPreTestInstruction(false);

@@ -7,6 +7,7 @@ import { app, db } from '../firebaseConfig';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaCheckCircle, FaSpinner, FaDownload, FaArrowRight, FaLock } from 'react-icons/fa';
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 const auth = getAuth(app);
 
@@ -50,6 +51,7 @@ export default function ThankYou() {
                     const data = await response.json();
                     if (data.verified) {
                         setPaymentVerified(true);
+                        trackGA4Event('thank_you_page_view', { payment_id: paymentId, email: data.email || '' });
                         if (data.email) {
                             setVerifiedEmail(data.email);
                         }
@@ -87,6 +89,7 @@ export default function ThankYou() {
     // Trigger secure file download
     const handleDownload = () => {
         if (!paymentVerified) return;
+        trackGA4Event('ebook_download', { payment_id: paymentId, email: verifiedEmail });
         window.location.href = `/.netlify/functions/downloadEbook?payment_id=${paymentId}&email=${encodeURIComponent(verifiedEmail)}`;
     };
 

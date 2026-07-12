@@ -6,6 +6,7 @@ import { auth, db } from '../firebaseConfig';
 import { readingTests, speakingTests } from '../data/mockTests';
 import { FaLock, FaUnlock } from 'react-icons/fa';
 import Header from '../components/Header';
+import { trackGA4Event } from '../utils/GA4Analytics';
 
 import {
   DashboardNav,
@@ -290,6 +291,7 @@ const Dashboard = () => {
   };
 
   const handleBuyEbook = async () => {
+    trackGA4Event('ebook_buy_click', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
     const currentUser = auth.currentUser;
     if (!currentUser) return;
 
@@ -334,6 +336,11 @@ const Dashboard = () => {
         theme: {
           color: "#0f766e"
         },
+        modal: {
+          ondismiss: function() {
+            trackGA4Event('razorpay_payment_failed', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR', reason: 'User dismissed checkout modal' });
+          }
+        },
         handler: async function (response) {
           setIsProcessingEbook(true);
           try {
@@ -351,8 +358,15 @@ const Dashboard = () => {
               })
             });
 
-            if (verifyRes.ok) {
-              alert("Payment Verified! Your ebook has been unlocked.");
+             if (verifyRes.ok) {
+               trackGA4Event('razorpay_payment_success', {
+                 transaction_id: response.razorpay_payment_id,
+                 payment_amount: 199,
+                 currency: 'INR',
+                 product_name: 'Versant Test Mastery Ebook',
+                 payment_method: 'razorpay'
+               });
+               alert("Payment Verified! Your ebook has been unlocked.");
               setHasEbookAccess(true);
             } else {
               alert("Payment verification failed.");
@@ -366,6 +380,7 @@ const Dashboard = () => {
         }
       };
 
+      trackGA4Event('razorpay_checkout_open', { product_name: 'Versant Test Mastery Ebook', payment_amount: 199, currency: 'INR' });
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
 
@@ -381,6 +396,7 @@ const Dashboard = () => {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) return;
+      trackGA4Event('ebook_download', { email: currentUser.email });
       const token = await currentUser.getIdToken(true);
       window.location.href = `/.netlify/functions/downloadEbook?token=${token}`;
     } catch (err) {
