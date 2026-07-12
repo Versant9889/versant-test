@@ -32,8 +32,8 @@ function Login() {
     setSuccessMsg('');
     try {
       await sendPasswordResetEmail(auth, resetEmail);
-      setSuccessMsg('Password reset link sent! Please check your inbox.');
-      setTimeout(() => setShowResetModal(false), 3000);
+      setSuccessMsg('Password reset link sent! Please check your Inbox (and check your Spam/Junk folder if you don\'t see it there).');
+      setTimeout(() => setShowResetModal(false), 6000);
     } catch (error) {
       setErrorMsg(error.message.replace('Firebase: ', ''));
     }
