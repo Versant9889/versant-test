@@ -33,6 +33,13 @@ const AdminDashboard = () => {
 
     // Affiliate Tracking State
     const [affiliateFilter, setAffiliateFilter] = useState(null);
+
+    // Visitor Stats State
+    const [visitorStats, setVisitorStats] = useState({
+        today: { unique: 0, repeated: 0 },
+        yesterday: { unique: 0, repeated: 0 }
+    });
+    const [loadingVisitorStats, setLoadingVisitorStats] = useState(true);
     
     const [stats, setStats] = useState({
         totalUsers: 0,
@@ -188,7 +195,41 @@ const AdminDashboard = () => {
             fetchSalesData();
             const pollInterval = setInterval(fetchSalesData, 6000);
 
-            return () => { unsubUsers(); unsubEvents(); clearInterval(pollInterval); };
+            // Fetch visitor stats via Backend API
+            const fetchVisitorStats = async () => {
+                if (!token) return;
+                try {
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const todayStr = `${year}-${month}-${day}`;
+
+                    const response = await fetch(`/.netlify/functions/getVisitorStats?date=${todayStr}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setVisitorStats(data);
+                    }
+                } catch (e) {
+                    console.error("Failed to load visitor stats via API:", e);
+                } finally {
+                    setLoadingVisitorStats(false);
+                }
+            };
+
+            fetchVisitorStats();
+            const visitorInterval = setInterval(fetchVisitorStats, 6000);
+
+            return () => { 
+                unsubUsers(); 
+                unsubEvents(); 
+                clearInterval(pollInterval); 
+                clearInterval(visitorInterval);
+            };
         });
 
         return () => unsubscribeAuth();
@@ -481,6 +522,83 @@ const AdminDashboard = () => {
                     <AdminStatCard title="Premium Members" value={stats.premiumUsers} color="emerald" icon={<span className="text-2xl">💎</span>} />
                     <AdminStatCard title="Total Tests Taken" value={stats.totalTests} color="amber" icon={<span className="text-2xl">📝</span>} />
                     <AdminStatCard title="Total Tracked Sessions" value={activeSessions.length} color="rose" icon={<span className="text-2xl">📡</span>} />
+                </div>
+
+                {/* Real-Time Traffic Section */}
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 shadow-xl relative overflow-hidden">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-800/60">
+                        <div>
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <span className="flex h-2.5 w-2.5 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                </span>
+                                Real-Time Traffic Analysis (Today vs. Yesterday)
+                            </h3>
+                            <p className="text-slate-400 text-xs">Accurate unique visitors and returning user performance metrics.</p>
+                        </div>
+                        <div className="text-xs text-slate-500 font-mono bg-slate-950 px-2.5 py-1 rounded border border-slate-800">
+                            Auto-refreshing every 6s
+                        </div>
+                    </div>
+
+                    {loadingVisitorStats ? (
+                        <div className="text-slate-500 font-mono text-center py-6 text-sm">
+                            Loading traffic metrics...
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Unique Visitors Card */}
+                            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 relative flex flex-col justify-between hover:border-emerald-500/20 transition-all duration-300">
+                                <div>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Unique Visitors</span>
+                                        <span className="text-lg">👥</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-4 mb-3">
+                                        <span className="text-4xl font-black text-white tracking-tight">{visitorStats.today.unique}</span>
+                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 ${
+                                            (visitorStats.today.unique - visitorStats.yesterday.unique) >= 0 
+                                                ? 'bg-emerald-500/10 text-emerald-400' 
+                                                : 'bg-rose-500/10 text-rose-400'
+                                        }`}>
+                                            {(visitorStats.today.unique - visitorStats.yesterday.unique) >= 0 ? '↑' : '↓'}{' '}
+                                            {calculateChange(visitorStats.today.unique, visitorStats.yesterday.unique)}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="mt-4 pt-4 border-t border-slate-850 flex justify-between items-center text-xs">
+                                    <span className="text-slate-500">Yesterday's Total</span>
+                                    <span className="text-slate-300 font-bold font-mono">{visitorStats.yesterday.unique}</span>
+                                </div>
+                            </div>
+
+                            {/* Repeated Users Card */}
+                            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 relative flex flex-col justify-between hover:border-emerald-500/20 transition-all duration-300">
+                                <div>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Repeated Visitors (Returning)</span>
+                                        <span className="text-lg">🔄</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-4 mb-3">
+                                        <span className="text-4xl font-black text-white tracking-tight">{visitorStats.today.repeated}</span>
+                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 ${
+                                            (visitorStats.today.repeated - visitorStats.yesterday.repeated) >= 0 
+                                                ? 'bg-emerald-500/10 text-emerald-400' 
+                                                : 'bg-rose-500/10 text-rose-400'
+                                        }`}>
+                                            {(visitorStats.today.repeated - visitorStats.yesterday.repeated) >= 0 ? '↑' : '↓'}{' '}
+                                            {calculateChange(visitorStats.today.repeated, visitorStats.yesterday.repeated)}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="mt-4 pt-4 border-t border-slate-850 flex justify-between items-center text-xs">
+                                    <span className="text-slate-500">Yesterday's Total</span>
+                                    <span className="text-slate-300 font-bold font-mono">{visitorStats.yesterday.repeated}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* 🔑 Manual Access Grant & 📘 Ebook Version Upload Grid */}
@@ -826,6 +944,14 @@ const AdminDashboard = () => {
             )}
         </div>
     );
+};
+
+const calculateChange = (todayVal, yesterdayVal) => {
+    if (yesterdayVal === 0) {
+        return todayVal > 0 ? '+100%' : '0%';
+    }
+    const percent = ((todayVal - yesterdayVal) / yesterdayVal) * 100;
+    return (percent >= 0 ? '+' : '') + percent.toFixed(1) + '%';
 };
 
 export default AdminDashboard;

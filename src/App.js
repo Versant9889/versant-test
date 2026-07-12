@@ -51,6 +51,45 @@ function PageTracker() {
   useActivityTracker(); // <--- New Global Real-time Tracker
   useSessionManager();  // <--- Anti-Piracy Server Lock
 
+  // Real-time Unique/Repeated Visitor Tracking
+  useEffect(() => {
+    const trackVisitor = async () => {
+      try {
+        let visitorId = localStorage.getItem('versant_visitor_id');
+        let isRepeated = true;
+
+        if (!visitorId) {
+          // Generate a new unique visitor ID
+          visitorId = 'vis_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+          localStorage.setItem('versant_visitor_id', visitorId);
+          isRepeated = false;
+        }
+
+        // Generate YYYY-MM-DD in local time
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+
+        const lastLoggedDate = localStorage.getItem('versant_last_visit_logged_date');
+        if (lastLoggedDate !== todayStr) {
+          const response = await fetch('/.netlify/functions/trackVisitor', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ visitorId, isRepeated, date: todayStr })
+          });
+          if (response.ok) {
+            localStorage.setItem('versant_last_visit_logged_date', todayStr);
+          }
+        }
+      } catch (err) {
+        console.error("Error tracking visitor:", err);
+      }
+    };
+    trackVisitor();
+  }, []);
+
   useEffect(() => {
     // 0. Affiliate URL Tracking
     const searchParams = new URLSearchParams(location.search);
