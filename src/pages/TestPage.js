@@ -11,10 +11,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import EbookRecommendSlide from '../components/EbookRecommendSlide';
 
 export default function TestPage() {
-  useEffect(() => {
-    trackGA4Event('instruction_page_view', { test_type: 'reading', test_id: testId || 1 });
-  }, [testId]);
-
   // Add a class to the body when the component mounts, and remove it when it unmounts
   useEffect(() => {
     document.body.classList.add('test-page-active');
@@ -26,6 +22,10 @@ export default function TestPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { testId } = location.state || {};
+
+  useEffect(() => {
+    trackGA4Event('instruction_page_view', { test_type: 'reading', test_id: testId || 1 });
+  }, [testId]);
   const [currentTest, setCurrentTest] = useState('typing');
   const [testStarted, setTestStarted] = useState(false);
   const [testCompleted, setTestCompleted] = useState(false);
