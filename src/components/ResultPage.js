@@ -28,6 +28,8 @@ const ResultPage = () => {
   const [authPassword, setAuthPassword] = useState('');
   const [isLoginView, setIsLoginView] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [hasEbookAccess, setHasEbookAccess] = useState(false);
+  const [hasPremiumAccess, setHasPremiumAccess] = useState(false);
   
   const dataSavedRef = React.useRef(false);
 
@@ -40,11 +42,24 @@ const ResultPage = () => {
 
     // Strictly verify Firebase Auth state. 
     // This allows logged in users to unblur, and forces guests to hit the wall.
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setIsLocked(false);
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const premium = userData.paidTests === true || userData.hasPaid === true || userData.isPremium === true;
+            setHasPremiumAccess(premium);
+            setHasEbookAccess(userData.hasPurchasedEbook === true || premium);
+          }
+        } catch (e) {
+          console.error("Error reading credentials on ResultPage:", e);
+        }
       } else {
         setIsLocked(true);
+        setHasPremiumAccess(false);
+        setHasEbookAccess(false);
       }
     });
     return () => unsubscribe();
@@ -825,6 +840,40 @@ const ResultPage = () => {
                 </div>
               </div>
 
+              {/* eBook Promo Banner (Only shown if user does not have access) */}
+              {!hasEbookAccess && (
+                <div className="mt-12 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 p-6 sm:p-8 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-6 shadow-md text-left">
+                  <div className="flex items-start gap-4 sm:gap-6">
+                    <img 
+                      src="/images/versant_ebook_cover.jpg" 
+                      alt="Versant Ebook Cover" 
+                      onClick={() => navigate('/ebook')}
+                      className="w-24 h-auto rounded-xl shadow-md border border-emerald-100 flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
+                    />
+                    <div className="space-y-2">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold uppercase rounded-full tracking-wider">
+                        📘 RECOMMENDED RESOURCE
+                      </span>
+                      <h3 className="text-xl sm:text-2xl font-black text-gray-900 leading-tight">
+                        Versant Test Mastery Ebook
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed max-w-xl">
+                        Scored low? Get the exact speaking templates, secret voice adjustments, and sample answers that candidates use to pass Amazon & Deloitte screenings.
+                      </p>
+                      <div className="text-emerald-700 font-bold text-sm">
+                        Available now for just ₹199 (One-time payment)
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => navigate('/ebook')}
+                    className="w-full md:w-auto px-6 py-4 bg-emerald-600 hover:bg-emerald-750 text-white font-extrabold rounded-xl transition-all hover:scale-[1.02] shadow-md flex items-center justify-center gap-2 whitespace-nowrap text-sm"
+                  >
+                    View Ebook Guide &rarr;
+                  </button>
+                </div>
+              )}
+
               {/* Action Buttons & Conversion CTA */}
               <div className="mt-16 bg-gradient-to-b from-gray-900 to-black p-8 sm:p-12 rounded-[2.5rem] border border-gray-800 flex flex-col items-center justify-center text-center shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 -mr-10 -mt-10 opacity-10">
@@ -850,7 +899,7 @@ const ResultPage = () => {
                   to="/pricing"
                   className="z-10 w-full sm:w-auto inline-flex items-center justify-center gap-3 flex-wrap bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-gray-900 font-extrabold py-5 px-12 rounded-2xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:-translate-y-1 text-xl sm:text-2xl"
                 >
-                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1250 / $14.99</span>
+                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1449 / $14.99</span>
                 </Link>
 
                 <div className="flex flex-wrap items-center justify-center gap-3 lg:gap-4 mt-8 z-10 w-full">
