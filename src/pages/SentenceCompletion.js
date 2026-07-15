@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 
 const SentenceCompletion = ({ questions, onTimeUp, answers, onAnswerChange }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(25);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const SentenceCompletion = ({ questions, onTimeUp, answers, onAnswerChange }) =>
         if (prev <= 1) {
           if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(i => i + 1);
-            return 15;
+            return 25;
           } else {
             clearInterval(timer);
             onTimeUp();

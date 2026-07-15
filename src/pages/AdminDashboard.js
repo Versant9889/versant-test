@@ -397,6 +397,145 @@ const AdminDashboard = () => {
         setGrantLoading(false);
     };
 
+    // --- Manual Access Revoke ---
+    const handleRevokeAccess = async (e) => {
+        if (e) e.preventDefault();
+        const targetEmail = grantEmail.trim().toLowerCase();
+        if (!targetEmail) return;
+
+        const confirmRevoke = window.confirm(`WARNING: Are you sure you want to revoke Premium & Ebook access for: ${grantEmail}?`);
+        if (!confirmRevoke) return;
+
+        setGrantLoading(true);
+        setGrantMessage(null);
+        try {
+            // 1. Find user(s) in local allUsersList
+            const foundUsers = allUsersList.filter(u => u.email && u.email.toLowerCase() === targetEmail);
+            let uidsRevoked = [];
+
+            if (foundUsers.length > 0) {
+                const updatePromises = foundUsers.map(u => {
+                    const userDocRef = doc(db, 'users', u.id);
+                    uidsRevoked.push(u.id);
+                    return updateDoc(userDocRef, {
+                        hasPaid: false,
+                        paidTests: false,
+                        isPremium: false,
+                        hasPurchasedEbook: false,
+                        revokedAt: serverTimestamp(),
+                        revokedBy: 'admin'
+                    });
+                });
+                await Promise.all(updatePromises);
+            }
+
+            // 2. Query ebook_purchases to revoke eBook records as well
+            const ebookQuery = query(collection(db, 'ebook_purchases'), where('email', '==', targetEmail));
+            const ebookSnap = await getDocs(ebookQuery);
+            let ebookRevokedCount = 0;
+            if (!ebookSnap.empty) {
+                const ebookPromises = ebookSnap.docs.map(d => {
+                    ebookRevokedCount++;
+                    const docRef = doc(db, 'ebook_purchases', d.id);
+                    return updateDoc(docRef, {
+                        status: 'revoked',
+                        revokedAt: serverTimestamp(),
+                        revokedBy: 'admin'
+                    });
+                });
+                await Promise.all(ebookPromises);
+            }
+
+            if (foundUsers.length === 0 && ebookSnap.empty) {
+                setGrantMessage({ type: 'error', text: `No user or ebook purchase record found for email: ${grantEmail}` });
+            } else {
+                setGrantMessage({ 
+                    type: 'success', 
+                    text: `🔒 Revoked successfully. User UIDs: [${uidsRevoked.join(', ') || 'none'}]. Ebook records: [${ebookRevokedCount} revoked].` 
+                });
+            }
+            setGrantEmail('');
+            setGrantPaymentId('');
+        } catch (err) {
+            console.error('Revoke error:', err);
+            setGrantMessage({ type: 'error', text: 'Error: ' + err.message });
+        }
+        setGrantLoading(false);
+    };
+
+    // --- Direct Premium Pass Revoke ---
+    const handleRevokeDirect = async (userId, userEmail) => {
+        const displayName = userEmail || userId;
+        const confirmRevoke = window.confirm(`WARNING: Are you sure you want to revoke Premium & Ebook access for: ${displayName}?`);
+        if (!confirmRevoke) return;
+
+        try {
+            // Update users table
+            const userDocRef = doc(db, 'users', userId);
+            await updateDoc(userDocRef, {
+                hasPaid: false,
+                paidTests: false,
+                isPremium: false,
+                hasPurchasedEbook: false,
+                revokedAt: serverTimestamp(),
+                revokedBy: 'admin'
+            });
+
+            // If user has email, check and revoke corresponding ebook_purchases records
+            if (userEmail) {
+                const targetEmail = userEmail.toLowerCase().trim();
+                const ebookQuery = query(collection(db, 'ebook_purchases'), where('email', '==', targetEmail));
+                const ebookSnap = await getDocs(ebookQuery);
+                if (!ebookSnap.empty) {
+                    const ebookPromises = ebookSnap.docs.map(d => {
+                        const docRef = doc(db, 'ebook_purchases', d.id);
+                        return updateDoc(docRef, {
+                            status: 'revoked',
+                            revokedAt: serverTimestamp(),
+                            revokedBy: 'admin'
+                        });
+                    });
+                    await Promise.all(ebookPromises);
+                }
+            }
+
+            alert(`✅ Access successfully revoked for ${displayName}`);
+        } catch (err) {
+            console.error('Direct revoke error:', err);
+            alert('Failed to revoke access: ' + err.message);
+        }
+    };
+
+    // --- Direct Ebook Purchase Revoke ---
+    const handleRevokeEbookDirect = async (purchaseId, purchaseEmail, purchaseUid) => {
+        const displayName = purchaseEmail || purchaseId;
+        const confirmRevoke = window.confirm(`WARNING: Are you sure you want to revoke Ebook access for transaction: ${purchaseId}?`);
+        if (!confirmRevoke) return;
+
+        try {
+            // Update purchase record
+            const purchaseRef = doc(db, 'ebook_purchases', purchaseId);
+            await updateDoc(purchaseRef, {
+                status: 'revoked',
+                revokedAt: serverTimestamp(),
+                revokedBy: 'admin'
+            });
+
+            // If transaction is linked to a registered user, remove hasPurchasedEbook flag in users table
+            if (purchaseUid && purchaseUid !== 'guest') {
+                const userDocRef = doc(db, 'users', purchaseUid);
+                await updateDoc(userDocRef, {
+                    hasPurchasedEbook: false
+                });
+            }
+
+            alert(`✅ Ebook access successfully revoked for ${displayName}`);
+        } catch (err) {
+            console.error('Ebook direct revoke error:', err);
+            alert('Failed to revoke ebook access: ' + err.message);
+        }
+    };
+
     // --- NEW: Clear Firebase Storage Logic ---
     const handleClearData = async () => {
         if (liveEvents.length === 0) return alert("Database is already empty.");
@@ -449,6 +588,9 @@ const AdminDashboard = () => {
     const displayedPremiumUsers = affiliateFilter 
         ? premiumUsersList.filter(u => u.referredBy === affiliateFilter)
         : premiumUsersList;
+
+    // Filter active Ebook sales (exclude revoked)
+    const activeEbookSales = ebookPurchases.filter(p => p.status !== 'revoked');
 
     if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading Mission Control...</div>;
 
@@ -603,38 +745,51 @@ const AdminDashboard = () => {
 
                 {/* 🔑 Manual Access Grant & 📘 Ebook Version Upload Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    {/* Manual Access Grant Tool */}
+                    {/* Manual Access Grant & Revoke Tool */}
                     <div className="bg-slate-900 border border-yellow-500/30 rounded-xl p-6 shadow-xl">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-9 h-9 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400 text-lg">🔑</div>
                             <div>
-                                <h3 className="text-white font-bold text-base">Manual Premium Access Grant</h3>
-                                <p className="text-slate-400 text-xs">Use when payment was captured but verification failed. Enter customer email + Payment ID.</p>
+                                <h3 className="text-white font-bold text-base">Manual Access Control (Grant & Revoke)</h3>
+                                <p className="text-slate-400 text-xs">Grant or Revoke premium/ebook access. For granting, Payment ID is optional. For revoking, only Customer Email is required.</p>
                             </div>
                         </div>
-                        <form onSubmit={handleGrantAccess} className="flex flex-col sm:flex-row gap-3">
-                            <input
-                                type="email"
-                                required
-                                value={grantEmail}
-                                onChange={e => { setGrantEmail(e.target.value); setGrantMessage(null); }}
-                                placeholder="Customer Email (e.g. religiontheo062022@gmail.com)"
-                                className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
-                            />
-                            <input
-                                type="text"
-                                value={grantPaymentId}
-                                onChange={e => setGrantPaymentId(e.target.value)}
-                                placeholder="Payment ID (e.g. pay_Sia4Nv49...)"
-                                className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
-                            />
-                            <button
-                                type="submit"
-                                disabled={grantLoading}
-                                className="px-6 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                            >
-                                {grantLoading ? '⏳ Granting...' : '🔓 Grant Access'}
-                            </button>
+                        <form className="flex flex-col gap-3" onSubmit={e => e.preventDefault()}>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <input
+                                    type="email"
+                                    required
+                                    value={grantEmail}
+                                    onChange={e => { setGrantEmail(e.target.value); setGrantMessage(null); }}
+                                    placeholder="Customer Email (e.g. user@example.com)"
+                                    className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                                />
+                                <input
+                                    type="text"
+                                    value={grantPaymentId}
+                                    onChange={e => setGrantPaymentId(e.target.value)}
+                                    placeholder="Payment ID (for Grant - e.g. pay_Sia4Nv49)"
+                                    className="flex-1 bg-slate-800 border border-slate-700 text-white text-sm px-4 py-2.5 rounded-lg focus:outline-none focus:border-yellow-500 placeholder-slate-500"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-3 mt-1">
+                                <button
+                                    type="button"
+                                    onClick={handleRevokeAccess}
+                                    disabled={grantLoading}
+                                    className="px-5 py-2.5 bg-red-950/40 hover:bg-red-650 text-red-300 hover:text-white border border-red-500/30 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                                >
+                                    🔒 Revoke Access
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleGrantAccess}
+                                    disabled={grantLoading}
+                                    className="px-5 py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold text-sm rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                                >
+                                    {grantLoading ? '⏳ Processing...' : '🔓 Grant Access'}
+                                </button>
+                            </div>
                         </form>
                         {grantMessage && (
                             <div className={`mt-3 text-sm font-medium px-4 py-2.5 rounded-lg ${grantMessage.type === 'success' ? 'bg-emerald-900/40 border border-emerald-500/30 text-emerald-300' : 'bg-red-900/40 border border-red-500/30 text-red-300'}`}>
@@ -797,10 +952,10 @@ const AdminDashboard = () => {
                         </div>
                         <div className="flex gap-4">
                             <div className="bg-teal-500/10 text-teal-400 border border-teal-500/20 font-bold px-4 py-1.5 rounded-lg text-sm">
-                                Sales: {ebookPurchases.length}
+                                Active Sales: {activeEbookSales.length}
                             </div>
                             <div className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold px-4 py-1.5 rounded-lg text-sm">
-                                Revenue: ₹{(ebookPurchases.length * 199).toLocaleString('en-IN')}
+                                Net Revenue: ₹{(activeEbookSales.length * 199).toLocaleString('en-IN')}
                             </div>
                         </div>
                     </div>
@@ -812,12 +967,13 @@ const AdminDashboard = () => {
                                     <th className="px-6 py-4">Transaction Details</th>
                                     <th className="px-6 py-4 font-center">Download Count</th>
                                     <th className="px-6 py-4">Purchase Date</th>
+                                    <th className="px-6 py-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-850 text-sm">
                                 {ebookPurchases.length === 0 && (
                                     <tr>
-                                        <td colSpan="4" className="px-6 py-8 text-center text-slate-500">No ebook purchases yet.</td>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-slate-500">No ebook purchases yet.</td>
                                     </tr>
                                 )}
                                 {ebookPurchases.map(purchase => (
@@ -835,6 +991,20 @@ const AdminDashboard = () => {
                                         </td>
                                         <td className="px-6 py-4 text-slate-300 text-sm">
                                             {purchase.paidAt ? purchase.paidAt.toDate().toLocaleString() : 'N/A'}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {purchase.status === 'revoked' ? (
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-red-950 text-red-400 border border-red-500/20">
+                                                    Revoked
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleRevokeEbookDirect(purchase.id, purchase.email, purchase.uid)}
+                                                    className="px-2 py-1 bg-red-950/40 hover:bg-red-650 text-red-300 hover:text-white rounded border border-red-500/20 text-xs font-semibold transition-all"
+                                                >
+                                                    Revoke
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}
@@ -865,12 +1035,13 @@ const AdminDashboard = () => {
                                     <th className="px-6 py-4">Purchase Date</th>
                                     <th className="px-6 py-4">Tests Taken</th>
                                     <th className="px-6 py-4">Status</th>
+                                    <th className="px-6 py-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-800/50">
                                 {displayedPremiumUsers.length === 0 && (
                                     <tr>
-                                        <td colSpan="4" className="px-6 py-8 text-center text-slate-500">No premium customers found.</td>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-slate-500">No premium customers found.</td>
                                     </tr>
                                 )}
                                 {displayedPremiumUsers.map(user => (
@@ -895,11 +1066,19 @@ const AdminDashboard = () => {
                                                 Active Lifetime
                                             </span>
                                         </td>
+                                        <td className="px-6 py-4">
+                                            <button
+                                                onClick={() => handleRevokeDirect(user.id, user.email)}
+                                                className="px-2 py-1 bg-red-950/40 hover:bg-red-650 text-red-300 hover:text-white rounded border border-red-500/20 text-xs font-semibold transition-all"
+                                            >
+                                                Revoke Pass
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                                 {premiumUsersList.length === 0 && (
                                     <tr>
-                                        <td colSpan="3" className="px-6 py-12 text-center text-slate-500 font-mono">
+                                        <td colSpan="5" className="px-6 py-12 text-center text-slate-500 font-mono">
                                             No premium customers yet. Awaiting sales...
                                         </td>
                                     </tr>
