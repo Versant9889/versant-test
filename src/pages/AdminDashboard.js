@@ -346,48 +346,29 @@ const AdminDashboard = () => {
         setGrantLoading(true);
         setGrantMessage(null);
         try {
-            // 1. Find user by email case-insensitively using the locally cached allUsersList
-            const foundUsers = allUsersList.filter(u => u.email && u.email.toLowerCase() === targetEmail);
+            const user = auth.currentUser;
+            if (!user) throw new Error("Admin authentication required.");
+            const token = await user.getIdToken();
 
-            if (foundUsers.length === 0) {
-                // Also check analytics_events for userId case-insensitively using liveEvents
-                const foundEvent = liveEvents.find(ev => ev.email && ev.email.toLowerCase() === targetEmail);
-                if (!foundEvent) {
-                    setGrantMessage({ type: 'error', text: `No user found with email: ${grantEmail}` });
-                    setGrantLoading(false);
-                    return;
-                }
-                const userId = foundEvent.userId;
-                // Create/update user doc with this uid
-                const userDocRef = doc(db, 'users', userId);
-                await setDoc(userDocRef, {
-                    email: foundEvent.email || grantEmail.trim(),
-                    hasPaid: true,
-                    paidTests: true,
-                    paymentMethod: 'razorpay_manual',
-                    transactionId: grantPaymentId || 'manual_grant',
-                    paidAt: serverTimestamp(),
-                    grantedBy: 'admin'
-                }, { merge: true });
-                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail} (found via analytics). UID: ${userId}` });
-            } else {
-                // User doc(s) found directly
-                const updatePromises = foundUsers.map(u => {
-                    const userDocRef = doc(db, 'users', u.id);
-                    return updateDoc(userDocRef, {
-                        hasPaid: true,
-                        paidTests: true,
-                        paymentMethod: 'razorpay_manual',
-                        transactionId: grantPaymentId || 'manual_grant',
-                        paidAt: serverTimestamp(),
-                        grantedBy: 'admin'
-                    });
-                });
-                await Promise.all(updatePromises);
-                
-                const uids = foundUsers.map(u => u.id).join(', ');
-                setGrantMessage({ type: 'success', text: `✅ Access granted to ${grantEmail}. UIDs: ${uids}` });
+            const res = await fetch('/.netlify/functions/adminModifyAccess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    action: 'grant',
+                    targetEmail: targetEmail,
+                    paymentId: grantPaymentId
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to grant access");
             }
+
+            setGrantMessage({ type: 'success', text: `✅ Access successfully granted to ${targetEmail}. UIDs: ${data.uids.join(', ')}` });
             setGrantEmail('');
             setGrantPaymentId('');
         } catch (err) {
@@ -409,51 +390,31 @@ const AdminDashboard = () => {
         setGrantLoading(true);
         setGrantMessage(null);
         try {
-            // 1. Find user(s) in local allUsersList
-            const foundUsers = allUsersList.filter(u => u.email && u.email.toLowerCase() === targetEmail);
-            let uidsRevoked = [];
+            const user = auth.currentUser;
+            if (!user) throw new Error("Admin authentication required.");
+            const token = await user.getIdToken();
 
-            if (foundUsers.length > 0) {
-                const updatePromises = foundUsers.map(u => {
-                    const userDocRef = doc(db, 'users', u.id);
-                    uidsRevoked.push(u.id);
-                    return updateDoc(userDocRef, {
-                        hasPaid: false,
-                        paidTests: false,
-                        isPremium: false,
-                        hasPurchasedEbook: false,
-                        revokedAt: serverTimestamp(),
-                        revokedBy: 'admin'
-                    });
-                });
-                await Promise.all(updatePromises);
+            const res = await fetch('/.netlify/functions/adminModifyAccess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    action: 'revoke',
+                    targetEmail: targetEmail
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to revoke access");
             }
 
-            // 2. Query ebook_purchases to revoke eBook records as well
-            const ebookQuery = query(collection(db, 'ebook_purchases'), where('email', '==', targetEmail));
-            const ebookSnap = await getDocs(ebookQuery);
-            let ebookRevokedCount = 0;
-            if (!ebookSnap.empty) {
-                const ebookPromises = ebookSnap.docs.map(d => {
-                    ebookRevokedCount++;
-                    const docRef = doc(db, 'ebook_purchases', d.id);
-                    return updateDoc(docRef, {
-                        status: 'revoked',
-                        revokedAt: serverTimestamp(),
-                        revokedBy: 'admin'
-                    });
-                });
-                await Promise.all(ebookPromises);
-            }
-
-            if (foundUsers.length === 0 && ebookSnap.empty) {
-                setGrantMessage({ type: 'error', text: `No user or ebook purchase record found for email: ${grantEmail}` });
-            } else {
-                setGrantMessage({ 
-                    type: 'success', 
-                    text: `🔒 Revoked successfully. User UIDs: [${uidsRevoked.join(', ') || 'none'}]. Ebook records: [${ebookRevokedCount} revoked].` 
-                });
-            }
+            setGrantMessage({ 
+                type: 'success', 
+                text: `🔒 Revoked successfully. User UIDs: [${data.uids.join(', ') || 'none'}]. Ebook records: [${data.ebookRecords} revoked].` 
+            });
             setGrantEmail('');
             setGrantPaymentId('');
         } catch (err) {
@@ -470,33 +431,26 @@ const AdminDashboard = () => {
         if (!confirmRevoke) return;
 
         try {
-            // Update users table
-            const userDocRef = doc(db, 'users', userId);
-            await updateDoc(userDocRef, {
-                hasPaid: false,
-                paidTests: false,
-                isPremium: false,
-                hasPurchasedEbook: false,
-                revokedAt: serverTimestamp(),
-                revokedBy: 'admin'
+            const user = auth.currentUser;
+            if (!user) throw new Error("Admin authentication required.");
+            const token = await user.getIdToken();
+
+            const res = await fetch('/.netlify/functions/adminModifyAccess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    action: 'revoke',
+                    targetUid: userId,
+                    targetEmail: userEmail
+                })
             });
 
-            // If user has email, check and revoke corresponding ebook_purchases records
-            if (userEmail) {
-                const targetEmail = userEmail.toLowerCase().trim();
-                const ebookQuery = query(collection(db, 'ebook_purchases'), where('email', '==', targetEmail));
-                const ebookSnap = await getDocs(ebookQuery);
-                if (!ebookSnap.empty) {
-                    const ebookPromises = ebookSnap.docs.map(d => {
-                        const docRef = doc(db, 'ebook_purchases', d.id);
-                        return updateDoc(docRef, {
-                            status: 'revoked',
-                            revokedAt: serverTimestamp(),
-                            revokedBy: 'admin'
-                        });
-                    });
-                    await Promise.all(ebookPromises);
-                }
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to revoke access");
             }
 
             alert(`✅ Access successfully revoked for ${displayName}`);
@@ -513,20 +467,26 @@ const AdminDashboard = () => {
         if (!confirmRevoke) return;
 
         try {
-            // Update purchase record
-            const purchaseRef = doc(db, 'ebook_purchases', purchaseId);
-            await updateDoc(purchaseRef, {
-                status: 'revoked',
-                revokedAt: serverTimestamp(),
-                revokedBy: 'admin'
+            const user = auth.currentUser;
+            if (!user) throw new Error("Admin authentication required.");
+            const token = await user.getIdToken();
+
+            const res = await fetch('/.netlify/functions/adminModifyAccess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    action: 'revoke',
+                    targetUid: purchaseUid !== 'guest' ? purchaseUid : null,
+                    paymentId: purchaseId
+                })
             });
 
-            // If transaction is linked to a registered user, remove hasPurchasedEbook flag in users table
-            if (purchaseUid && purchaseUid !== 'guest') {
-                const userDocRef = doc(db, 'users', purchaseUid);
-                await updateDoc(userDocRef, {
-                    hasPurchasedEbook: false
-                });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to revoke ebook access");
             }
 
             alert(`✅ Ebook access successfully revoked for ${displayName}`);
