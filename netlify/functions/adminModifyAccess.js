@@ -220,7 +220,7 @@ exports.handler = async (event, context) => {
         return { 
             statusCode: 500, 
             headers, 
-            body: JSON.stringify({ error: "Internal server error performing action" }) 
+            body: JSON.stringify({ error: `Internal server error: ${error.message}. Stack: ${error.stack}` }) 
         };
     }
 };

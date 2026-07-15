@@ -5712,13 +5712,13 @@
       },
       {
         "id": 5,
-        "question": "Fill in the blank: 'The project is currently ___ budget.'",
+        "question": "Fill in the blank: 'The supplier delivered the materials ___ schedule.'",
         "options": [
-          "under",
-          "below",
-          "down"
+          "ahead of",
+          "ahead",
+          "in front"
         ],
-        "answer": "under"
+        "answer": "ahead of"
       },
       {
         "id": 6,
@@ -6001,13 +6001,13 @@
       },
       {
         "id": 3,
-        "question": "Fill in the blank: 'We look forward to ___ you.'",
+        "question": "Fill in the blank: 'We are ___ the proposal before Friday.'",
         "options": [
-          "hiring",
-          "hire",
-          "hired"
+          "reviewing",
+          "review",
+          "reviewed"
         ],
-        "answer": "hiring"
+        "answer": "reviewing"
       },
       {
         "id": 4,
@@ -6021,13 +6021,13 @@
       },
       {
         "id": 5,
-        "question": "Fill in the blank: 'The budget has been ___ approved.'",
+        "question": "Fill in the blank: 'The report was ___ to the board yesterday.'",
         "options": [
-          "officially",
-          "official",
-          "officious"
+          "presented",
+          "present",
+          "presenting"
         ],
-        "answer": "officially"
+        "answer": "presented"
       },
       {
         "id": 6,
@@ -6041,13 +6041,13 @@
       },
       {
         "id": 7,
-        "question": "Fill in the blank: 'The target was ___ met.'",
+        "question": "Fill in the blank: 'The new process has ___ response times.'",
         "options": [
-          "successfully",
-          "successful",
-          "success"
+          "improved",
+          "improve",
+          "improving"
         ],
-        "answer": "successfully"
+        "answer": "improved"
       },
       {
         "id": 8,

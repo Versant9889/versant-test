@@ -93,7 +93,7 @@ export default function TestPage() {
   // Sentence completion state
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
   const [sentenceAnswers, setSentenceAnswers] = useState([]);
-  const [sentenceTimeLeft, setSentenceTimeLeft] = useState(15); // 15 seconds per question
+  const [sentenceTimeLeft, setSentenceTimeLeft] = useState(25); // 25 seconds per question
   const sentenceInputRef = useRef(null);
 
   // Fill in blanks state
@@ -119,7 +119,7 @@ export default function TestPage() {
 
   // Email writing state
   const [emailInput, setEmailInput] = useState('');
-  const [emailTimeLeft, setEmailTimeLeft] = useState(300); // 5 minutes
+  const [emailTimeLeft, setEmailTimeLeft] = useState(540); // 9 minutes
   const emailInputRef = useRef(null);
 
   // Handle refresh or tab close
@@ -367,7 +367,7 @@ export default function TestPage() {
   // Sentence completion functions
   const startSentenceCompletion = () => {
     setCurrentSentenceIndex(0);
-    setSentenceTimeLeft(15);
+    setSentenceTimeLeft(25);
     setCurrentTest('sentence');
     setShowInstructions(true); // Show instructions before starting
   };
@@ -382,7 +382,7 @@ export default function TestPage() {
     if (currentSentenceIndex < 9) {
       // 10 questions (0-9)
       setCurrentSentenceIndex((prev) => prev + 1);
-      setSentenceTimeLeft(15);
+      setSentenceTimeLeft(25);
     } else {
       startFillInBlanks();
     }
@@ -495,7 +495,7 @@ export default function TestPage() {
   // Email writing functions
   const startEmailWriting = () => {
     setEmailInput('');
-    setEmailTimeLeft(300);
+    setEmailTimeLeft(540);
     setCurrentTest('email');
     setShowInstructions(true); // Show instructions before starting
   };
@@ -558,7 +558,7 @@ export default function TestPage() {
           text = "Improve your typing speed and accuracy. You will have 1 minute to type the paragraph shown. Click 'Start Section' to begin.";
           break;
         case 'sentence':
-          text = "Test your vocabulary and grammar by completing sentences. Type the correct word to fill in each sentence’s blank within 15 seconds. Click 'Start Section' to begin.";
+          text = "Test your vocabulary and grammar by completing sentences. Type one word that best completes each sentence within 25 seconds. Click 'Start Section' to begin.";
           break;
         case 'fill':
           text = "Strengthen your language skills by filling in missing words. Select the correct word from the multiple-choice options within 30 seconds. Click 'Start Section' to begin.";
@@ -570,7 +570,7 @@ export default function TestPage() {
           text = "Enhance memory and paraphrasing by reconstructing passages. Read the passage for 30 seconds, then rewrite it in your own words within 90 seconds. Click 'Start Section' to begin.";
           break;
         case 'email':
-          text = "Practice professional communication by writing clear emails. Read the prompt and write a formal email within 5 minutes. Click 'Start Section' to begin.";
+          text = "Practice professional communication by writing a clear, formal email. Cover every point in the prompt and write at least 100 words within 9 minutes. Click 'Start Section' to begin.";
           break;
         default:
           break;
@@ -606,7 +606,7 @@ export default function TestPage() {
           if (prev <= 1) {
             clearInterval(timer);
             handleNextSentence();
-            return 15;
+            return 25;
           }
           return prev - 1;
         });
@@ -772,11 +772,11 @@ export default function TestPage() {
               <p>This test has six sections:</p>
               <ol className="list-decimal pl-5 space-y-1">
                 <li>Typing Test (1 minute)</li>
-                <li>Sentence Completion (10 questions, 2.5 minutes)</li>
+                <li>Sentence Completion (10 questions, about 4 minutes)</li>
                 <li>Fill in the Blanks (10 questions, 5 minutes)</li>
                 <li>Jumbled Words (15 questions, 7.5 minutes)</li>
                 <li>Passage Reconstruction (3 tasks, 6 minutes)</li>
-                <li>Email Writing (5 minutes)</li>
+                <li>Email Writing (9 minutes, at least 100 words)</li>
               </ol>
             </div>
             <button
@@ -1150,7 +1150,7 @@ export default function TestPage() {
             <h2 className="test-title">Email Writing</h2>
             <div className="test-question-area">
               <p className="test-subtitle">
-                Practice professional communication by writing clear emails. Read the prompt and write a formal email within 5 minutes. Click ‘Start Section’ to begin.
+                Practice professional communication by writing a clear, formal email. Cover every point in the prompt and write at least 100 words within 9 minutes. Click ‘Start Section’ to begin.
               </p>
             </div>
             <button onClick={handleStartSection} className="test-btn test-btn-primary">Start Section</button>
