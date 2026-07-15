@@ -176,59 +176,39 @@ export default function TestPage() {
 
 
   const loadTestQuestions = (testId) => {
-    // Validate testId (must be between 1 and 20)
-    const testIndex = testId - 1; // Convert to zero-based index
-    if (testIndex < 0 || testIndex >= 20) {
-      console.error(`Invalid testId: ${testId}. Must be between 1 and 20.`);
-      return [];
-    }
+    const testIndexStr = testId ? testId.toString() : "1";
+    const testData = masterData[testIndexStr] || masterData["1"] || {};
+
+    const typing = testData.typing || [];
+    const sentence = testData.sentenceCompletion || [];
+    const fill = testData.fillBlanks || [];
+    const jumbled = testData.jumbledWords || [];
+    const passage = testData.passageReconstruction || [];
+    const email = testData.emailWriting || [];
 
     const questions = [];
-    const typing = masterData.typing;
-    const sentence = masterData.sentenceCompletion;
-    const fill = masterData.fillBlanks;
-    const jumbled = masterData.jumbledWords;
-    const passage = masterData.passageReconstruction;
-    const email = masterData.emailWriting;
-
-    // Calculate indices based on testId
-    // Use modulo to cycle through available questions if testId > available data
-    const typingIndex = testIndex % typing.length;
-    const emailIndex = testIndex % email.length;
-
-    // Cycle the START index for array chunks
-    const sentenceStart = (testIndex * 10) % Math.max(1, sentence.length);
-    const fillStart = (testIndex * 10) % Math.max(1, fill.length);
-    const jumbledStart = (testIndex * 15) % Math.max(1, jumbled.length);
-    const passageStart = (testIndex * 3) % Math.max(1, passage.length);
-
-    // Helper to extract a chunk of questions with wrapping
-    const getChunk = (sourceArr, start, count) => {
-      if (!sourceArr || sourceArr.length === 0) return [];
-      const result = [];
-      for (let i = 0; i < count; i++) {
-        result.push(sourceArr[(start + i) % sourceArr.length]);
-      }
-      return result;
-    };
 
     // 1. Typing (1 question) - Index 0
-    questions.push(typing[typingIndex]);
+    if (typing.length > 0) {
+      questions.push(typing[0]);
+    }
 
     // 2. Sentence Completion (10 questions) - Indices 1-10
-    questions.push(...getChunk(sentence, sentenceStart, 10));
+    questions.push(...sentence);
 
     // 3. Fill in Blanks (10 questions) - Indices 11-20
-    questions.push(...getChunk(fill, fillStart, 10));
+    questions.push(...fill);
 
     // 4. Jumbled Words (15 questions) - Indices 21-35
-    questions.push(...getChunk(jumbled, jumbledStart, 15));
+    questions.push(...jumbled);
 
     // 5. Passage Reconstruction (3 questions) - Indices 36-38
-    questions.push(...getChunk(passage, passageStart, 3));
+    questions.push(...passage);
 
     // 6. Email Writing (1 question) - Index 39
-    questions.push(email[emailIndex]);
+    if (email.length > 0) {
+      questions.push(email[0]);
+    }
 
     return questions;
   };
