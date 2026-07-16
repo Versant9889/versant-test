@@ -37,13 +37,30 @@ exports.handler = async (event, context) => {
 
         const logId = `${date}_${visitorId}`;
         const docRef = db.collection('daily_visitors').doc(logId);
+        const docSnap = await docRef.get();
         
-        await docRef.set({
-            date: date,
-            visitorId: visitorId,
-            isRepeated: !!isRepeated,
-            timestamp: admin.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+        if (!docSnap.exists) {
+            // First time tracking this visitor today
+            await docRef.set({
+                date: date,
+                visitorId: visitorId,
+                isRepeated: !!isRepeated,
+                timestamp: admin.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Update daily aggregate counter
+            const statsRef = db.collection('daily_stats').doc(date);
+            const increment = admin.firestore.FieldValue.increment(1);
+            
+            const updateData = {};
+            if (isRepeated) {
+                updateData.repeated = increment;
+            } else {
+                updateData.unique = increment;
+            }
+            
+            await statsRef.set(updateData, { merge: true });
+        }
 
         return {
             statusCode: 200,

@@ -55,6 +55,60 @@ const AdminDashboard = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    // Fetch ebook purchases securely via Backend API
+    const fetchSalesData = async () => {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            const token = await user.getIdToken();
+            const response = await fetch('/.netlify/functions/getEbookSales', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const formatted = data.map(item => ({
+                    ...item,
+                    paidAt: item.paidAt ? {
+                        toDate: () => new Date(item.paidAt.seconds * 1000)
+                    } : null
+                }));
+                setEbookPurchases(formatted);
+            }
+        } catch (e) {
+            console.error("Failed to load ebook sales via API:", e);
+        }
+    };
+
+    // Fetch visitor stats via Backend API
+    const fetchVisitorStats = async () => {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            const token = await user.getIdToken();
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const response = await fetch(`/.netlify/functions/getVisitorStats?date=${todayStr}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setVisitorStats(data);
+            }
+        } catch (e) {
+            console.error("Failed to load visitor stats via API:", e);
+        } finally {
+            setLoadingVisitorStats(false);
+        }
+    };
+
     // Listen for Inspect Modal Event from sub-components
     useEffect(() => {
         const handleOpenModal = (e) => setSelectedSession(e.detail);
@@ -167,68 +221,12 @@ const AdminDashboard = () => {
                 setLoading(false);
             });
 
-            // Fetch ebook purchases securely via Backend API
-            const fetchSalesData = async () => {
-                if (!token) return;
-                try {
-                    const response = await fetch('/.netlify/functions/getEbookSales', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Format the timestamp transfer fields back to toDate() methods
-                        const formatted = data.map(item => ({
-                            ...item,
-                            paidAt: item.paidAt ? {
-                                toDate: () => new Date(item.paidAt.seconds * 1000)
-                            } : null
-                        }));
-                        setEbookPurchases(formatted);
-                    }
-                } catch (e) {
-                    console.error("Failed to load ebook sales via API:", e);
-                }
-            };
-            
             fetchSalesData();
-            const pollInterval = setInterval(fetchSalesData, 6000);
-
-            // Fetch visitor stats via Backend API
-            const fetchVisitorStats = async () => {
-                if (!token) return;
-                try {
-                    const now = new Date();
-                    const year = now.getFullYear();
-                    const month = String(now.getMonth() + 1).padStart(2, '0');
-                    const day = String(now.getDate()).padStart(2, '0');
-                    const todayStr = `${year}-${month}-${day}`;
-
-                    const response = await fetch(`/.netlify/functions/getVisitorStats?date=${todayStr}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        setVisitorStats(data);
-                    }
-                } catch (e) {
-                    console.error("Failed to load visitor stats via API:", e);
-                } finally {
-                    setLoadingVisitorStats(false);
-                }
-            };
-
             fetchVisitorStats();
-            const visitorInterval = setInterval(fetchVisitorStats, 6000);
 
             return () => { 
                 unsubUsers(); 
                 unsubEvents(); 
-                clearInterval(pollInterval); 
-                clearInterval(visitorInterval);
             };
         });
 
@@ -635,13 +633,17 @@ const AdminDashboard = () => {
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                                 </span>
-                                Real-Time Traffic Analysis (Today vs. Yesterday)
+                                Traffic Analysis (Today vs. Yesterday)
                             </h3>
                             <p className="text-slate-400 text-xs">Accurate unique visitors and returning user performance metrics.</p>
                         </div>
-                        <div className="text-xs text-slate-500 font-mono bg-slate-950 px-2.5 py-1 rounded border border-slate-800">
-                            Auto-refreshing every 6s
-                        </div>
+                        <button 
+                            type="button"
+                            onClick={() => { setLoadingVisitorStats(true); fetchVisitorStats(); }}
+                            className="flex items-center gap-1.5 text-xs text-slate-400 font-mono bg-slate-950 hover:bg-slate-850 hover:text-white px-3 py-1.5 rounded border border-slate-800 transition-all font-bold cursor-pointer"
+                        >
+                            🔄 Refresh Traffic Data
+                        </button>
                     </div>
 
                     {loadingVisitorStats ? (
@@ -910,7 +912,14 @@ const AdminDashboard = () => {
                             </h3>
                             <p className="text-xs text-slate-400 mt-1">A log of all direct Ebook sales, including guests and registered users.</p>
                         </div>
-                        <div className="flex gap-4">
+                        <div className="flex items-center gap-4">
+                            <button
+                                type="button"
+                                onClick={fetchSalesData}
+                                className="flex items-center gap-1.5 text-xs text-slate-400 font-mono bg-slate-950 hover:bg-slate-850 hover:text-white px-3 py-1.5 rounded border border-slate-800 transition-all font-bold cursor-pointer"
+                            >
+                                🔄 Refresh Sales
+                            </button>
                             <div className="bg-teal-500/10 text-teal-400 border border-teal-500/20 font-bold px-4 py-1.5 rounded-lg text-sm">
                                 Active Sales: {activeEbookSales.length}
                             </div>

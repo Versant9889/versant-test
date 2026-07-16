@@ -62,26 +62,53 @@ exports.handler = async (event, context) => {
         const yDay = String(yesterdayDate.getDate()).padStart(2, '0');
         const yesterdayStr = `${yYear}-${yMonth}-${yDay}`;
 
-        // Query visitor logs for Today and Yesterday
-        const visitorSnap = await db.collection('daily_visitors')
-            .where('date', 'in', [date, yesterdayStr])
-            .get();
-
+        // Fetch or aggregate visitor counts for Today
         let todayUnique = 0;
         let todayRepeated = 0;
-        let yesterdayUnique = 0;
-        let yesterdayRepeated = 0;
-
-        visitorSnap.docs.forEach(doc => {
-            const data = doc.data();
-            if (data.date === date) {
+        const todayDoc = await db.collection('daily_stats').doc(date).get();
+        if (todayDoc.exists) {
+            const data = todayDoc.data();
+            todayUnique = data.unique || 0;
+            todayRepeated = data.repeated || 0;
+        } else {
+            // Count once from daily_visitors and cache it
+            const snap = await db.collection('daily_visitors').where('date', '==', date).get();
+            snap.docs.forEach(doc => {
+                const data = doc.data();
                 todayUnique++;
                 if (data.isRepeated) todayRepeated++;
-            } else if (data.date === yesterdayStr) {
+            });
+            if (!snap.empty) {
+                await db.collection('daily_stats').doc(date).set({
+                    unique: todayUnique,
+                    repeated: todayRepeated
+                });
+            }
+        }
+
+        // Fetch or aggregate visitor counts for Yesterday
+        let yesterdayUnique = 0;
+        let yesterdayRepeated = 0;
+        const yesterdayDoc = await db.collection('daily_stats').doc(yesterdayStr).get();
+        if (yesterdayDoc.exists) {
+            const data = yesterdayDoc.data();
+            yesterdayUnique = data.unique || 0;
+            yesterdayRepeated = data.repeated || 0;
+        } else {
+            // Count once from daily_visitors and cache it
+            const snap = await db.collection('daily_visitors').where('date', '==', yesterdayStr).get();
+            snap.docs.forEach(doc => {
+                const data = doc.data();
                 yesterdayUnique++;
                 if (data.isRepeated) yesterdayRepeated++;
+            });
+            if (!snap.empty) {
+                await db.collection('daily_stats').doc(yesterdayStr).set({
+                    unique: yesterdayUnique,
+                    repeated: yesterdayRepeated
+                });
             }
-        });
+        }
 
         return {
             statusCode: 200,
