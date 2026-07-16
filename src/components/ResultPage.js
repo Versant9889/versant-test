@@ -880,29 +880,51 @@ const ResultPage = () => {
                     <FaTrophy className="text-[15rem] text-white" />
                 </div>
                 
-                <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 mb-8 text-left max-w-3xl relative">
-                    <div className="absolute top-0 right-0 -mr-2 -mt-2 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
-                    <h3 className="text-xl font-bold text-red-400 flex items-center gap-2 mb-3">
-                        <FaExclamationTriangle className="text-2xl" /> Warning: Critical Score
-                    </h3>
-                    <p className="text-gray-300 text-base md:text-lg">
-                        Your current score of <span className="font-bold text-white">{score}</span> falls below the strict 65-point cutoff used by Amazon, Deloitte, and top MNCs. Candidates who fail this stage are <span className="font-bold text-red-400">immediately rejected without human review</span>.
+                {!hasPremiumAccess ? (
+                  <>
+                    <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 mb-8 text-left max-w-3xl relative">
+                        <div className="absolute top-0 right-0 -mr-2 -mt-2 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+                        <h3 className="text-xl font-bold text-red-400 flex items-center gap-2 mb-3">
+                            <FaExclamationTriangle className="text-2xl" /> Warning: Critical Score
+                        </h3>
+                        <p className="text-gray-300 text-base md:text-lg">
+                            Your current score of <span className="font-bold text-white">{score}</span> falls below the strict 65-point cutoff used by Amazon, Deloitte, and top MNCs. Candidates who fail this stage are <span className="font-bold text-red-400">immediately rejected without human review</span>.
+                        </p>
+                    </div>
+                    
+                    <h2 className="text-2xl md:text-4xl font-black text-white mb-6 z-10">Don't let this cost you your dream job.</h2>
+                    <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 z-10 font-medium">
+                      Unlock all 19 premium tests or get our step-by-step Mastery eBook to guarantee you pass.
                     </p>
-                </div>
-                
-                <h2 className="text-2xl md:text-4xl font-black text-white mb-6 z-10">Don't let this cost you your dream job.</h2>
-                <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 z-10 font-medium">
-                  Unlock 19 premium tests with deep pronunciation analytics to fix your weaknesses and guarantee you pass.
-                </p>
 
-                <Link
-                  to="/pricing"
-                  className="z-10 w-full sm:w-auto inline-flex items-center justify-center gap-3 flex-wrap bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-gray-900 font-extrabold py-5 px-12 rounded-2xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:-translate-y-1 text-xl sm:text-2xl"
-                >
-                  <FaStar className="animate-pulse flex-shrink-0" /> <span className="whitespace-nowrap">Unlock 19 Premium Tests</span> <span className="opacity-60 hidden sm:inline px-2">|</span> <span className="whitespace-nowrap">₹1449 / $14.99</span>
-                </Link>
+                    <div className="z-10 w-full flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+                      <Link
+                        to="/pricing"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-gray-900 font-extrabold py-4 px-8 rounded-2xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:-translate-y-1 text-lg sm:text-xl text-center"
+                      >
+                        <FaStar className="animate-pulse flex-shrink-0" /> Unlock 19 Premium Tests | ₹1449
+                      </Link>
 
-                <div className="flex flex-wrap items-center justify-center gap-3 lg:gap-4 mt-8 z-10 w-full">
+                      {!hasEbookAccess && (
+                        <Link
+                          to="/ebook"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 to-yellow-450 hover:from-amber-450 hover:to-yellow-350 text-gray-900 font-extrabold py-4 px-8 rounded-2xl transition-all shadow-[0_0_40px_rgba(245,158,11,0.2)] hover:shadow-[0_0_60px_rgba(245,158,11,0.4)] hover:-translate-y-1 text-lg sm:text-xl text-center"
+                        >
+                          📘 Buy Mastery Ebook | ₹199
+                        </Link>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-2xl md:text-3xl font-black text-white mb-4 z-10">Test Completed Successfully!</h2>
+                    <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto mb-8 z-10">
+                      Great job taking the test! Keep practicing to secure your target score for Amazon, Deloitte, and other top hiring partners.
+                    </p>
+                  </>
+                )}
+
+                <div className="flex flex-wrap items-center justify-center gap-3 lg:gap-4 z-10 w-full">
                     <Link
                       to="/dashboard"
                       className="inline-flex items-center justify-center bg-gray-800 text-gray-300 font-bold py-3 px-6 sm:px-8 rounded-xl hover:bg-gray-700 transition-all hover:-translate-y-1 text-sm border border-gray-700 w-full sm:w-auto"
