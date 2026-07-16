@@ -47,7 +47,7 @@ export const calculateReadability = (text) => {
  * @param {string} text - User's email body
  * @returns {object} { score: number (0-10), feedback: string }
  */
-export const gradeEmail = (text) => {
+export const gradeEmail = (text, requiredThemes = []) => {
     if (!text || text.length < 10) {
         return { score: 0, feedback: "Email is too short or empty." };
     }
@@ -56,6 +56,8 @@ export const gradeEmail = (text) => {
     const feedbackList = [];
     const lowerText = text.toLowerCase();
 
+    const wordCount = text.trim().split(/\s+/).length;
+
     // 1. Structure Check (Greeting & Sign-off)
     const greetings = ['dear', 'hi ', 'hello', 'to ', 'morning', 'afternoon'];
     const signOffs = ['sincerely', 'regards', 'best', 'thank you', 'thanks', 'yours'];
@@ -63,8 +65,8 @@ export const gradeEmail = (text) => {
     const hasGreeting = greetings.some(g => lowerText.includes(g));
     const hasSignOff = signOffs.some(s => lowerText.includes(s));
 
-    if (hasGreeting) scorePoints += 2;
-    if (hasSignOff) scorePoints += 2;
+    if (hasGreeting) scorePoints += 1;
+    if (hasSignOff) scorePoints += 1;
     if (!hasGreeting) feedbackList.push("Missing professional greeting.");
     if (!hasSignOff) feedbackList.push("Missing professional sign-off.");
 
@@ -72,22 +74,39 @@ export const gradeEmail = (text) => {
     const politeWords = ['please', 'could you', 'would you', 'appreciate', 'kindly', 'inquire', 'apologize'];
     const politeCount = politeWords.filter(w => lowerText.includes(w)).length;
 
-    if (politeCount >= 2) scorePoints += 3;
+    if (politeCount >= 2) scorePoints += 2;
     else if (politeCount === 1) scorePoints += 1;
     else feedbackList.push("Tone could be more polite (use 'Please', 'Could you').");
 
-    // 3. Length & Complexity
-    const wordCount = text.trim().split(/\s+/).length;
-    if (wordCount > 30) scorePoints += 2; // Good length
-    else feedbackList.push("Email is a bit too brief.");
+    // 3. Length: the practice target follows the 100-word Versant-style task.
+    if (wordCount >= 100) scorePoints += 3;
+    else if (wordCount >= 70) {
+        scorePoints += 2;
+        feedbackList.push("Aim for at least 100 words.");
+    } else if (wordCount >= 40) {
+        scorePoints += 1;
+        feedbackList.push("Email is too brief; aim for at least 100 words.");
+    } else {
+        feedbackList.push("Email is too brief; aim for at least 100 words.");
+    }
 
-    // 4. Vocabulary (Business Keywords)
+    // 4. Required-point coverage, when the prompt supplies key themes.
+    if (requiredThemes.length) {
+        const coveredThemes = requiredThemes.filter(theme => lowerText.includes(theme.toLowerCase()));
+        scorePoints += Math.round((coveredThemes.length / requiredThemes.length) * 2);
+        if (coveredThemes.length < requiredThemes.length) {
+            feedbackList.push("Cover every required point from the prompt.");
+        }
+    }
+
+    // 5. Vocabulary (Business Keywords)
     const businessWords = ['meeting', 'attached', 'resume', 'proposal', 'project', 'team', 'manager', 'confirm', 'available', 'schedule'];
     const vocabCount = businessWords.filter(w => lowerText.includes(w)).length;
     if (vocabCount >= 1) scorePoints += 1;
 
-    // Cap score at 10
-    const finalScore = Math.min(10, scorePoints);
+    // Dynamically scale maximum possible score to 10
+    const maxPossiblePoints = requiredThemes.length ? 10 : 8;
+    const finalScore = Math.min(10, Math.round((scorePoints / maxPossiblePoints) * 10));
 
     return {
         score: finalScore,

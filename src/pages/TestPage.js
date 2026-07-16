@@ -505,7 +505,8 @@ export default function TestPage() {
   const evaluateEmailWriting = () => {
     setIsSubmitting(true);
     // 1. Calculate Email Score (0-10) using our new algorithm
-    const emailResult = gradeEmail(emailInput);
+    const emailQuestion = questions.find((question) => question.prompt);
+    const emailResult = gradeEmail(emailInput, emailQuestion?.requiredThemes || []);
     console.log("Email Grading:", emailResult);
 
     // 2. Calculate Passage Scores
@@ -1185,6 +1186,7 @@ export default function TestPage() {
               placeholder="Write your email here..."
               className="test-textarea min-h-[200px]"
             />
+            <p className="test-subtitle mt-2">Word count: {emailInput.trim() ? emailInput.trim().split(/\s+/).length : 0} / 100 minimum</p>
             <button
               onClick={evaluateEmailWriting}
               disabled={!emailInput}

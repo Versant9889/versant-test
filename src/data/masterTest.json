@@ -303,7 +303,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write a formal email to a client explaining that the project delivery will be delayed by one week due to unforeseen technical issues. Apologize for the inconvenience and propose a new timeline."
+        "prompt": "Write a formal email to a client explaining that the project delivery will be delayed by one week due to unforeseen technical issues. Apologize for the inconvenience and propose a new timeline.",
+        "requiredThemes": [
+          "delay",
+          "technical",
+          "apologize",
+          "timeline"
+        ]
       }
     ]
   },
@@ -612,7 +618,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Compose an email to your team announcing a mandatory training session on the new cybersecurity protocols. Include the date, time, and importance of attendance."
+        "prompt": "Compose an email to your team announcing a mandatory training session on the new cybersecurity protocols. Include the date, time, and importance of attendance.",
+        "requiredThemes": [
+          "mandatory",
+          "training",
+          "cybersecurity",
+          "attendance"
+        ]
       }
     ]
   },
@@ -921,7 +933,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write a persuasive email to your department head requesting budget approval for a new software tool that could improve team productivity. Highlight the return on investment."
+        "prompt": "Write a persuasive email to your department head requesting budget approval for a new software tool that could improve team productivity. Highlight the return on investment.",
+        "requiredThemes": [
+          "budget",
+          "software",
+          "productivity",
+          "investment"
+        ]
       }
     ]
   },
@@ -1230,7 +1248,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Draft a follow-up email to a potential client who expressed interest in your services at a recent conference but hasn't responded to your initial contact."
+        "prompt": "Draft a follow-up email to a potential client who expressed interest in your services at a recent conference but hasn't responded to your initial contact.",
+        "requiredThemes": [
+          "follow",
+          "interest",
+          "conference",
+          "services"
+        ]
       }
     ]
   },
@@ -1539,7 +1563,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write a formal resignation email to your supervisor, giving two weeks' notice and offering to help with the transition of your responsibilities."
+        "prompt": "Write a formal resignation email to your supervisor, giving two weeks' notice and offering to help with the transition of your responsibilities.",
+        "requiredThemes": [
+          "resignation",
+          "notice",
+          "transition",
+          "help"
+        ]
       }
     ]
   },
@@ -1848,7 +1878,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to a vendor requesting a quote for upgrading our office security systems. Specify requirements like CCTV, keycard access, and maintenance contracts."
+        "prompt": "Write an email to a vendor requesting a quote for upgrading our office security systems. Specify requirements like CCTV, keycard access, and maintenance contracts.",
+        "requiredThemes": [
+          "quote",
+          "security",
+          "cctv",
+          "maintenance"
+        ]
       }
     ]
   },
@@ -2157,7 +2193,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Compose an email to a customer apologizing for sending the wrong item in their order. Explain the process for returning the item and how they will receive the correct one."
+        "prompt": "Compose an email to a customer apologizing for sending the wrong item in their order. Explain the process for returning the item and how they will receive the correct one.",
+        "requiredThemes": [
+          "apologize",
+          "wrong",
+          "returning",
+          "correct"
+        ]
       }
     ]
   },
@@ -2466,7 +2508,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to your manager requesting a salary review, outlining your key achievements and contributions to the company over the past year."
+        "prompt": "Write an email to your manager requesting a salary review, outlining your key achievements and contributions to the company over the past year.",
+        "requiredThemes": [
+          "salary",
+          "review",
+          "achievements",
+          "contributions"
+        ]
       }
     ]
   },
@@ -2775,7 +2823,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Draft an email inviting all department heads to a strategic planning meeting. Outline the agenda topics, including budget reviews and Q4 hiring targets."
+        "prompt": "Draft an email inviting all department heads to a strategic planning meeting. Outline the agenda topics, including budget reviews and Q4 hiring targets.",
+        "requiredThemes": [
+          "inviting",
+          "meeting",
+          "budget",
+          "hiring"
+        ]
       }
     ]
   },
@@ -3084,7 +3138,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to an employee congratulating them on their promotion to Team Lead. Highlight their leadership skills and outline their new responsibilities."
+        "prompt": "Write an email to an employee congratulating them on their promotion to Team Lead. Highlight their leadership skills and outline their new responsibilities.",
+        "requiredThemes": [
+          "congratulate",
+          "promotion",
+          "leadership",
+          "responsibilities"
+        ]
       }
     ]
   },
@@ -3393,7 +3453,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to a client requesting feedback on the consultancy services provided last month. Provide a link to a short survey and thank them for their time."
+        "prompt": "Write an email to a client requesting feedback on the consultancy services provided last month. Provide a link to a short survey and thank them for their time.",
+        "requiredThemes": [
+          "feedback",
+          "services",
+          "survey",
+          "thank"
+        ]
       }
     ]
   },
@@ -3702,7 +3768,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Compose an email to the logistics team addressing recurring delays in delivery shipments. Request an action plan to resolve this bottleneck by Friday."
+        "prompt": "Compose an email to the logistics team addressing recurring delays in delivery shipments. Request an action plan to resolve this bottleneck by Friday.",
+        "requiredThemes": [
+          "delay",
+          "shipment",
+          "plan",
+          "friday"
+        ]
       }
     ]
   },
@@ -4011,7 +4083,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write a formal email to a job applicant inviting them for a second-round interview. Provide details on date, time, panel members, and required presentations."
+        "prompt": "Write a formal email to a job applicant inviting them for a second-round interview. Provide details on date, time, panel members, and required presentations.",
+        "requiredThemes": [
+          "interview",
+          "date",
+          "panel",
+          "presentation"
+        ]
       }
     ]
   },
@@ -4320,7 +4398,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Draft an email to your company's IT support department reporting a software access issue. Detail the error messages and steps taken to troubleshoot."
+        "prompt": "Draft an email to your company's IT support department reporting a software access issue. Detail the error messages and steps taken to troubleshoot.",
+        "requiredThemes": [
+          "access",
+          "issue",
+          "error",
+          "troubleshoot"
+        ]
       }
     ]
   },
@@ -4629,7 +4713,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to a business partner proposing a joint webinar next month. Outline the target audience, potential topics, and proposed division of labor."
+        "prompt": "Write an email to a business partner proposing a joint webinar next month. Outline the target audience, potential topics, and proposed division of labor.",
+        "requiredThemes": [
+          "webinar",
+          "audience",
+          "topics",
+          "labor"
+        ]
       }
     ]
   },
@@ -4938,7 +5028,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Compose an email to the marketing agency requesting revisions on the latest advertising templates. Explain what needs to be changed and set a new deadline."
+        "prompt": "Compose an email to the marketing agency requesting revisions on the latest advertising templates. Explain what needs to be changed and set a new deadline.",
+        "requiredThemes": [
+          "revisions",
+          "advertising",
+          "changed",
+          "deadline"
+        ]
       }
     ]
   },
@@ -5247,7 +5343,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to your team praising them for exceeding the sales targets this quarter. Announce a celebratory team lunch next Friday."
+        "prompt": "Write an email to your team praising them for exceeding the sales targets this quarter. Announce a celebratory team lunch next Friday.",
+        "requiredThemes": [
+          "exceed",
+          "targets",
+          "lunch",
+          "friday"
+        ]
       }
     ]
   },
@@ -5556,7 +5658,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Draft an email to a client seeking clarification on the project requirements document. Outline specific questions regarding the user login functionality."
+        "prompt": "Draft an email to a client seeking clarification on the project requirements document. Outline specific questions regarding the user login functionality.",
+        "requiredThemes": [
+          "clarification",
+          "requirements",
+          "questions",
+          "login"
+        ]
       }
     ]
   },
@@ -5865,7 +5973,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Write an email to the finance department requesting reimbursement for travel expenses. Attach scanned copies of the receipts and outline the purpose of travel."
+        "prompt": "Write an email to the finance department requesting reimbursement for travel expenses. Attach scanned copies of the receipts and outline the purpose of travel.",
+        "requiredThemes": [
+          "reimbursement",
+          "travel",
+          "receipts",
+          "purpose"
+        ]
       }
     ]
   },
@@ -6174,7 +6288,13 @@
     "emailWriting": [
       {
         "id": 1,
-        "prompt": "Compose an email to all staff announcing the annual company retreat. Outline the location, dates, accommodation details, and RSVP deadline."
+        "prompt": "Compose an email to all staff announcing the annual company retreat. Outline the location, dates, accommodation details, and RSVP deadline.",
+        "requiredThemes": [
+          "retreat",
+          "location",
+          "dates",
+          "rsvp"
+        ]
       }
     ]
   }
