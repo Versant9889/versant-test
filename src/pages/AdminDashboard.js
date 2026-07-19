@@ -162,6 +162,46 @@ const AdminDashboard = () => {
         }
     };
 
+    // Fetch users list ONCE using getDocs (On-Demand) to eliminate real-time read amplification
+    const [loadingUsers, setLoadingUsers] = useState(false);
+    const fetchUsers = async () => {
+        setLoadingUsers(true);
+        try {
+            const snap = await getDocs(collection(db, 'users'));
+            let total = snap.size;
+            let premium = 0;
+            let tests = 0;
+            let premiumSet = new Set();
+            let premiumList = [];
+            let allUsers = [];
+            snap.docs.forEach(d => {
+                const data = d.data();
+                allUsers.push({ id: d.id, ...data });
+                if (data.paidTests || data.hasPaid || data.isPremium) {
+                    premium++;
+                    premiumSet.add(d.id);
+                    premiumList.push({ id: d.id, ...data });
+                }
+                tests += data.testsCompleted || 0;
+            });
+            
+            premiumList.sort((a, b) => {
+                const timeA = a.lastActive?.toDate() || 0;
+                const timeB = b.lastActive?.toDate() || 0;
+                return timeB - timeA;
+            });
+
+            setPremiumUserIds(premiumSet);
+            setPremiumUsersList(premiumList);
+            setAllUsersList(allUsers);
+            setStats(s => ({ ...s, totalUsers: total, premiumUsers: premium, totalTests: tests }));
+        } catch (err) {
+            console.error("Error fetching users list:", err);
+        } finally {
+            setLoadingUsers(false);
+        }
+    };
+
     // Listen for Inspect Modal Event from sub-components
     useEffect(() => {
         const handleOpenModal = (e) => setSelectedSession(e.detail);
@@ -185,45 +225,12 @@ const AdminDashboard = () => {
                 console.error("Error retrieving ID Token:", err);
             }
 
-            const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-                let total = snap.size;
-                let premium = 0;
-                let tests = 0;
-                let premiumSet = new Set();
-                let premiumList = [];
-                let allUsers = [];
-                snap.docs.forEach(d => {
-                    const data = d.data();
-                    allUsers.push({ id: d.id, ...data });
-                    // Check all possible legacy and current premium flags
-                    if (data.paidTests || data.hasPaid || data.isPremium) {
-                        premium++;
-                        premiumSet.add(d.id);
-                        premiumList.push({ id: d.id, ...data });
-                    }
-                    tests += data.testsCompleted || 0;
-                });
-                
-                // Sort premium list by most recent activity
-                premiumList.sort((a, b) => {
-                    const timeA = a.lastActive?.toDate() || 0;
-                    const timeB = b.lastActive?.toDate() || 0;
-                    return timeB - timeA;
-                });
-
-                setPremiumUserIds(premiumSet);
-                setPremiumUsersList(premiumList);
-                setAllUsersList(allUsers);
-                setStats(s => ({ ...s, totalUsers: total, premiumUsers: premium, totalTests: tests }));
-            });
-
+            fetchUsers();
             fetchAnalyticsEvents();
             fetchSalesData();
             fetchVisitorStats();
 
-            return () => { 
-                unsubUsers(); 
-            };
+            return () => {};
         });
 
         return () => unsubscribeAuth();
@@ -582,7 +589,14 @@ const AdminDashboard = () => {
 
             {/* Action Bar */}
             <div className="max-w-screen-2xl mx-auto px-6 pt-6 flex flex-wrap gap-4 justify-between items-center">
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
+                    <button 
+                        onClick={fetchUsers} 
+                        disabled={loadingUsers}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white font-bold transition shadow-lg shadow-indigo-500/20 cursor-pointer disabled:opacity-50"
+                    >
+                        <span>🔄</span> {loadingUsers ? 'Refreshing...' : 'Refresh User Data'}
+                    </button>
                     <button onClick={handleExportCSV} className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white font-bold transition shadow-lg shadow-emerald-500/20">
                         <span>📥</span> Export Data (CSV)
                     </button>
