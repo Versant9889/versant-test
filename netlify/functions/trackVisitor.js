@@ -12,7 +12,6 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 exports.handler = async (event, context) => {
-    // Enable CORS
     const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
@@ -24,55 +23,11 @@ exports.handler = async (event, context) => {
         return { statusCode: 200, headers, body: '' };
     }
 
-    if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
-    }
-
-    try {
-        const { visitorId, isRepeated, date } = JSON.parse(event.body);
-
-        if (!visitorId || !date) {
-            return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing required fields' }) };
-        }
-
-        const logId = `${date}_${visitorId}`;
-        const docRef = db.collection('daily_visitors').doc(logId);
-        const docSnap = await docRef.get();
-        
-        if (!docSnap.exists) {
-            // First time tracking this visitor today
-            await docRef.set({
-                date: date,
-                visitorId: visitorId,
-                isRepeated: !!isRepeated,
-                timestamp: admin.firestore.FieldValue.serverTimestamp()
-            });
-
-            // Update daily aggregate counter
-            const statsRef = db.collection('daily_stats').doc(date);
-            const increment = admin.firestore.FieldValue.increment(1);
-            
-            const updateData = {};
-            if (isRepeated) {
-                updateData.repeated = increment;
-            } else {
-                updateData.unique = increment;
-            }
-            
-            await statsRef.set(updateData, { merge: true });
-        }
-
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({ success: true, message: 'Visitor tracked successfully' })
-        };
-    } catch (error) {
-        console.error("Error in trackVisitor:", error);
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ error: 'Internal Server Error' })
-        };
-    }
+    // Google Analytics 4 handles all visitor tracking automatically.
+    // Returning 200 immediately to save 100% of Firestore reads & writes.
+    return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ success: true, message: 'Visitor analytics handled via Google Analytics 4' })
+    };
 };

@@ -620,85 +620,35 @@ const AdminDashboard = () => {
                     <AdminStatCard title="Total Tracked Sessions" value={activeSessions.length} color="rose" icon={<span className="text-2xl">📡</span>} />
                 </div>
 
-                {/* Real-Time Traffic Section */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 shadow-xl relative overflow-hidden">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-800/60">
+                {/* 📊 Google Analytics Data Hub Banner */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 border border-indigo-500/30 rounded-2xl p-6 mb-8 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-start gap-4">
+                        <div className="bg-indigo-500/10 border border-indigo-500/30 p-3.5 rounded-xl text-indigo-400 text-3xl flex-shrink-0">
+                            📊
+                        </div>
                         <div>
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <span className="flex h-2.5 w-2.5 relative">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-mono tracking-wider">
+                                    Zero Firestore Quota Usage
                                 </span>
-                                Traffic Analysis (Today vs. Yesterday)
+                                <span className="text-slate-400 text-xs font-mono">GA4 Tag: G-91JD206S3Z</span>
+                            </div>
+                            <h3 className="text-xl font-bold text-white tracking-tight">
+                                Real-Time Traffic & Analytics Hub
                             </h3>
-                            <p className="text-slate-400 text-xs">Accurate unique visitors and returning user performance metrics.</p>
+                            <p className="text-slate-400 text-xs mt-1 max-w-xl">
+                                Complete visitor performance, today vs yesterday comparison, active users, traffic sources, and geo-analytics are tracked live via Google Analytics 4.
+                            </p>
                         </div>
-                        <button 
-                            type="button"
-                            onClick={() => { setLoadingVisitorStats(true); fetchVisitorStats(); }}
-                            className="flex items-center gap-1.5 text-xs text-slate-400 font-mono bg-slate-950 hover:bg-slate-850 hover:text-white px-3 py-1.5 rounded border border-slate-800 transition-all font-bold cursor-pointer"
-                        >
-                            🔄 Refresh Traffic Data
-                        </button>
                     </div>
-
-                    {loadingVisitorStats ? (
-                        <div className="text-slate-500 font-mono text-center py-6 text-sm">
-                            Loading traffic metrics...
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Unique Visitors Card */}
-                            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 relative flex flex-col justify-between hover:border-emerald-500/20 transition-all duration-300">
-                                <div>
-                                    <div className="flex justify-between items-start mb-2">
-                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Unique Visitors</span>
-                                        <span className="text-lg">👥</span>
-                                    </div>
-                                    <div className="flex items-baseline gap-4 mb-3">
-                                        <span className="text-4xl font-black text-white tracking-tight">{visitorStats.today.unique}</span>
-                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 ${
-                                            (visitorStats.today.unique - visitorStats.yesterday.unique) >= 0 
-                                                ? 'bg-emerald-500/10 text-emerald-400' 
-                                                : 'bg-rose-500/10 text-rose-400'
-                                        }`}>
-                                            {(visitorStats.today.unique - visitorStats.yesterday.unique) >= 0 ? '↑' : '↓'}{' '}
-                                            {calculateChange(visitorStats.today.unique, visitorStats.yesterday.unique)}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-slate-850 flex justify-between items-center text-xs">
-                                    <span className="text-slate-500">Yesterday's Total</span>
-                                    <span className="text-slate-300 font-bold font-mono">{visitorStats.yesterday.unique}</span>
-                                </div>
-                            </div>
-
-                            {/* Repeated Users Card */}
-                            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 relative flex flex-col justify-between hover:border-emerald-500/20 transition-all duration-300">
-                                <div>
-                                    <div className="flex justify-between items-start mb-2">
-                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Repeated Visitors (Returning)</span>
-                                        <span className="text-lg">🔄</span>
-                                    </div>
-                                    <div className="flex items-baseline gap-4 mb-3">
-                                        <span className="text-4xl font-black text-white tracking-tight">{visitorStats.today.repeated}</span>
-                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5 ${
-                                            (visitorStats.today.repeated - visitorStats.yesterday.repeated) >= 0 
-                                                ? 'bg-emerald-500/10 text-emerald-400' 
-                                                : 'bg-rose-500/10 text-rose-400'
-                                        }`}>
-                                            {(visitorStats.today.repeated - visitorStats.yesterday.repeated) >= 0 ? '↑' : '↓'}{' '}
-                                            {calculateChange(visitorStats.today.repeated, visitorStats.yesterday.repeated)}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-slate-850 flex justify-between items-center text-xs">
-                                    <span className="text-slate-500">Yesterday's Total</span>
-                                    <span className="text-slate-300 font-bold font-mono">{visitorStats.yesterday.repeated}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    <a
+                        href="https://analytics.google.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full md:w-auto px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2 whitespace-nowrap text-sm cursor-pointer"
+                    >
+                        Open Google Analytics Dashboard &rarr;
+                    </a>
                 </div>
 
                 {/* 🔑 Manual Access Grant & 📘 Ebook Version Upload Grid */}

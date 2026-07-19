@@ -53,24 +53,13 @@ export const heartbeat = async () => {
     }
 };
 
-// Call this to track custom funnel events internally (fixing blind spots)
+// Call this to track custom funnel events via Google Analytics 4 (GA4)
 export const trackFunnelEvent = async (eventName, additionalData = {}) => {
     try {
-        const user = auth.currentUser;
-        
-        const eventData = {
-            eventType: eventName,
-            timestamp: serverTimestamp(),
-            path: window.location.pathname,
-            isRegistered: !!user,
-            userId: user ? user.uid : `anon_${Math.random().toString(36).substr(2, 9)}`,
-            email: user ? user.email : 'Anonymous',
-            ...additionalData
-        };
-
-        // Push to the global event stream used by AdminDashboard
-        await addDoc(collection(db, 'analytics_events'), eventData);
+        if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+            window.gtag('event', eventName, additionalData);
+        }
     } catch (e) {
-        console.error("Error tracking funnel event internally:", e);
+        console.error("Error tracking funnel event:", e);
     }
 };
