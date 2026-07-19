@@ -109,6 +109,59 @@ const AdminDashboard = () => {
         }
     };
 
+    // Fetch analytics events ONCE (limit 100) to prevent daily quota exhaustion from real-time streaming listeners
+    const fetchAnalyticsEvents = async () => {
+        try {
+            const qEvents = query(collection(db, 'analytics_events'), orderBy('timestamp', 'desc'), limit(100));
+            const snap = await getDocs(qEvents);
+            setIndexErrorUrl(null);
+            const events = [];
+            snap.docs.forEach(doc => {
+                const data = doc.data();
+                events.push({ id: doc.id, ...data, time: data.timestamp?.toDate() || new Date() });
+            });
+            
+            setLiveEvents(events);
+
+            const sessionsMap = {};
+            let activeCount = 0;
+            const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+            events.forEach(evt => {
+                 if (!sessionsMap[evt.userId]) {
+                     const isOnline = evt.time > fiveMinsAgo;
+                     if (isOnline) activeCount++;
+                     
+                     sessionsMap[evt.userId] = {
+                         userId: evt.userId,
+                         email: evt.email || 'Anonymous',
+                         isRegistered: evt.isRegistered,
+                         currentPath: evt.path,
+                         lastActive: evt.time.toISOString(),
+                         isOnline: isOnline,
+                         totalClicks: 1,
+                         history: [evt]
+                     };
+                 } else {
+                     sessionsMap[evt.userId].totalClicks++;
+                     sessionsMap[evt.userId].history.push(evt);
+                 }
+            });
+
+            const sessionsArray = Object.values(sessionsMap).sort((a,b) => new Date(b.lastActive) - new Date(a.lastActive));
+            setActiveSessions(sessionsArray);
+            setStats(s => ({ ...s, activeNow: activeCount }));
+        } catch (err) {
+            console.error("Firebase Analytics Fetch Error:", err);
+            if (err.message.includes("index")) {
+                const urlMatch = err.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
+                if (urlMatch) setIndexErrorUrl(urlMatch[0]);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Listen for Inspect Modal Event from sub-components
     useEffect(() => {
         const handleOpenModal = (e) => setSelectedSession(e.detail);
@@ -164,69 +217,12 @@ const AdminDashboard = () => {
                 setStats(s => ({ ...s, totalUsers: total, premiumUsers: premium, totalTests: tests }));
             });
 
-            // 2. Analytics Events Collection (The Real-Time Engine)
-            const qEvents = query(collection(db, 'analytics_events'), orderBy('timestamp', 'desc'), limit(500));
-            
-            const unsubEvents = onSnapshot(qEvents, (snap) => {
-                setIndexErrorUrl(null); // clear errors if successful
-                const events = [];
-                snap.docs.forEach(doc => {
-                    const data = doc.data();
-                    events.push({ id: doc.id, ...data, time: data.timestamp?.toDate() || new Date() });
-                });
-                
-                setLiveEvents(events);
-
-                // Group Raw Events into "Sessions" to track active ghosts/users
-                const sessionsMap = {};
-                let activeCount = 0;
-                const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
-
-                events.forEach(evt => {
-                     // The array is ordered newest first. 
-                     // The FIRST time we encounter a userId, that is their "Current" state.
-                     if (!sessionsMap[evt.userId]) {
-                         const isOnline = evt.time > fiveMinsAgo;
-                         if (isOnline) activeCount++;
-                         
-                         sessionsMap[evt.userId] = {
-                             userId: evt.userId,
-                             email: evt.email || 'Anonymous',
-                             isRegistered: evt.isRegistered,
-                             currentPath: evt.path,
-                             lastActive: evt.time.toISOString(),
-                             isOnline: isOnline,
-                             totalClicks: 1,
-                             history: [evt] // Seed history array
-                         };
-                     } else {
-                         // Append older history events
-                         sessionsMap[evt.userId].totalClicks++;
-                         sessionsMap[evt.userId].history.push(evt);
-                     }
-                });
-
-                const sessionsArray = Object.values(sessionsMap).sort((a,b) => new Date(b.lastActive) - new Date(a.lastActive));
-                setActiveSessions(sessionsArray);
-                setStats(s => ({ ...s, activeNow: activeCount }));
-                setLoading(false);
-
-            }, (err) => {
-                console.error("Firebase Fetch Error:", err);
-                if (err.message.includes("index")) {
-                    // Extract the Firebase URL to automatically build the index
-                    const urlMatch = err.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/);
-                    if (urlMatch) setIndexErrorUrl(urlMatch[0]);
-                }
-                setLoading(false);
-            });
-
+            fetchAnalyticsEvents();
             fetchSalesData();
             fetchVisitorStats();
 
             return () => { 
                 unsubUsers(); 
-                unsubEvents(); 
             };
         });
 

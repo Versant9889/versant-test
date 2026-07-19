@@ -78,12 +78,11 @@ exports.handler = async (event, context) => {
                 todayUnique++;
                 if (data.isRepeated) todayRepeated++;
             });
-            if (!snap.empty) {
-                await db.collection('daily_stats').doc(date).set({
-                    unique: todayUnique,
-                    repeated: todayRepeated
-                });
-            }
+            // Always set daily_stats document so doc.exists is true on subsequent calls
+            await db.collection('daily_stats').doc(date).set({
+                unique: todayUnique,
+                repeated: todayRepeated
+            });
         }
 
         // Fetch or aggregate visitor counts for Yesterday
@@ -102,12 +101,11 @@ exports.handler = async (event, context) => {
                 yesterdayUnique++;
                 if (data.isRepeated) yesterdayRepeated++;
             });
-            if (!snap.empty) {
-                await db.collection('daily_stats').doc(yesterdayStr).set({
-                    unique: yesterdayUnique,
-                    repeated: yesterdayRepeated
-                });
-            }
+            // Always set daily_stats document so doc.exists is true on subsequent calls
+            await db.collection('daily_stats').doc(yesterdayStr).set({
+                unique: yesterdayUnique,
+                repeated: yesterdayRepeated
+            });
         }
 
         return {
