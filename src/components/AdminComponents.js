@@ -14,11 +14,14 @@ export function AdminNav({ onLogout }) {
                     <span className="text-2xl font-bold tracking-tight">VersantPro <span className="text-indigo-400">Admin</span></span>
                 </div>
                 <div className="flex items-center gap-4">
+                    <span className="hidden md:inline-block text-xs font-mono text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                        ⚡ Logout when finished to freeze background reads
+                    </span>
                     <button
                         onClick={onLogout}
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg transition-colors text-sm"
+                        className="px-5 py-2.5 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-extrabold rounded-xl shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all hover:scale-105 text-sm flex items-center gap-2 cursor-pointer border border-rose-400/30"
                     >
-                        Logout
+                        <span>🚪</span> LOGOUT ADMIN
                     </button>
                 </div>
             </div>
