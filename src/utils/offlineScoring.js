@@ -155,6 +155,38 @@ const evaluateOpenQuestion = (transcript) => {
     };
 };
 
+const numberWordsMap = {
+    '0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
+    '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '10': 'ten',
+    '11': 'eleven', '12': 'twelve', '13': 'thirteen', '14': 'fourteen', '15': 'fifteen',
+    '16': 'sixteen', '17': 'seventeen', '18': 'eighteen', '19': 'nineteen', '20': 'twenty',
+    '21': 'twenty one', '22': 'twenty two', '23': 'twenty three', '24': 'twenty four', '25': 'twenty five',
+    '26': 'twenty six', '27': 'twenty seven', '28': 'twenty eight', '29': 'twenty nine', '30': 'thirty'
+};
+
+const wordsNumberMap = {};
+Object.entries(numberWordsMap).forEach(([num, word]) => {
+    wordsNumberMap[word] = num;
+    wordsNumberMap[word.replace(' ', '-')] = num;
+});
+
+const getExpandedAnswers = (rawAnswers) => {
+    const list = Array.isArray(rawAnswers) ? rawAnswers : [rawAnswers];
+    const expanded = new Set();
+    list.forEach(item => {
+        if (!item) return;
+        const str = String(item).trim().toLowerCase();
+        expanded.add(str);
+        if (numberWordsMap[str]) {
+            expanded.add(numberWordsMap[str]);
+        }
+        if (wordsNumberMap[str]) {
+            expanded.add(wordsNumberMap[str]);
+        }
+    });
+    return Array.from(expanded);
+};
+
 /**
  * Main offline evaluator router for 'ResultPage.js'
  */
@@ -168,12 +200,17 @@ export const evaluateOffline = (section, responseObj, testData) => {
         case 'sentenceBuilds':
             // We need to fetch the target answer string based on the section structure
             const arr = testData[section];
-            // Find the active question by matching the display text
-            const qData = arr.find(q =>
-                (q.text && responseObj.questionText.includes(q.text.substring(0, 15))) ||
-                (q.question && responseObj.questionText.includes(q.question.substring(0, 15))) ||
-                (q.parts && responseObj.questionText.includes(q.parts.join('. ').substring(0, 15)))
-            );
+            // Find the active question by matching ID first, then exact text, then fallback to substring
+            const qData = (arr && Array.isArray(arr)) ? (
+                arr.find(q => q.id && (q.id === responseObj.questionId || q.id === responseObj.id)) ||
+                arr.find(q => q.question && cleanText(q.question) === cleanText(responseObj.questionText)) ||
+                arr.find(q => q.text && cleanText(q.text) === cleanText(responseObj.questionText)) ||
+                arr.find(q =>
+                    (q.text && responseObj.questionText.includes(q.text.substring(0, 15))) ||
+                    (q.question && responseObj.questionText.includes(q.question.substring(0, 15))) ||
+                    (q.parts && responseObj.questionText.includes(q.parts.join('. ').substring(0, 15)))
+                )
+            ) : null;
 
             let target = responseObj.questionText; // fallback
 
@@ -181,15 +218,15 @@ export const evaluateOffline = (section, responseObj, testData) => {
                 if (section === 'readAloud' || section === 'repeats') target = qData.text;
                 if (section === 'sentenceBuilds') target = qData.answer;
                 if (section === 'shortAnswer') {
-                    // Short answers have an array of acceptable answers
-                    target = Array.isArray(qData.answer) ? qData.answer[0] : qData.answer;
+                    const acceptableList = getExpandedAnswers(qData.answer || qData.acceptableAnswers);
+                    target = acceptableList.join(' / ');
 
-                    // Specific fix: if they say any of the acceptable answers, we should grade positively.
-                    // Instead of full distance, check if their transcript contains an accepted short answer.
                     const cleanTranscript = cleanText(transcript);
-                    const isCorrect = Array.isArray(qData.answer)
-                        ? qData.answer.some(ans => cleanTranscript.includes(cleanText(ans)))
-                        : cleanTranscript.includes(cleanText(qData.answer));
+                    const isCorrect = acceptableList.some(ans => {
+                        const cleanAns = cleanText(ans);
+                        const regex = new RegExp(`\\b${cleanAns}\\b`, 'i');
+                        return regex.test(cleanTranscript) || cleanTranscript.includes(cleanAns);
+                    });
 
                     if (isCorrect) {
                         return { score: 10, aiFeedback: { grammar_feedback: "Accuracy: 100% - Perfect answer.", ideal_response: target } };
