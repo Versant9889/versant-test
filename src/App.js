@@ -106,25 +106,9 @@ function PageTracker() {
       console.log('Affiliate tracking code saved:', ref);
     }
 
-    // 1. Track Page View in GA
+    // Track Page View in Google Analytics 4
     ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
-
-    // 2. Track Internal Analytics
-    const trackInternal = async () => {
-      const { trackPageView } = await import('./utils/AnalyticsService');
-      trackPageView(location.pathname);
-    };
-    trackInternal();
   }, [location]);
-
-  // Heartbeat for "Online" status (every 30s)
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const { heartbeat } = await import('./utils/AnalyticsService');
-      heartbeat();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
 
   return null;
 }
