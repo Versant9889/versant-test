@@ -188,6 +188,123 @@ const getExpandedAnswers = (rawAnswers) => {
 };
 
 /**
+ * Rubric Evaluator for Email Writing
+ */
+export const evaluateEmailWritingRubric = (userEmail, promptText = '') => {
+    if (!userEmail || typeof userEmail !== 'string') {
+        return {
+            score: 0,
+            rubrics: { formAndTone: 0, taskCompletion: 0, grammar: 0, vocabulary: 0 },
+            aiFeedback: { grammar_feedback: "No email content provided.", ideal_response: "A structured business email with greeting, body, and sign-off." }
+        };
+    }
+
+    const text = userEmail.trim();
+    const words = text.split(/\s+/).filter(w => w);
+    const lowerText = text.toLowerCase();
+
+    // 1. Form & Tone
+    const hasGreeting = /dear|hi|hello|greetings|respected|to whom/i.test(lowerText);
+    const hasSignoff = /sincerely|regards|best|thanks|thank you|yours|cheers/i.test(lowerText);
+    const hasParagraphs = text.includes('\n') || words.length > 40;
+
+    let formScore = 0;
+    if (hasGreeting && hasSignoff && hasParagraphs) formScore = 10;
+    else if (hasGreeting || hasSignoff) formScore = 7;
+    else if (words.length > 20) formScore = 5;
+    else formScore = 2;
+
+    // 2. Task Completion / Content Length
+    let taskScore = 0;
+    if (words.length >= 80) taskScore = 10;
+    else if (words.length >= 50) taskScore = 8;
+    else if (words.length >= 30) taskScore = 6;
+    else if (words.length >= 15) taskScore = 4;
+    else taskScore = 2;
+
+    // 3. Grammar & Mechanics
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const cappedStart = sentences.filter(s => /^[A-Z]/.test(s.trim())).length;
+    const capRatio = sentences.length > 0 ? (cappedStart / sentences.length) : 0;
+
+    let grammarScore = Math.round(capRatio * 10);
+    if (words.length < 20) grammarScore = Math.min(grammarScore, 5);
+
+    // 4. Vocabulary Density
+    const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+    const vocabRatio = words.length > 0 ? (uniqueWords.size / words.length) : 0;
+    let vocabScore = Math.round(vocabRatio * 10);
+
+    const totalRaw = (formScore * 0.25) + (taskScore * 0.25) + (grammarScore * 0.25) + (vocabScore * 0.25);
+    const finalScore = Math.min(10, Math.max(0, Math.round(totalRaw)));
+
+    return {
+        score: finalScore,
+        rubrics: {
+            formAndTone: Math.round(formScore),
+            taskCompletion: Math.round(taskScore),
+            grammar: Math.round(grammarScore),
+            vocabulary: Math.round(vocabScore)
+        },
+        aiFeedback: {
+            grammar_feedback: `Email Length: ${words.length} words. Structure: ${hasGreeting ? 'Greeting detected' : 'Missing greeting'}, ${hasSignoff ? 'Sign-off detected' : 'Missing sign-off'}.`,
+            ideal_response: "Use a clear subject line, professional greeting, distinct body paragraph, and formal closing."
+        }
+    };
+};
+
+/**
+ * Rubric Evaluator for Passage Reconstruction
+ */
+export const evaluatePassageReconstructionRubric = (reconstructionText, originalPassage = '') => {
+    if (!reconstructionText || typeof reconstructionText !== 'string') {
+        return {
+            score: 0,
+            rubrics: { memoryRecall: 0, sentenceStructure: 0, mechanics: 0 },
+            aiFeedback: { grammar_feedback: "No text submitted.", ideal_response: originalPassage }
+        };
+    }
+
+    const cleanedUser = cleanText(reconstructionText);
+    const cleanedOrig = cleanText(originalPassage);
+    const origWords = cleanedOrig.split(" ").filter(w => w.length > 3);
+
+    let hits = 0;
+    origWords.forEach(kw => {
+        if (cleanedUser.includes(kw)) hits++;
+    });
+    const recallRatio = origWords.length > 0 ? (hits / origWords.length) : 0;
+    const memoryScore = Math.round(recallRatio * 10);
+
+    const userLength = reconstructionText.split(/\s+/).filter(w => w).length;
+    let structureScore = 0;
+    if (userLength >= 25) structureScore = 10;
+    else if (userLength >= 15) structureScore = 7;
+    else if (userLength >= 8) structureScore = 4;
+    else structureScore = 2;
+
+    const hasPunctuation = /[.!?]/.test(reconstructionText);
+    const startsCapital = /^[A-Z]/.test(reconstructionText.trim());
+    let mechanicsScore = (hasPunctuation ? 5 : 2) + (startsCapital ? 5 : 2);
+
+    const totalRaw = (memoryScore * 0.40) + (structureScore * 0.30) + (mechanicsScore * 0.30);
+    const finalScore = Math.min(10, Math.max(0, Math.round(totalRaw)));
+
+    return {
+        score: finalScore,
+        rubrics: {
+            memoryRecall: Math.round(memoryScore),
+            sentenceStructure: Math.round(structureScore),
+            mechanics: Math.round(mechanicsScore)
+        },
+        aiFeedback: {
+            grammar_feedback: `Recall Accuracy: ${Math.round(recallRatio * 100)}%. Word count: ${userLength}.`,
+            ideal_response: originalPassage
+        }
+    };
+};
+
+/**
  * Main offline evaluator router for 'ResultPage.js'
  */
 export const evaluateOffline = (section, responseObj, testData) => {
@@ -237,13 +354,19 @@ export const evaluateOffline = (section, responseObj, testData) => {
             return evaluateObjective(target, transcript);
 
         case 'storyRetelling':
-            // We need to fetch the keywords from the mock database matching this question
             const storyData = testData.storyRetelling.find(q => responseObj.questionText.includes(q.audioText.substring(0, 15)));
             const keywords = storyData ? storyData.keywords : [];
             return evaluateStoryRetelling(transcript, keywords);
 
         case 'openQuestions':
             return evaluateOpenQuestion(transcript);
+
+        case 'emailWriting':
+        case 'email':
+            return evaluateEmailWritingRubric(transcript || responseObj.userAnswer || '', responseObj.questionText || '');
+
+        case 'passageReconstruction':
+            return evaluatePassageReconstructionRubric(transcript || responseObj.userAnswer || '', responseObj.questionText || '');
 
         default:
             return {

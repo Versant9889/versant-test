@@ -347,19 +347,15 @@ export default function TestPage() {
     let correctWords = 0;
     const minWordCount = Math.min(inputWords.length, referenceWords.length);
     for (let i = 0; i < minWordCount; i++) {
-      if (inputWords[i] === referenceWords[i]) correctWords++;
+      if (inputWords[i].toLowerCase() === referenceWords[i].toLowerCase()) {
+        correctWords++;
+      }
     }
-    const timeInSeconds = Math.max(60 - typingTimeLeft, 1);
+    const timeInSeconds = Math.max(60 - typingTimeLeft, 30);
     const timeInMinutes = timeInSeconds / 60;
     const wpm = Math.round(correctWords / timeInMinutes) || 0;
-    console.log(`Typing evaluation: Input words: ${inputWords.length}, Correct words: ${correctWords}, Time (s): ${timeInSeconds}, WPM: ${wpm}`);
-    const reference = typingQuestion.paragraph.slice(0, typingInput.length);
-    let correctChars = 0;
-    for (let i = 0; i < typingInput.length; i++) {
-      if (typingInput[i] === reference[i]) correctChars++;
-    }
-    const accuracy = Math.round((correctChars / typingInput.length) * 100) || 0;
-    console.log(`Typing evaluation: Correct chars: ${correctChars}, Input chars: ${typingInput.length}, Accuracy: ${accuracy}%`);
+    const accuracy = inputWords.length > 0 ? Math.min(100, Math.round((correctWords / inputWords.length) * 100)) : 0;
+    console.log(`Typing evaluation: Input words: ${inputWords.length}, Correct words: ${correctWords}, Time (s): ${timeInSeconds}, WPM: ${wpm}, Accuracy: ${accuracy}%`);
     setTypingResults({ wpm, accuracy });
     startSentenceCompletion();
   };

@@ -10,6 +10,28 @@ import { FaCheck, FaChartLine, FaTrophy, FaMicrophone, FaClipboardList, FaBullse
 import { trackFunnelEvent } from '../utils/AnalyticsService';
 import { trackGA4Event } from '../utils/GA4Analytics';
 
+const normalizeString = (str) => {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .toLowerCase()
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const isAnswerMatching = (userAns, correctAns) => {
+  if (!correctAns) return false;
+  const uClean = normalizeString(userAns);
+  const cClean = normalizeString(correctAns);
+  if (uClean === cClean) return true;
+  
+  const uNoThe = uClean.replace(/^the\s+/, '');
+  const cNoThe = cClean.replace(/^the\s+/, '');
+  if (uNoThe.length > 0 && uNoThe === cNoThe) return true;
+
+  return false;
+};
+
 const ResultPage = () => {
   const { state } = useLocation();
   const {
@@ -379,9 +401,8 @@ const ResultPage = () => {
             if (userText[i] === referenceText[i]) correctChars++;
           }
           const accuracy = userText.length > 0 ? Math.round((correctChars / userText.length) * 100) : 0;
-          return { wpm, accuracy };
         } else {
-          isCorrect = (practiceAnswers[q.id] || '').trim().toLowerCase() === (q.answer || '').trim().toLowerCase();
+          isCorrect = isAnswerMatching(practiceAnswers[q.id], q.answer);
           if (isCorrect) {
             calculatedScore++;
           }
@@ -395,10 +416,6 @@ const ResultPage = () => {
       });
       setScore(calculatedScore);
       setResults(section === 'typing' ? detailedResults[0] : detailedResults);
-      // Determine if functionality for saving practice tests is desired. 
-      // The prompt specifically mentions "user management system... like attempted tests, previous test score"
-      // It implies main tests, but saving practice tests might be nice too. 
-      // For now, I will focus on the main test as per the variable naming in the prompt logic block below.
 
     } else if (!state.mode || state.mode === 'writing') {
       // This is the logic for the full test from the dashboard (reading/writing).
@@ -412,7 +429,7 @@ const ResultPage = () => {
           section: 'Typing',
           wpm: typingResults.wpm,
           accuracy: typingResults.accuracy,
-          score: typingResults.wpm // normalizing score for typing? usually WPM is the score.
+          score: typingResults.wpm
         });
       }
 
@@ -420,7 +437,7 @@ const ResultPage = () => {
       const sentenceQs = allQuestions.slice(1, 11);
       const sentenceResults = sentenceQs.map((q, i) => {
         const userAnswer = sentenceAnswers[i] || 'Not Answered';
-        const isCorrect = q.answer && userAnswer.trim().toLowerCase() === q.answer.toLowerCase();
+        const isCorrect = q.answer && isAnswerMatching(userAnswer, q.answer);
         if (isCorrect) totalScore++;
         return { question: q.question, userAnswer, correctAnswer: q.answer, isCorrect };
       });
@@ -430,7 +447,7 @@ const ResultPage = () => {
       const fillQs = allQuestions.slice(11, 21);
       const fillResults = fillQs.map((q, i) => {
         const userAnswer = fillAnswers[i] || 'Not Answered';
-        const isCorrect = q.answer && userAnswer === q.answer;
+        const isCorrect = q.answer && isAnswerMatching(userAnswer, q.answer);
         if (isCorrect) totalScore++;
         return { question: q.question, userAnswer, correctAnswer: q.answer, isCorrect };
       });
@@ -440,7 +457,7 @@ const ResultPage = () => {
       const jumbledQs = allQuestions.slice(21, 36);
       const jumbledResults = jumbledQs.map((q, i) => {
         const userAnswer = jumbledAnswers[i] || 'Not Answered';
-        const isCorrect = q.answer && userAnswer.trim().toLowerCase() === q.answer.toLowerCase();
+        const isCorrect = q.answer && isAnswerMatching(userAnswer, q.answer);
         if (isCorrect) totalScore++;
         return { question: q.jumbled, userAnswer, correctAnswer: q.answer, isCorrect };
       });
@@ -771,11 +788,17 @@ const ResultPage = () => {
                                   </div>
                                 )}
 
-                                {/* Correct Answer Fallback */}
-                                {(typeof res.isCorrect !== 'undefined' && !res.isCorrect) && (
-                                  <div className="mt-3 text-sm flex items-center gap-2 text-gray-600 bg-gray-100/50 px-3 py-2 rounded-lg w-max">
-                                    <FaCheckCircle className="text-green-500" /> Correct Answer: <span className="font-bold text-gray-800">{res.correctAnswer}</span>
-                                  </div>
+                                {/* Correct Answer Display Badge */}
+                                {typeof res.isCorrect !== 'undefined' && (
+                                  res.isCorrect ? (
+                                    <div className="mt-3 text-xs font-bold inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg shadow-sm">
+                                      <FaCheckCircle className="text-emerald-500 text-sm" /> Correct Answer: <span className="font-extrabold text-emerald-900">{res.correctAnswer || res.userAnswer}</span>
+                                    </div>
+                                  ) : (
+                                    <div className="mt-3 text-xs font-bold inline-flex items-center gap-1.5 text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg shadow-sm">
+                                      <span className="text-rose-500 font-black">✕</span> Correct Answer: <span className="font-extrabold text-rose-900">{res.correctAnswer}</span>
+                                    </div>
+                                  )
                                 )}
                               </div>
                             </div>
@@ -908,7 +931,7 @@ const ResultPage = () => {
                       {!hasEbookAccess && (
                         <Link
                           to="/ebook"
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 to-yellow-450 hover:from-amber-450 hover:to-yellow-350 text-gray-900 font-extrabold py-4 px-8 rounded-2xl transition-all shadow-[0_0_40px_rgba(245,158,11,0.2)] hover:shadow-[0_0_60px_rgba(245,158,11,0.4)] hover:-translate-y-1 text-lg sm:text-xl text-center"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black py-4 px-8 rounded-2xl transition-all shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_50px_rgba(245,158,11,0.6)] hover:-translate-y-1 text-lg sm:text-xl text-center"
                         >
                           📘 Buy Mastery Ebook | ₹199
                         </Link>
