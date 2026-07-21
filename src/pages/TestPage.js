@@ -302,7 +302,8 @@ export default function TestPage() {
   // Handle Enter key press
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
+      // Do NOT intercept Enter key in Email Writing section so candidates can type new lines/paragraphs
+      if (e.key === 'Enter' && currentTest !== 'email') {
         e.preventDefault();
         handleNextAction();
       }
@@ -1188,7 +1189,7 @@ export default function TestPage() {
               disabled={!emailInput}
               className="test-btn test-btn-primary"
             >
-              {emailTimeLeft > 0 ? 'Submit (or press Enter)' : 'Finish Test'}
+              {emailTimeLeft > 0 ? 'Submit Email' : 'Finish Test'}
             </button>
           </div>
         </div>
