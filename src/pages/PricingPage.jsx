@@ -107,7 +107,7 @@ export default function PricingPage() {
             const orderData = await orderResponse.json();
 
             const options = {
-                key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID || "rzp_live_SUarCwkw3sp2rY",
                 amount: orderData.amount,
                 currency: orderData.currency,
                 name: "VersantPro Premium",
@@ -320,7 +320,7 @@ export default function PricingPage() {
                         {/* PayPal Smart Buttons for International Users */}
                         <div className="w-full relative z-50">
                             <PayPalScriptProvider options={{ 
-                                "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID || "test", // Uses sandbox 'test' if env not found
+                                "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID || "AebCAZ3TaqDhTWtO-ST3ti-dfio5p3S1c1WDLem38Y71qIHcU4xwD18Zu1MK932m1D0CvK5uNzdptDDd",
                                 currency: "USD",
                                 intent: "capture"
                             }}>
