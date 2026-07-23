@@ -308,103 +308,12 @@ export default function PricingPage() {
                         </ul>
 
                         <button onClick={handleUpgrade} disabled={isProcessing} className="w-full py-4 rounded-xl font-extrabold text-lg shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(16,185,129,0.6)] bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-900 disabled:opacity-50 disabled:cursor-wait mb-4">
-                            {isProcessing ? "Connecting Gateway..." : "Pay ₹1449 (Indian Users)"}
+                            {isProcessing ? "Connecting Gateway..." : "Pay ₹1449 & Unlock All Tests"}
                         </button>
-                        
-                        <div className="w-full relative flex items-center mb-4">
-                            <div className="flex-grow border-t border-emerald-500/30"></div>
-                            <span className="flex-shrink-0 mx-4 text-emerald-200/60 text-xs font-bold uppercase tracking-wider">OR</span>
-                            <div className="flex-grow border-t border-emerald-500/30"></div>
-                        </div>
-
-                        {/* PayPal Smart Buttons for International Users */}
-                        <div className="w-full relative z-50">
-                            <PayPalButtons 
-                                style={{ layout: "vertical", color: "gold", shape: "rect", label: "paypal" }}
-                                createOrder={(data, actions) => {
-                                    trackGA4Event('premium_subscription_click', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD' });
-                                    trackGA4Event('razorpay_checkout_open', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', payment_method: 'paypal' });
-                                    if (!auth.currentUser) {
-                                        alert('Please sign in first to upgrade to Pro.');
-                                        navigate('/signup');
-                                        return actions.reject();
-                                    }
-                                    return actions.order.create({
-                                        purchase_units: [{
-                                            amount: { 
-                                                currency_code: "USD",
-                                                value: "14.99" 
-                                            },
-                                            description: "VersantPro Premium Access"
-                                        }]
-                                    });
-                                }}
-                                onApprove={async (data, actions) => {
-                                    // Capture uid IMMEDIATELY while auth is still active
-                                    const currentUid = auth.currentUser?.uid;
-                                    if (!currentUid) {
-                                        alert('Session expired. Please log in again and retry.');
-                                        navigate('/login');
-                                        return;
-                                    }
-                                    setIsProcessing(true);
-                                    try {
-                                        const verifyRes = await fetch('/.netlify/functions/verifyPayPalPayment', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                                orderID: data.orderID,
-                                                uid: currentUid,
-                                                referredBy: localStorage.getItem('versant_affiliate_ref') || null
-                                            })
-                                        });
-
-                                        const verifyData = await verifyRes.json();
-
-                                        if (verifyRes.ok) {
-                                            trackGA4Event('razorpay_payment_success', {
-                                                transaction_id: data.orderID,
-                                                payment_amount: 14.99,
-                                                currency: 'USD',
-                                                product_name: 'VersantPro Premium Pass',
-                                                payment_method: 'paypal'
-                                            });
-                                            // --- Google Ads Conversion Tracking ---
-                                            if (typeof window !== "undefined" && typeof window.gtag === "function") {
-                                                window.gtag('event', 'purchase', {
-                                                    'value': 14.99,
-                                                    'currency': 'USD',
-                                                    'transaction_id': data.orderID
-                                                });
-                                                console.log("Google Ads Conversion Fired (PayPal)");
-                                            }
-                                            trackFunnelEvent('purchase', { value: 14.99, currency: 'USD' });
-
-                                            alert("PayPal Payment Verified! Welcome to Versant Pro. All tests are now unlocked.");
-                                            navigate('/dashboard');
-                                        } else {
-                                            trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: verifyData.error || 'Verification Failed' });
-                                            alert("Payment verification failed: " + verifyData.error);
-                                            setIsProcessing(false);
-                                        }
-                                    } catch (err) {
-                                        trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: err.message || 'Verification Error' });
-                                        console.error("PayPal Verification error:", err);
-                                        alert("Network error during verification. If money was deducted, contact support.");
-                                        setIsProcessing(false);
-                                    }
-                                }}
-                                onError={(err) => {
-                                    trackGA4Event('razorpay_payment_failed', { product_name: 'VersantPro Premium Pass', payment_amount: 14.99, currency: 'USD', reason: err?.message || 'PayPal Popup Closed/Error' });
-                                    console.error("PayPal Error:", err);
-                                    alert("There was an error loading the PayPal popup.");
-                                }}
-                            />
-                        </div>
 
                         <div className="w-full text-center mt-4 flex items-center justify-center gap-2 opacity-60">
                             <svg className="w-4 h-4 text-emerald-200" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-xs text-emerald-100 font-medium">Secured via Razorpay & PayPal (256-bit)</span>
+                            <span className="text-xs text-emerald-100 font-medium">Secured via Razorpay (256-bit)</span>
                         </div>
                     </div>
                 </div>
