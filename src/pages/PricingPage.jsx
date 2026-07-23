@@ -331,7 +331,10 @@ export default function PricingPage() {
                                     }
                                     return actions.order.create({
                                         purchase_units: [{
-                                            amount: { value: "14.99" },
+                                            amount: { 
+                                                currency_code: "USD",
+                                                value: "14.99" 
+                                            },
                                             description: "VersantPro Premium Access"
                                         }]
                                     });
