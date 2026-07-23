@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ReactGA from 'react-ga4';
 import { getAuth } from 'firebase/auth';
 import Homepage from './pages/Homepage';
@@ -114,41 +115,49 @@ function PageTracker() {
 }
 
 function App() {
+  const paypalOptions = {
+    "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID || "AebCAZ3TaqDhTWtO-ST3ti-dfio5p3S1c1WDLem38Y71qIHcU4xwD18Zu1MK932m1D0CvK5uNzdptDDd",
+    currency: "USD",
+    intent: "capture"
+  };
+
   return (
-    <Router>
-      <PageTracker />
-      <WhatsAppButton />
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/versant-reading-and-writing-mock-test/start" element={<TestPage />} />
-        <Route path="/result" element={<ResultPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/terms" element={<TermsAndConditions />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/refund" element={<RefundPolicy />} />
-        <Route path="/blog" element={<BlogIndex />} />
-        <Route path="/blog/:slug" element={<FullBlogPost />} />
+    <PayPalScriptProvider options={paypalOptions}>
+      <Router>
+        <PageTracker />
+        <WhatsAppButton />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/versant-reading-and-writing-mock-test/start" element={<TestPage />} />
+          <Route path="/result" element={<ResultPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/refund" element={<RefundPolicy />} />
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/blog/:slug" element={<FullBlogPost />} />
 
-        {/* Speaking & Listening Module */}
-        <Route path="/versant-reading-and-writing-mock-test" element={<ReadingHub />} />
-        <Route path="/versant-speaking-and-listening-practice-test" element={<SpeakingHub />} />
-        <Route path="/versant-speaking-and-listening-practice-test/start/:mode" element={<SpeakingTest />} />
+          {/* Speaking & Listening Module */}
+          <Route path="/versant-reading-and-writing-mock-test" element={<ReadingHub />} />
+          <Route path="/versant-speaking-and-listening-practice-test" element={<SpeakingHub />} />
+          <Route path="/versant-speaking-and-listening-practice-test/start/:mode" element={<SpeakingTest />} />
 
-        {/* Ebook Routes */}
-        <Route path="/ebook" element={<EbookLanding />} />
-        <Route path="/thank-you" element={<ThankYou />} />
+          {/* Ebook Routes */}
+          <Route path="/ebook" element={<EbookLanding />} />
+          <Route path="/thank-you" element={<ThankYou />} />
 
-        {/* Admin Routing */}
-        <Route path="/admin" element={<AdminRedirect />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+          {/* Admin Routing */}
+          <Route path="/admin" element={<AdminRedirect />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Routes>
+      </Router>
+    </PayPalScriptProvider>
   );
 }
 

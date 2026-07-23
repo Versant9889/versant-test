@@ -54,7 +54,7 @@ export default function EbookRecommendSlide({ onContinue, testType }) {
       const orderData = await orderResponse.json();
 
       const options = {
-        key: process.env.REACT_APP_RAZORPAY_KEY_ID || "rzp_live_SUarCwkw3sp2rY",
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Versant Test Mastery Ebook",
